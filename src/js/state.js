@@ -22,7 +22,6 @@ function dashboard(state, action) {
             break;
         }
         case 'RECEIVED_TRAFFIC_DATA': {
-            console.log(updatedState.traffic);
             updatedState.traffic.status = 'RECEIVED';
             updatedState.traffic.data = action.data;
             break;
@@ -60,7 +59,7 @@ function dashboard(state, action) {
     }
 
 
-    console.log('ACTION: ', action);
+    // console.log('ACTION: ', action);
     // console.log('OLD STATE: ', state);
     // console.log('NEW STATE: ', updatedState);
     // console.log('--------');
@@ -70,7 +69,7 @@ function dashboard(state, action) {
 
 var createStore = Redux.createStore,
     initialState = {
-        activeView: '',
+        activeView: 'traffic',
         viewChange: '',
         requestApiCall: false,
         traffic: {},

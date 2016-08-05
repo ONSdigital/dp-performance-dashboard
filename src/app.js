@@ -48,6 +48,8 @@ store.subscribe(function() {
         activeView = currentState.activeView,
         viewElement = document.getElementById('active-view');
 
+    console.log(currentState);
+
     if (currentState[activeView].status == 'RECEIVED' && currentState.viewChange == 'IN_PROGRESS') {
         store.dispatch({
             type: 'UPDATED_VIEW'
