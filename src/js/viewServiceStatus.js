@@ -1,9 +1,25 @@
 var viewServiceStatus = {
 
     serviceStatusTemplate: require('../templates/service-status.handlebars'),
+    Highcharts: require('highcharts'),
+    chart: require('./chartConfig'),
 
     renderTemplate: function (container, data) {
         container.innerHTML = this.serviceStatusTemplate(data);
+        this.renderChart('js--chart', this.addDataToConfig('line', 'Response rates'));
+
+    },
+
+    renderChart: function(container, data) {
+        this.Highcharts.chart(container, data);
+    },
+
+    addDataToConfig: function(type, title) {
+        var chart = this.chart;
+        chart.chart.type = type;
+        chart.title.text = title;
+
+        return chart;
     }
 };
 
@@ -33,30 +49,6 @@ var viewServiceStatus = {
 //     }, {
 //         name: 'John',
 //         data: [5, 7, 3]
-//     }]
-// });
-//
-// Highcharts.chart('chart--js-2', {
-//     chart: {
-//         type: 'bar'
-//     },
-//     title: {
-//         text: 'Meat eaten'
-//     },
-//     xAxis: {
-//         categories: ['Lamb', 'Chicken', 'Beef', '"Quorn"']
-//     },
-//     yAxis: {
-//         title: {
-//             text: 'Meat eaten'
-//         }
-//     },
-//     series: [{
-//         name: 'Crispin',
-//         data: [0, 0, 0, 50]
-//     }, {
-//         name: 'Jon',
-//         data: [34, 48, 34, 0]
 //     }]
 // });
 
