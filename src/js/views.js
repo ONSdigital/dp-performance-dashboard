@@ -66,10 +66,10 @@ var view = {
         var content = document.getElementById('content');
         switch (uriHash) {
             case "service-status":
-                this.viewServiceStatus.renderTemplate(content, this.bodyData);
+                this.viewServiceStatus.renderView(content);
                 break;
             default:
-                this.viewActivity.renderTemplate(content, this.bodyData);
+                this.viewActivity.renderView(content);
         }
     }
 
