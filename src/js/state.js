@@ -52,17 +52,19 @@ function dashboard(state, action) {
         }
         case 'UPDATED_VIEW': {
             updatedState.viewChange = initialState.viewChange;
+            break;
         }
         default: {
-            // console.log('No action type given');
+            console.log('No action type given');
+            break;
         }
     }
 
 
     // console.log('ACTION: ', action);
-    // console.log('OLD STATE: ', state);
-    // console.log('NEW STATE: ', updatedState);
-    // console.log('--------');
+    console.log('OLD STATE: ', state);
+    console.log('NEW STATE: ', updatedState);
+    console.log('--------');
 
     return updatedState
 }
