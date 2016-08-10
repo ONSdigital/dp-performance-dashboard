@@ -2,8 +2,8 @@
   "name": "performance",
   "version": "0.0.1",
   "scripts": {
-    "webpack": "webpack",
-    "webpack-server": "webpack-dev-server --content-base dist/ --port 9876",
+    "webpack": "node ./node_modules/webpack/bin/webpack.js",
+    "webpack-server": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --content-base dist/ --port 9876",
     "install-sixteens": "mkdir -p node_modules && rm -rf ./node_modules/sixteens && cd node_modules && git clone -b live https://github.com/onsdigital/sixteens && cd sixteens && npm install && cp -rf dist ../../dist && cd ../ && rm -rf sixteens",
     "install": "npm run install-sixteens"
   },
