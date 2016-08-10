@@ -1,20 +1,19 @@
 {
-  "name": "performance",
-  "version": "0.0.1",
-  "scripts": {
-    "webpack": "webpack",
-    "webpack-server": "webpack-dev-server --content-base dist/ --port 9876",
-    "install-sixteens": "mkdir -p node_modules && rm -rf ./node_modules/sixteens && cd node_modules && git clone -b live https://github.com/onsdigital/sixteens && cd sixteens && npm install && cp -rf dist ../../dist && cd ../ && rm -rf sixteens",
-    "install": "npm run install-sixteens"
-  },
-  "dependencies": {
-    "deep-freeze": "0.0.1",
-    "handlebars": "^4.0.5",
-    "handlebars-loader": "^1.3.0",
-    "immutable": "^3.8.1",
-    "redux": "^3.5.2",
-    "webpack": "^1.13.1",
-    "webpack-dev-server": "^1.14.1",
-    "xhr": "^2.2.2"
-  }
+    "name": "performance",
+    "version": "0.0.1",
+    "scripts": {
+        "webpack": "webpack",
+        "webpack-server": "webpack-dev-server --content-base dist/ --port 9876",
+        "install-sixteens": "mkdir -p node_modules && rm -rf ./node_modules/sixteens && cd node_modules && git clone -b live https://github.com/onsdigital/sixteens && cd sixteens && npm install && cp -rf dist ../../dist && cd ../ && rm -rf sixteens",
+        "install": "npm run install-sixteens"
+    },
+    "dependencies": {
+        "handlebars": "^4.0.5",
+        "handlebars-loader": "^1.3.0",
+        "highcharts": "^4.2.6",
+        "redux": "^3.5.2",
+        "webpack": "^1.13.1",
+        "webpack-dev-server": "^1.14.1",
+        "xhr": "^2.2.2"
+    }
 }

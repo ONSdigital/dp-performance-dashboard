@@ -1,10 +1,13 @@
 /** Configuration file for application */
 
+// get the uri hash for routing
+var uriHash = window.location.hash ? window.location.hash.substring(1) : false;
 
-/* Import other JS files */
-var api = require('./js/api'),
+var view = require('./js/views'),
+    api = require('./js/api'),
     store = require('./js/state');
-require('./js/views');
+
+view.init(uriHash);
 
 
 /* Initialise data */
