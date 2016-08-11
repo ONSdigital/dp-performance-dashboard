@@ -32,6 +32,7 @@
 
 var view = {
     baseTemplate: require('../templates/base.handlebars'),
+    viewTabs: require('./viewTabs'),
     viewActivity: require('./viewActivity'),
     viewServiceStatus: require('./viewServiceStatus'),
     main: document.getElementById('main'),
@@ -41,15 +42,15 @@ var view = {
 
     // remove uriHash arg - get from state store
     init: function(uriHash) {
+        this.initView(uriHash);
         this.renderBase();
-        // this.renderContent(uriHash);
         this.bindClickEvents();
-        this.changeView(uriHash);
         this.subscribeToStateChange();
     },
 
     renderBase: function() {
         this.main.innerHTML = this.baseTemplate(this.baseData);
+        this.renderTabs();
     },
 
     bindClickEvents: function() {
@@ -85,12 +86,24 @@ var view = {
         })
     },
 
-    changeView: function(uriHash) {
+    renderTabs: function() {
+        var tabs = document.getElementById('tabs--js');
+        view.viewTabs.renderView(tabs);
+    },
+
+    initView: function(uriHash) {
         var activeView = uriHash ? uriHash : "activity";
 
         this.store.dispatch({
-            type: 'REQUEST_VIEW',
+            type: 'INITIALISE_VIEW',
             view: activeView
+        })
+    },
+
+    changeView: function(uriHash) {
+        this.store.dispatch({
+            type: 'REQUEST_VIEW',
+            view: uriHash
         });
     },
 
@@ -100,25 +113,14 @@ var view = {
 
             // Render view is a view update is pending
             if (currentState.pendingViewUpdate) {
-                view.renderContent(view.stringConvert.fromCameltoSlug(currentState.activeView))
+                // TODO if data crunching and rendering charts take some time tab click feels delayed. Tab should swap instantly and content should go completely empty first, then new content loaded in when it's ready.
+                view.renderTabs();
+                view.bindClickEvents();
+
+                view.renderContent(view.stringConvert.fromCameltoSlug(currentState.activeView));
             }
         });
     }
-
-    // subscribeToStateChange: function() {
-    //     this.store.subscribe(function() {
-    //         var currentState = view.store.getState(),
-    //             activeView = view.camelCase(currentState.activeView);
-    //
-    //         if (currentState[activeView].status == 'RECEIVED' && currentState.viewChange == 'IN_PROGRESS') {
-    //             console.log("Updated view to: " + activeView);
-    //             view.renderContent(activeView);
-    //             view.store.dispatch({
-    //                 type: 'UPDATED_VIEW'
-    //             });
-    //         }
-    //     })
-    // }
 
 };
 

@@ -23,34 +23,10 @@ function dashboard(state, action) {
             updatedState.serviceStatus.data = action.data;
             break;
         }
-        // case 'REQUEST_TRAFFIC_DATA': {
-        //     updatedState.activity.status = 'IN_PROGRESS';
-        //     updatedState.requestApiCall = false;
-        //     break;
-        // }
-        // case 'RECEIVED_TRAFFIC_DATA': {
-        //     updatedState.activity.status = 'RECEIVED';
-        //     updatedState.activity.data = action.data;
-        //     break;
-        // }
-        // case 'REQUEST_TECHNICAL_DATA': {
-        //     updatedState.serviceStatus.status = 'IN_PROGRESS';
-        //     updatedState.requestApiCall = false;
-        //     break;
-        // }
-        // case 'RECEIVED_TECHNICAL_DATA': {
-        //     updatedState.serviceStatus.status = 'RECEIVED';
-        //     updatedState.serviceStatus.data = action.data;
-        //     break;
-        // }
-        // case 'UPDATE_TRAFFIC': {
-        //     updatedState.activity = action.activity;
-        //     break;
-        // }
-        // case 'UPDATE_TECHNICAL': {
-        //     updatedState.serviceStatus = action.serviceStatus;
-        //     break;
-        // }
+        case 'INITIALISE_VIEW': {
+            updatedState.activeView = action.view;
+            break;
+        }
         case 'REQUEST_VIEW': {
             updatedState.activeView = action.view;
             updatedState.pendingViewUpdate = true;
