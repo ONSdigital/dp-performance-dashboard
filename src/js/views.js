@@ -2,11 +2,11 @@
 // var viewActivity = require('./viewActivity');
 // var viewServiceStatus = require('./viewServiceStatus');
 // var main = document.getElementById('main');
-// var bodyData = {title: "Title thingy"};
+// var baseData = {title: "Title thingy"};
 //
 //
 // // render base template
-// main.innerHTML = baseTemplate(bodyData);
+// main.innerHTML = baseTemplate(baseData);
 // content = document.getElementById('content');
 // renderContent();
 //
@@ -22,11 +22,11 @@
 //     switch (uriHash) {
 //         case "service-status":
 //             console.log("service-status");
-//             viewServiceStatus.renderTemplate(content, bodyData);
+//             viewServiceStatus.renderTemplate(content, baseData);
 //             break;
 //         default:
 //             console.log("activity");
-//             viewActivity.renderTemplate(content, bodyData);
+//             viewActivity.renderTemplate(content, baseData);
 //     }
 // };
 
@@ -35,17 +35,21 @@ var view = {
     viewActivity: require('./viewActivity'),
     viewServiceStatus: require('./viewServiceStatus'),
     main: document.getElementById('main'),
-    bodyData: {title: "Title thingy"},
+    baseData: {title: "Title thingy"},
+    store: require('./state'),
+    stringConvert: require('./stringConvert'),
 
     // remove uriHash arg - get from state store
     init: function(uriHash) {
         this.renderBase();
-        this.renderContent(uriHash);
+        // this.renderContent(uriHash);
         this.bindClickEvents();
+        this.changeView(uriHash);
+        this.subscribeToStateChange();
     },
 
     renderBase: function() {
-        this.main.innerHTML = this.baseTemplate(this.bodyData);
+        this.main.innerHTML = this.baseTemplate(this.baseData);
     },
 
     bindClickEvents: function() {
@@ -58,7 +62,7 @@ var view = {
 
     handleTabClick: function() {
         var href = this.getAttribute("href").substring(1);
-        view.renderContent(href);
+        view.changeView(href);
     },
 
     renderContent: function(uriHash) {
@@ -68,10 +72,53 @@ var view = {
             case "service-status":
                 this.viewServiceStatus.renderView(content);
                 break;
-            default:
+            case "activity":
                 this.viewActivity.renderView(content);
+                break;
+            default:
+                console.log('No matching hash provided');
         }
+
+        // Update state with flag saying view change is no longer pending
+        view.store.dispatch({
+            type: 'UPDATED_VIEW'
+        })
+    },
+
+    changeView: function(uriHash) {
+        var activeView = uriHash ? uriHash : "activity";
+
+        this.store.dispatch({
+            type: 'REQUEST_VIEW',
+            view: activeView
+        });
+    },
+
+    subscribeToStateChange: function() {
+        this.store.subscribe(function() {
+            var currentState = view.store.getState();
+
+            // Render view is a view update is pending
+            if (currentState.pendingViewUpdate) {
+                view.renderContent(view.stringConvert.fromCameltoSlug(currentState.activeView))
+            }
+        });
     }
+
+    // subscribeToStateChange: function() {
+    //     this.store.subscribe(function() {
+    //         var currentState = view.store.getState(),
+    //             activeView = view.camelCase(currentState.activeView);
+    //
+    //         if (currentState[activeView].status == 'RECEIVED' && currentState.viewChange == 'IN_PROGRESS') {
+    //             console.log("Updated view to: " + activeView);
+    //             view.renderContent(activeView);
+    //             view.store.dispatch({
+    //                 type: 'UPDATED_VIEW'
+    //             });
+    //         }
+    //     })
+    // }
 
 };
 

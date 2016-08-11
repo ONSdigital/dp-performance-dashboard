@@ -13,45 +13,51 @@ function dashboard(state, action) {
     var stateStr = JSON.stringify(state),
         updatedState = JSON.parse(stateStr);
 
-    // console.log("Previous state:", state);
-
+    // Reducer switch function, updates the state as necessary
     switch (action.type) {
-        case 'REQUEST_TRAFFIC_DATA': {
-            updatedState.traffic.status = 'IN_PROGRESS';
-            updatedState.requestApiCall = false;
+        case 'RECEIVED_ACTIVITY_DATA': {
+            updatedState.activity.data = action.data;
             break;
         }
-        case 'RECEIVED_TRAFFIC_DATA': {
-            updatedState.traffic.status = 'RECEIVED';
-            updatedState.traffic.data = action.data;
+        case 'RECEIVED_SERVICE_STATUS_DATA': {
+            updatedState.serviceStatus.data = action.data;
             break;
         }
-        case 'REQUEST_TECHNICAL_DATA': {
-            updatedState.technical.status = 'IN_PROGRESS';
-            updatedState.requestApiCall = false;
-            break;
-        }
-        case 'RECEIVED_TECHNICAL_DATA': {
-            updatedState.technical.status = 'RECEIVED';
-            updatedState.technical.data = action.data;
-            break;
-        }
-        case 'UPDATE_TRAFFIC': {
-            updatedState.traffic = action.traffic;
-            break;
-        }
-        case 'UPDATE_TECHNICAL': {
-            updatedState.technical = action.technical;
-            break;
-        }
+        // case 'REQUEST_TRAFFIC_DATA': {
+        //     updatedState.activity.status = 'IN_PROGRESS';
+        //     updatedState.requestApiCall = false;
+        //     break;
+        // }
+        // case 'RECEIVED_TRAFFIC_DATA': {
+        //     updatedState.activity.status = 'RECEIVED';
+        //     updatedState.activity.data = action.data;
+        //     break;
+        // }
+        // case 'REQUEST_TECHNICAL_DATA': {
+        //     updatedState.serviceStatus.status = 'IN_PROGRESS';
+        //     updatedState.requestApiCall = false;
+        //     break;
+        // }
+        // case 'RECEIVED_TECHNICAL_DATA': {
+        //     updatedState.serviceStatus.status = 'RECEIVED';
+        //     updatedState.serviceStatus.data = action.data;
+        //     break;
+        // }
+        // case 'UPDATE_TRAFFIC': {
+        //     updatedState.activity = action.activity;
+        //     break;
+        // }
+        // case 'UPDATE_TECHNICAL': {
+        //     updatedState.serviceStatus = action.serviceStatus;
+        //     break;
+        // }
         case 'REQUEST_VIEW': {
             updatedState.activeView = action.view;
-            updatedState.viewChange = 'IN_PROGRESS';
-            updatedState.requestApiCall = true;
+            updatedState.pendingViewUpdate = true;
             break;
         }
         case 'UPDATED_VIEW': {
-            updatedState.viewChange = initialState.viewChange;
+            updatedState.pendingViewUpdate = false;
             break;
         }
         default: {
@@ -61,7 +67,7 @@ function dashboard(state, action) {
     }
 
 
-    // console.log('ACTION: ', action);
+    console.log('ACTION: ', action);
     console.log('OLD STATE: ', state);
     console.log('NEW STATE: ', updatedState);
     console.log('--------');
@@ -71,11 +77,10 @@ function dashboard(state, action) {
 
 var createStore = Redux.createStore,
     initialState = {
-        activeView: 'traffic',
-        viewChange: '',
-        requestApiCall: false,
-        traffic: {},
-        technical: {}
+        activeView: '',
+        pendingViewUpdate: false,
+        activity: {},
+        serviceStatus: {}
     },
     store = createStore(dashboard);
 

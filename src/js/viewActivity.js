@@ -7,10 +7,12 @@ var viewActivity = {
     addDataToConfig: require('./addChartDataToChartConfig'),
     buildChartData: require('./buildChartDataObject'),
     bodyData: {"title": "Activity"},
+    store: require('./state'),
 
     getData: function() {
-        // this will get data from store. for now use raw JSON
-        return gaJSON;
+        // Get latest activity data from state
+        var currentState = this.store.getState();
+        return currentState.activity.data;
     },
 
     renderView: function (container) {
