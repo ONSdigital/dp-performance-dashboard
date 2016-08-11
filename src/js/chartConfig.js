@@ -31,7 +31,19 @@ var chartConfig = {
                 }
             }
         }
-    }]
+    }],
+    tooltip: {
+        shared: true,
+        useHTML: true,
+        style: {
+            "padding": "8px 16px 8px 16px"
+        },
+        backgroundColor: 'rgba(234,234,234, 1)',
+        borderWidth: 1,
+        borderRadius: 0,
+        borderColor: 'rgba(208,210,211, 1)',
+        shadow: false
+    }
 };
 
 module.exports = chartConfig;
