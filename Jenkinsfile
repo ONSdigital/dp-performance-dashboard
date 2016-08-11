@@ -18,7 +18,7 @@ node {
     if (env.JOB_NAME.replaceFirst('.+/', '') != 'develop') return
 
     stage 'Deploy'
-    sh "aws s3 cp --recursive dist s3://${env.S3_DEVELOP_PERFORMANCE_BUCKET}/"
+    sh "aws s3 cp --cache-control max-age=300 --recursive dist s3://${env.S3_DEVELOP_PERFORMANCE_BUCKET}/"
 }
 
 def revision() {
