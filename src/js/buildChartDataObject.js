@@ -25,7 +25,7 @@ module.exports = function(data, dimension, categoryColumn, valueColumn) {
         }
     }
 
-    obj.type = type; obj.title = name; obj.categories = categories; obj.series = series;
+    obj.title = name; obj.categories = categories; obj.series = series;
 
     return obj;
 
