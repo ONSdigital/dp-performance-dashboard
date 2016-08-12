@@ -18,10 +18,15 @@ var viewActivity = {
         this.getData();
         this.buildPageData();
         this.renderTemplate(container);
+        this.setChartOptions();
         this.renderChartVisitsToday();
         this.renderChartDevices();
         this.renderChartLandingPages();
         this.renderChartTrafficSources();
+    },
+
+    setChartOptions: function() {
+        this.Highcharts.setOptions(this.chartConfig)
     },
 
     buildPageData: function () {
@@ -30,23 +35,112 @@ var viewActivity = {
     },
 
     renderChartVisitsToday: function () {
-        this.renderChart('visits-today--chart', this.addDataToConfig(this.chartConfig, this.buildChartData(this.getData(), 1, 0, 1, "column")));
+        //this.renderChart('visits-today--chart', this.addDataToConfig(this.chartConfig, this.buildChartData(this.getData(), 1, 0, 1, "column")));
+        var options = this.buildChartData(this.getData(), 1, 0, 1);
+        var chart = new viewActivity.Highcharts.Chart({
+            chart: {
+                renderTo: 'visits-today--chart',
+                type: 'column'
+            },
+            title: {
+                text: options.title
+            },
+            xAxis: {
+                categories: options.categories
+            },
+            yAxis: {
+                title: {
+                    text: options.title
+                }
+            },
+            series: [{
+                data: options.series,
+                marker: viewActivity.chartConfig.series[0].marker
+            }]
+        });
+        //chart.series[0].setData([3,4,5,6,7,255,8,967,4]);
     },
 
     renderChartDevices: function () {
-        this.renderChart('devices--chart', this.addDataToConfig(this.chartConfig, this.buildChartData(this.getData(), 5, 0, 4, "bar")));
+        //this.renderChart('devices--chart', this.addDataToConfig(this.chartConfig, this.buildChartData(this.getData(), 5, 0, 4, "bar")));
+        var options = this.buildChartData(this.getData(), 5, 0, 4);
+        var chart = new viewActivity.Highcharts.Chart({
+            chart: {
+                renderTo: 'devices--chart',
+                type: 'bar'
+            },
+            title: {
+                text: options.title
+            },
+            xAxis: {
+                categories: options.categories
+            },
+            yAxis: {
+                title: {
+                    text: options.title
+                }
+            },
+            series: [{
+                data: options.series,
+                marker: viewActivity.chartConfig.series[0].marker
+            }]
+        });
     },
 
     renderChartLandingPages: function () {
-        this.renderChart('landing-pages--chart', this.addDataToConfig(this.chartConfig, this.buildChartData(this.getData(), 4, 0, 1, "bar")));
+        //this.renderChart('landing-pages--chart', this.addDataToConfig(this.chartConfig, this.buildChartData(this.getData(), 4, 0, 1, "bar")));
+        var options = this.buildChartData(this.getData(), 4, 0, 1);
+        var chart = new viewActivity.Highcharts.Chart({
+            chart: {
+                renderTo: 'landing-pages--chart',
+                type: 'bar'
+            },
+            title: {
+                text: options.title
+            },
+            xAxis: {
+                categories: options.categories
+            },
+            yAxis: {
+                title: {
+                    text: options.title
+                }
+            },
+            series: [{
+                data: options.series,
+                marker: viewActivity.chartConfig.series[0].marker
+            }]
+        });
     },
 
     renderChartTrafficSources: function () {
-        this.renderChart('traffic-sources--chart', this.addDataToConfig(this.chartConfig, this.buildChartData(this.getData(), 5, 0, 4, "bar")));
+        //this.renderChart('traffic-sources--chart', this.addDataToConfig(this.chartConfig, this.buildChartData(this.getData(), 5, 0, 4, "bar")));
+        var options = this.buildChartData(this.getData(), 5, 0, 4);
+        var chart = new viewActivity.Highcharts.Chart({
+            chart: {
+                renderTo: 'traffic-sources--chart',
+                type: 'bar'
+            },
+            title: {
+                text: options.title
+            },
+            xAxis: {
+                categories: options.categories
+            },
+            yAxis: {
+                title: {
+                    text: options.title
+                }
+            },
+            series: [{
+                data: options.series,
+                marker: viewActivity.chartConfig.series[0].marker
+            }]
+        });
     },
 
-    renderChart: function(container, data) {
-        this.Highcharts.chart(container, data);
+    renderCharts: function(container, data) {
+
     },
 
     renderTemplate: function(container) {
