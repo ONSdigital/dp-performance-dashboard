@@ -1,12 +1,25 @@
+
+
+
 var viewServiceStatus = {
 
     serviceStatusTemplate: require('../templates/service-status.handlebars'),
     Highcharts: require('highcharts'),
-    chart: require('./chartConfig'),
+    chartConfig: require('./chartConfig'),
+    bodyData: {"title": "Service status"},
+    dataToAdd: {
+        type: "line",
+        title: "Response times (ms)",
+        chart: {
+            type: 'line'
+        },
+        categories: [1,2,3,4],
+        series: [45,55,65,25]
+    },
 
-    renderTemplate: function (container, data) {
-        container.innerHTML = this.serviceStatusTemplate(data);
-        this.renderChart('js--chart', this.addDataToConfig('line', 'Response rates'));
+    renderView: function (container) {
+        this.renderTemplate(container);
+        this.renderChart('response-times--chart', this.addDataToConfig(this.chartConfig, this.dataToAdd));
 
     },
 
@@ -14,12 +27,20 @@ var viewServiceStatus = {
         this.Highcharts.chart(container, data);
     },
 
-    addDataToConfig: function(type, title) {
-        var chart = this.chart;
-        chart.chart.type = type;
-        chart.title.text = title;
+    renderTemplate: function(container) {
+        container.innerHTML = this.serviceStatusTemplate(this.bodyData);
+    },
 
-        return chart;
+    addDataToConfig: function(chartConfig, dataToAdd) {
+
+        chartConfig.chart.type = dataToAdd.type ? dataToAdd.type : chartConfig.chart.type;
+        chartConfig.title.text = dataToAdd.title ? dataToAdd.title : chartConfig.title.text;
+        chartConfig.series[0].data = dataToAdd.series ? dataToAdd.series : chartConfig.series[0].data;
+        chartConfig.series[0].name = dataToAdd.title ? dataToAdd.title : chartConfig.series[0].name;
+        chartConfig.xAxis.categories = dataToAdd.categories ? dataToAdd.categories : chartConfig.xAxis.categories;
+        chartConfig.yAxis.title.text = dataToAdd.title ? dataToAdd.title : chartConfig.yAxis.title.text;
+
+        return chartConfig;
     }
 };
 

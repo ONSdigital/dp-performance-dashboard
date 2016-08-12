@@ -1,10 +1,13 @@
 <nav>
     <ul class="list--neutral flush">
-        <li class="tab__item width-sm--6">
-            <a href="#activity" class="tab__link js-tab tab__link--active">Activity</a>
-        </li>
-        <li class="tab__item width-sm--6">
-            <a href="#service-status" class="tab__link js-tab">Service status</a>
-        </li>
+        {{#each tabs}}
+            <li class="tab__item width-sm--6">
+                {{#if isActive}}
+                    <span class="tab__link js-tab tab__link--active">{{title}}</span>
+                {{else}}
+                    <a href="#{{slug}}" class="tab__link js-tab">{{title}}</a>
+                {{/if}}
+            </li>
+        {{/each}}
     </ul>
 </nav>

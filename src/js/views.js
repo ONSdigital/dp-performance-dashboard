@@ -2,11 +2,11 @@
 // var viewActivity = require('./viewActivity');
 // var viewServiceStatus = require('./viewServiceStatus');
 // var main = document.getElementById('main');
-// var bodyData = {title: "Title thingy"};
+// var baseData = {title: "Title thingy"};
 //
 //
 // // render base template
-// main.innerHTML = baseTemplate(bodyData);
+// main.innerHTML = baseTemplate(baseData);
 // content = document.getElementById('content');
 // renderContent();
 //
@@ -22,30 +22,35 @@
 //     switch (uriHash) {
 //         case "service-status":
 //             console.log("service-status");
-//             viewServiceStatus.renderTemplate(content, bodyData);
+//             viewServiceStatus.renderTemplate(content, baseData);
 //             break;
 //         default:
 //             console.log("activity");
-//             viewActivity.renderTemplate(content, bodyData);
+//             viewActivity.renderTemplate(content, baseData);
 //     }
 // };
 
 var view = {
     baseTemplate: require('../templates/base.handlebars'),
+    viewTabs: require('./viewTabs'),
     viewActivity: require('./viewActivity'),
     viewServiceStatus: require('./viewServiceStatus'),
     main: document.getElementById('main'),
-    bodyData: {title: "Title thingy"},
+    baseData: {title: "Title thingy"},
+    store: require('./state'),
+    stringConvert: require('./stringConvert'),
 
     // remove uriHash arg - get from state store
     init: function(uriHash) {
+        this.initView(uriHash);
         this.renderBase();
-        this.renderContent(uriHash);
         this.bindClickEvents();
+        this.subscribeToStateChange();
     },
 
     renderBase: function() {
-        this.main.innerHTML = this.baseTemplate(this.bodyData);
+        this.main.innerHTML = this.baseTemplate(this.baseData);
+        this.renderTabs();
     },
 
     bindClickEvents: function() {
@@ -58,7 +63,7 @@ var view = {
 
     handleTabClick: function() {
         var href = this.getAttribute("href").substring(1);
-        view.renderContent(href);
+        view.changeView(href);
     },
 
     renderContent: function(uriHash) {
@@ -66,11 +71,55 @@ var view = {
         var content = document.getElementById('content');
         switch (uriHash) {
             case "service-status":
-                this.viewServiceStatus.renderTemplate(content, this.bodyData);
+                this.viewServiceStatus.renderView(content);
+                break;
+            case "activity":
+                this.viewActivity.renderView(content);
                 break;
             default:
-                this.viewActivity.renderTemplate(content, this.bodyData);
+                console.log('No matching hash provided');
         }
+
+        // Update state with flag saying view change is no longer pending
+        view.store.dispatch({
+            type: 'UPDATED_VIEW'
+        })
+    },
+
+    renderTabs: function() {
+        var tabs = document.getElementById('tabs--js');
+        view.viewTabs.renderView(tabs);
+    },
+
+    initView: function(uriHash) {
+        var activeView = uriHash ? uriHash : "activity";
+
+        this.store.dispatch({
+            type: 'INITIALISE_VIEW',
+            view: activeView
+        })
+    },
+
+    changeView: function(uriHash) {
+        this.store.dispatch({
+            type: 'REQUEST_VIEW',
+            view: uriHash
+        });
+    },
+
+    subscribeToStateChange: function() {
+        this.store.subscribe(function() {
+            var currentState = view.store.getState();
+
+            // Render view is a view update is pending
+            if (currentState.pendingViewUpdate) {
+                // TODO if data crunching and rendering charts take some time tab click feels delayed. Tab should swap instantly and content should go completely empty first, then new content loaded in when it's ready.
+                view.renderTabs();
+                view.bindClickEvents();
+
+                view.renderContent(view.stringConvert.fromCameltoSlug(currentState.activeView));
+            }
+        });
     }
 
 };
