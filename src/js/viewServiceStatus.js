@@ -1,27 +1,47 @@
 
-
-
 var viewServiceStatus = {
 
     serviceStatusTemplate: require('../templates/service-status.handlebars'),
     Highcharts: require('highcharts'),
     chartConfig: require('./chartConfig'),
+    addDataToConfig: require('./addChartDataToChartConfig'),
+    buildChartData: require('./buildChartDataObject'),
     bodyData: {"title": "Service status"},
-    dataToAdd: {
-        type: "line",
-        title: "Response times (ms)",
-        chart: {
-            type: 'line'
-        },
-        categories: [1,2,3,4],
-        series: [45,55,65,25]
+    store: require('./state'),
+
+    getData: function() {
+        // Get latest activity data from state
+        var currentState = this.store.getState();
+        return currentState.serviceStatus.data;
     },
 
     renderView: function (container) {
+        this.buildPageData();
         this.renderTemplate(container);
-        this.renderChart('response-times--chart', this.addDataToConfig(this.chartConfig, this.dataToAdd));
 
     },
+
+    buildPageData: function () {
+        var data = this.getData();
+        this.bodyData.averageResponseTimes = [];
+        for (var i = 0; i <= 2; i++) {
+            var responseTimeData = {
+                'name': data[i].definition.meta.name,
+                'description': data[i].definition.meta.description,
+                'responseTime': data[i].values[0][2],
+                'timeUp': data[i].values[0][3],
+                'timeDown': data[i].values[0][4],
+                'percentageTimeUp': data[i].values[0][6],
+                'percentageTimeDown': data[i].values[0][7]
+            };
+            this.bodyData.averageResponseTimes.push(responseTimeData);
+        }
+
+    },
+
+    // renderChartResponseTimes: function () {
+    //     this.renderChart('response-times--chart', this.addDataToConfig(this.chartConfig, this.buildChartData(this.getData(), 1, 0, 1, "line")));
+    // },
 
     renderChart: function(container, data) {
         this.Highcharts.chart(container, data);
@@ -29,48 +49,7 @@ var viewServiceStatus = {
 
     renderTemplate: function(container) {
         container.innerHTML = this.serviceStatusTemplate(this.bodyData);
-    },
-
-    addDataToConfig: function(chartConfig, dataToAdd) {
-
-        chartConfig.chart.type = dataToAdd.type ? dataToAdd.type : chartConfig.chart.type;
-        chartConfig.title.text = dataToAdd.title ? dataToAdd.title : chartConfig.title.text;
-        chartConfig.series[0].data = dataToAdd.series ? dataToAdd.series : chartConfig.series[0].data;
-        chartConfig.series[0].name = dataToAdd.title ? dataToAdd.title : chartConfig.series[0].name;
-        chartConfig.xAxis.categories = dataToAdd.categories ? dataToAdd.categories : chartConfig.xAxis.categories;
-        chartConfig.yAxis.title.text = dataToAdd.title ? dataToAdd.title : chartConfig.yAxis.title.text;
-
-        return chartConfig;
     }
 };
-
-
-
-// var Highcharts = require('highcharts');
-//
-// // Create the chart
-// Highcharts.chart('chart--js', {
-//     chart: {
-//         type: 'bar'
-//     },
-//     title: {
-//         text: 'Fruit Consumption'
-//     },
-//     xAxis: {
-//         categories: ['Apples', 'Bananas', 'Oranges']
-//     },
-//     yAxis: {
-//         title: {
-//             text: 'Fruit eaten'
-//         }
-//     },
-//     series: [{
-//         name: 'Jane',
-//         data: [1, 10, 4]
-//     }, {
-//         name: 'John',
-//         data: [5, 7, 3]
-//     }]
-// });
 
 module.exports = viewServiceStatus;

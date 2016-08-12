@@ -1,13 +1,16 @@
 <div class="">
     <div class="wrapper">
-        <div class="col-wrap">
+        <div class="col-wrap margin-top--1">
             <div class="col">
-                <!--<h2>Service Status</h2>-->
-                <div class="margin-top--1">
-                    <h2>Response times</h2>
-                    <div id="response-times--chart"></div>
-                </div>
+                <h2>Average response time</h2>
             </div>
+            {{#each averageResponseTimes}}
+                <div class="col col--lg-18 padding-top--2 padding-right--1 padding-bottom--2 padding-left--1">
+                    <p>{{description}}</p>
+                    <h2 class="flush">{{responseTime}}ms</h2>
+                    <p>Uptime: {{percentageTimeUp}}%<br/> Downtime: {{percentageTimeDown}}%</p>
+                </div>
+            {{/each}}
         </div>
     </div>
 </div>

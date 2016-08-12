@@ -1,22 +1,7 @@
 var chartConfig = {
-    chart: {
-        type: ''
-    },
+
     colors: ['#55A9DC', '#E6645C', '#886DB3', '#6CC080'],
-    title: {
-        text: ''
-    },
-    xAxis: {
-        categories: []
-    },
-    yAxis: {
-        title: {
-            text: ''
-        }
-    },
     series: [{
-        name: '',
-        data: [],
         marker : {
             enabled: true,
             lineWidth: 3,
