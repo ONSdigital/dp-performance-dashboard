@@ -1,5 +1,4 @@
 var webpack = require('webpack');
-var path = require('path');
 var isProduction = (process.env.ENV === 'production');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 
