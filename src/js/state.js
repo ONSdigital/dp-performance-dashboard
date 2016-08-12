@@ -36,17 +36,22 @@ function dashboard(state, action) {
             updatedState.pendingViewUpdate = false;
             break;
         }
+        case 'ENABLE_STATE_LOGGING': {
+            updatedState.enableStateLogging = true;
+            break;
+        }
         default: {
-            console.log('No action type given');
+            // console.log('No state action type given');
             break;
         }
     }
 
-
-    console.log('ACTION: ', action);
-    console.log('OLD STATE: ', state);
-    console.log('NEW STATE: ', updatedState);
-    console.log('--------');
+    if (updatedState.enableStateLogging) {
+        console.log('ACTION: ', action);
+        console.log('OLD STATE: ', state);
+        console.log('NEW STATE: ', updatedState);
+        console.log('--------');
+    }
 
     return updatedState
 }
@@ -55,6 +60,7 @@ var createStore = Redux.createStore,
     initialState = {
         activeView: '',
         pendingViewUpdate: false,
+        enableStateLogging: false,
         activity: {},
         serviceStatus: {}
     },
