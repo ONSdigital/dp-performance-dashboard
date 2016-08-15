@@ -4,7 +4,6 @@ var viewServiceStatus = {
     serviceStatusTemplate: require('../templates/service-status.handlebars'),
     Highcharts: require('highcharts'),
     chartConfig: require('./chartConfig'),
-    addDataToConfig: require('./addChartDataToChartConfig'),
     buildChartData: require('./buildChartDataObject'),
     bodyData: {"title": "Service status"},
     store: require('./state'),

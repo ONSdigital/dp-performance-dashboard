@@ -5,7 +5,6 @@ var viewActivity = {
     activityTemplate: require('../templates/activity.handlebars'),
     Highcharts: require('highcharts'),
     chartConfig: require('./chartConfig'),
-    addDataToConfig: require('./addChartDataToChartConfig'),
     buildChartData: require('./buildChartDataObject'),
     bodyData: {"title": "Activity"},
     store: require('./state'),
