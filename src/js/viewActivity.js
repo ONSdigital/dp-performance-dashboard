@@ -1,5 +1,7 @@
 var viewActivity = {
-    container: (function() {return document.getElementById('content');})(),
+    container: (function () {
+        return document.getElementById('content');
+    })(),
     activityTemplate: require('../templates/activity.handlebars'),
     Highcharts: require('highcharts'),
     chartConfig: require('./chartConfig'),
@@ -37,191 +39,141 @@ var viewActivity = {
     renderChartVisitsToday: function () {
         //this.renderChart('visits-today--chart', this.addDataToConfig(this.chartConfig, this.buildChartData(this.getData(), 1, 0, 1, "column")));
         var options = this.buildChartData(this.getData(), 1, 0, 1);
+
+        // format categories names with zeros to look like times
+        for (value in options.categories) {
+            options.categories[value] = options.categories[value] + ":00";
+        }
         var chart = new viewActivity.Highcharts.Chart({
             chart: {
                 renderTo: 'visits-today--chart',
                 type: 'column'
             },
             title: {
-                text: options.title
+                text: '',
+                align: "left"
             },
             xAxis: {
+                type: 'category',
                 categories: options.categories
             },
             yAxis: {
                 title: {
-                    text: options.title
+                    text: "Visits"
                 }
             },
             series: [{
                 data: options.series,
-                marker: viewActivity.chartConfig.series[0].marker
+                marker: viewActivity.chartConfig.series[0].marker,
+                name: "Visitors",
+                showInLegend: false
             }]
         });
         //chart.series[0].setData([3,4,5,6,7,255,8,967,4]);
+        console.log(options.categories);
     },
 
     renderChartDevices: function () {
         //this.renderChart('devices--chart', this.addDataToConfig(this.chartConfig, this.buildChartData(this.getData(), 5, 0, 4, "bar")));
-        var options = this.buildChartData(this.getData(), 5, 0, 4);
+        var options = this.buildChartData(this.getData(), 2, 0, 1);
         var chart = new viewActivity.Highcharts.Chart({
             chart: {
                 renderTo: 'devices--chart',
-                type: 'bar'
+                type: 'column'
             },
             title: {
-                text: options.title
+                text: '',
+                align: "left"
             },
             xAxis: {
-                categories: options.categories
+                categories: ['Desktop', 'Mobile', 'Tablet']
             },
             yAxis: {
                 title: {
-                    text: options.title
+                    text: "Visits"
                 }
             },
             series: [{
                 data: options.series,
-                marker: viewActivity.chartConfig.series[0].marker
+                marker: viewActivity.chartConfig.series[0].marker,
+                name: "Device",
+                showInLegend: false
             }]
         });
     },
 
     renderChartLandingPages: function () {
         //this.renderChart('landing-pages--chart', this.addDataToConfig(this.chartConfig, this.buildChartData(this.getData(), 4, 0, 1, "bar")));
-        var options = this.buildChartData(this.getData(), 4, 0, 1);
+        var options = this.buildChartData(this.getData(), 4, 1, 2);
+
+        // remove ' - Office for National Statistics' from page titles
+        for (value in options.categories) {
+            str = options.categories[value].split(' - Office for National Statistics');
+            options.categories[value] = str[0];
+            console.log(options.categories[value]);
+        }
+
         var chart = new viewActivity.Highcharts.Chart({
             chart: {
                 renderTo: 'landing-pages--chart',
                 type: 'bar'
             },
             title: {
-                text: options.title
+                text: ''
             },
             xAxis: {
                 categories: options.categories
             },
             yAxis: {
                 title: {
-                    text: options.title
+                    text: 'Sessions'
                 }
             },
             series: [{
                 data: options.series,
-                marker: viewActivity.chartConfig.series[0].marker
+                marker: viewActivity.chartConfig.series[0].marker,
+                name: "Sessions",
+                showInLegend: false
             }]
         });
     },
 
     renderChartTrafficSources: function () {
         //this.renderChart('traffic-sources--chart', this.addDataToConfig(this.chartConfig, this.buildChartData(this.getData(), 5, 0, 4, "bar")));
-        var options = this.buildChartData(this.getData(), 5, 0, 4);
+        var options = this.buildChartData(this.getData(), 5, 0, 2);
         var chart = new viewActivity.Highcharts.Chart({
             chart: {
                 renderTo: 'traffic-sources--chart',
                 type: 'bar'
             },
             title: {
-                text: options.title
+                text: ''
             },
             xAxis: {
                 categories: options.categories
             },
             yAxis: {
                 title: {
-                    text: options.title
+                    text: 'Sessions'
                 }
             },
             series: [{
                 data: options.series,
-                marker: viewActivity.chartConfig.series[0].marker
+                marker: viewActivity.chartConfig.series[0].marker,
+                name: 'Sessions',
+                showInLegend: false
             }]
         });
     },
 
-    renderCharts: function(container, data) {
+    renderCharts: function (container, data) {
 
     },
 
-    renderTemplate: function(container) {
+    renderTemplate: function (container) {
         container.innerHTML = this.activityTemplate(this.bodyData);
     }
 
-    // addDataToConfig: function (chartConfig, dataToAdd) {
-    //
-    //     chartConfig.chart.type = dataToAdd.type ? dataToAdd.type : chartConfig.chart.type;
-    //     chartConfig.title.text = dataToAdd.title ? dataToAdd.title : chartConfig.title.text;
-    //     chartConfig.series[0].data = dataToAdd.series ? dataToAdd.series : chartConfig.series[0].data;
-    //     chartConfig.series[0].name = dataToAdd.title ? dataToAdd.title : chartConfig.series[0].name;
-    //     chartConfig.xAxis.categories = dataToAdd.categories ? dataToAdd.categories : chartConfig.xAxis.categories;
-    //     chartConfig.yAxis.title.text = dataToAdd.title ? dataToAdd.title : chartConfig.yAxis.title.text;
-    //
-    //     console.log(chartConfig);
-    //     return chartConfig;
-    // },
-
-    // buildChartData: function(dimension, categoryColumn, valueColumn, chartType) {
-    //
-    //     /**
-    //      * Build an object of chart properties and data to merge with base chart config
-    //      * @param {int} dimension - Index of metric array in data object
-    //      * @param {int} categoryColumn - Index of values array in data object where to find category names
-    //      * @param {int} valueColumn - Index of values array in data object where to to find the values to plot on chart
-    //      * @param {string} chartType - type of chart to render
-    //      */
-    //
-    //     var data = this.getData(),
-    //         dataSeries = data[dimension].values,
-    //         name = data[dimension].definition.meta.description,
-    //         type = chartType,
-    //         categories = [],
-    //         series = [],
-    //         obj = {};
-    //
-    //     for (var i = 0; i < dataSeries.length; i++ ) {
-    //         for (value in dataSeries[i]) {
-    //             if (value == categoryColumn) {
-    //                 categories.push([dataSeries[i][value]].toString());
-    //             } else if (value == valueColumn) {
-    //                 series.push(parseInt([dataSeries[i][value]]));
-    //             }
-    //         }
-    //     }
-    //
-    //     obj.type = type; obj.title = name; obj.categories = categories; obj.series = series;
-    //
-    //     return obj;
-    //
-    // }
 };
-
-
-
-// var Highcharts = require('highcharts');
-//
-// // Create the chart
-// Highcharts.chart('chart--js', {
-//     chart: {
-//         type: 'bar'
-//     },
-//     title: {
-//         text: 'Fruit Consumption'
-//     },
-//     xAxis: {
-//         categories: ['Apples', 'Bananas', 'Oranges']
-//     },
-//     yAxis: {
-//         title: {
-//             text: 'Fruit eaten'
-//         }
-//     },
-//     series: [{
-//         name: 'Jane',
-//         data: [1, 10, 4]
-//     }, {
-//         name: 'John',
-//         data: [5, 7, 3]
-//     }]
-// });
 
 module.exports = viewActivity;

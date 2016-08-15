@@ -1,15 +1,29 @@
 <div class="">
     <div class="wrapper">
         <div class="col-wrap">
-            <div class="col">
+            <div class="col" >
                 <h2>Activity</h2>
-                <p>{{activeUsers}} active users currently on our website</p>
-
+                <div class="">
+                    <h3>Active users</h3>
+                    <p class="margin-top--2"><span style="font-size: 80px">{{activeUsers}}</span><br/>currently on our website</p>
+                </div>
                 <!--<h3>Visits today</h3>-->
-                <div id="visits-today--chart"></div>
-                <div id="devices--chart"></div>
-                <div id="landing-pages--chart"></div>
-                <div id="traffic-sources--chart"></div>
+                <div class="margin-bottom--2" style="clear:both">
+                    <h3>Visitors today</h3>
+                    <div id="visits-today--chart" class="height--40"></div>
+                </div>
+                <div class="margin-bottom--2">
+                    <h3>Devices used</h3>
+                    <div id="devices--chart" class="height--40"></div>
+                </div>
+                <div class="margin-bottom--2">
+                    <h3>Top pages</h3>
+                    <div id="landing-pages--chart"></div>
+                </div>
+                <div class="margin-bottom--2">
+                    <h3>Top refers</h3>
+                    <div id="traffic-sources--chart"></div>
+                </div>
             </div>
         </div>
     </div>
