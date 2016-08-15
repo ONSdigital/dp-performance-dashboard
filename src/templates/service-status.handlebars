@@ -5,10 +5,10 @@
                 <h2>Average response time</h2>
             </div>
             {{#each averageResponseTimes}}
-                <div class="col col--lg-18 padding-top--2 padding-right--1 padding-bottom--2 padding-left--1">
-                    <p>{{description}}</p>
+                <div class="col col--lg-19 padding-right--1 {{#unless @first}}padding-left--1{{/unless}} margin-top--2 margin-right--1" style="border-left:16px solid #E5E6E7">
+                    <p class="margin-top--0">{{description}}</p>
                     <h2 class="flush">{{responseTime}}ms</h2>
-                    <p>Uptime: {{percentageTimeUp}}%<br/> Downtime: {{percentageTimeDown}}%</p>
+                    <p class="flush">Uptime: {{percentageTimeUp}}%<br/> Downtime: {{percentageTimeDown}}%</p>
                 </div>
             {{/each}}
         </div>
