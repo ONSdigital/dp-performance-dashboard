@@ -8,7 +8,7 @@ node {
     sh 'set +e && (git describe --exact-match HEAD || true) > git-tag'
 
     stage 'Build'
-    sh 'npm install --no-bin-links'
+    sh 'npm install'
 
     stage 'Bundle'
     def revision = revision()
