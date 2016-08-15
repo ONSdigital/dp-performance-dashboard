@@ -1,5 +1,10 @@
 var chartConfig = {
-
+    chart: {
+        style: {
+            fontFamily: '"Open Sans",Helvetica,Arial,sans-serif',
+            fontSize: '14px'
+        }
+    },
     colors: ['#55A9DC', '#E6645C', '#886DB3', '#6CC080'],
     series: [{
         marker : {
