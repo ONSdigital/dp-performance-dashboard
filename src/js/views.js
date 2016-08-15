@@ -41,8 +41,9 @@ var view = {
     stringConvert: require('./stringConvert'),
 
     // remove uriHash arg - get from state store
-    init: function(uriHash) {
+    init: function(uriHash, uriParams) {
         this.initView(uriHash);
+        this.handleParams(uriParams);
         this.renderBase();
         this.bindClickEvents();
         this.subscribeToStateChange();
@@ -97,7 +98,18 @@ var view = {
         this.store.dispatch({
             type: 'INITIALISE_VIEW',
             view: activeView
-        })
+        });
+    },
+
+    handleParams: function(uriParams) {
+        if (!uriParams) {
+            return
+        } else if (uriParams == "stateLogging") {
+            // Enable state logging out in console
+            this.store.dispatch({
+                type: 'ENABLE_STATE_LOGGING'
+            });
+        }
     },
 
     changeView: function(uriHash) {
