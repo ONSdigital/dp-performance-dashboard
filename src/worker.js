@@ -4,13 +4,13 @@
 var data = [
     {
         title: 'activity',
-        uri: 'https://s3-eu-west-1.amazonaws.com/ons-metrics/analytics.json',
+        uri: 'analytics.json',
         updateTime: '',
         data: {}
     },
     {
         title: 'serviceStatus',
-        uri: 'https://s3-eu-west-1.amazonaws.com/ons-metrics/responsetimes.json',
+        uri: 'responsetimes.json',
         updateTime: '',
         data: {}
     }
@@ -46,4 +46,4 @@ function getData() {
 }
 
 getData();
-setInterval(getData, 30000);
+setInterval(getData, 300000);
