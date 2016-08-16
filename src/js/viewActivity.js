@@ -69,7 +69,6 @@ var viewActivity = {
             }]
         });
         //chart.series[0].setData([3,4,5,6,7,255,8,967,4]);
-        console.log(options.categories);
     },
 
     renderChartDevices: function () {
@@ -109,7 +108,6 @@ var viewActivity = {
         for (value in options.categories) {
             str = options.categories[value].split(' - Office for National Statistics');
             options.categories[value] = str[0];
-            console.log(options.categories[value]);
         }
 
         var chart = new viewActivity.Highcharts.Chart({
