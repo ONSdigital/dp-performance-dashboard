@@ -36,17 +36,9 @@ var viewActivity = {
         var options = this.buildChartData(this.getData(), 1, 0, 1);
 
         //format categories names with zeros to look like times
-        // for (value in options.categories) {
-        //     options.categories[value] = options.categories[value] + ":00";
-        // }
-        // for (value in options.categories) {
-        //     if (options.categories[value] < 12) {
-        //         options.categories[value] = (options.categories[value] - 0) + "am";
-        //     } else {
-        //         var val = options.categories[value] == 12 ? 0 : 12;
-        //         options.categories[value] = (options.categories[value] - val) + "pm";
-        //     }
-        // }
+        for (value in options.categories) {
+            options.categories[value] = options.categories[value] + ":00";
+        }
         var chart = new viewActivity.Highcharts.Chart({
             chart: {
                 renderTo: 'visits-today--chart',
