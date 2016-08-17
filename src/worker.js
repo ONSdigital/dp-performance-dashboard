@@ -44,8 +44,6 @@ onmessage = function(event) {
 // Our function that requests data from API
 function getData() {
 
-    console.log(data);
-
     var dataLength = data.length;
 
     // Loop through data and get data for each object
