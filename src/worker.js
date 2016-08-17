@@ -1,7 +1,7 @@
 /** Worker for updating data in the background **/
 
 // Object that will later be messaged back to client
-var dataArray = [
+var data = [
     {
         title: 'activity',
         uri: 'analytics.json',
@@ -21,21 +21,18 @@ onmessage = function(event) {
 
     switch (event.data) {
         case "USE_REMOTE_DATA": {
-            var array = [],
-                dataLength = dataArray.length,
+            var dataLength = data.length,
                 i;
 
             for (i = 0; i < dataLength; i++) {
-                array.push({});
-                array[i].title = dataArray[i].title;
-                array[i].uri = 'https://performance.develop.onsdigital.co.uk/' + dataArray[i].uri;
+                data[i].uri = 'https://performance.develop.onsdigital.co.uk/' + data[i].uri;
             }
 
-            getData(array);
+            getData();
             break;
         }
         case "USE_LOCAL_DATA": {
-            getData(dataArray);
+            getData();
             break;
         }
         default: {
@@ -45,7 +42,10 @@ onmessage = function(event) {
 };
 
 // Our function that requests data from API
-function getData(data) {
+function getData() {
+
+    console.log(data);
+
     var dataLength = data.length;
 
     // Loop through data and get data for each object
@@ -73,4 +73,4 @@ function getData(data) {
 
 }
 
-setInterval(getData, 300000);
+setInterval(getData, 5000);
