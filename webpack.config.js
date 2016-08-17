@@ -13,7 +13,8 @@ function getPlugins() {
     // Move static files to dist folder
     plugins.push(new CopyWebpackPlugin([
         { from: 'src/index.html', to: 'index.html' },
-        { from: 'src/worker.js', to: 'worker.js' }
+        { from: 'src/worker.js', to: 'worker.js' },
+        { from: 'src/img/loader.gif', to: 'img/loader.gif' }
     ]));
 
     return plugins;
