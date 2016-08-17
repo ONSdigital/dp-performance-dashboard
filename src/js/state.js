@@ -40,6 +40,10 @@ function dashboard(state, action) {
             updatedState.enableStateLogging = true;
             break;
         }
+        case 'UPDATE_ENVIRONMENT_VAR': {
+            updatedState.environment = action.env;
+            break;
+        }
         default: {
             // console.log('No state action type given');
             break;
@@ -61,6 +65,7 @@ var createStore = Redux.createStore,
         activeView: '',
         pendingViewUpdate: false,
         enableStateLogging: false,
+        environment: '',
         activity: {},
         serviceStatus: {}
     },

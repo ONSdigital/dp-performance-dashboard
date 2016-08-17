@@ -1,6 +1,7 @@
 var webpack = require('webpack');
-var isProduction = (process.env.ENV === 'production');
+var isProduction = process.env.ENV === 'production';
 var CopyWebpackPlugin = require('copy-webpack-plugin');
+var environment = (process.env.ENV === 'production') ? 'production' : 'develop';
 
 function getPlugins() {
     var plugins = [];
@@ -16,6 +17,13 @@ function getPlugins() {
         { from: 'src/worker.js', to: 'worker.js' },
         { from: 'src/img/loader.gif', to: 'img/loader.gif' }
     ]));
+
+    // environment variable plugin
+    plugins.push(new webpack.DefinePlugin({
+        'process.env': {
+            'ENV': JSON.stringify(environment)
+        }
+    }));
 
     return plugins;
 }
