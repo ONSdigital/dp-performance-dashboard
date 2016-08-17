@@ -16,14 +16,10 @@ var viewActivity = {
     },
 
     renderView: function (container) {
-        this.getData();
         this.buildPageData();
         this.renderTemplate(container);
-        this.setChartOptions();
-        this.renderChartVisitsToday();
-        this.renderChartDevices();
-        this.renderChartLandingPages();
-        this.renderChartTrafficSources();
+        // add delay before rendering charts to give browser chance to render template changes
+        setTimeout(function(){viewActivity.renderCharts();}, 5);
     },
 
     setChartOptions: function() {
@@ -39,10 +35,18 @@ var viewActivity = {
         //this.renderChart('visits-today--chart', this.addDataToConfig(this.chartConfig, this.buildChartData(this.getData(), 1, 0, 1, "column")));
         var options = this.buildChartData(this.getData(), 1, 0, 1);
 
-        // format categories names with zeros to look like times
-        for (value in options.categories) {
-            options.categories[value] = options.categories[value] + ":00";
-        }
+        //format categories names with zeros to look like times
+        // for (value in options.categories) {
+        //     options.categories[value] = options.categories[value] + ":00";
+        // }
+        // for (value in options.categories) {
+        //     if (options.categories[value] < 12) {
+        //         options.categories[value] = (options.categories[value] - 0) + "am";
+        //     } else {
+        //         var val = options.categories[value] == 12 ? 0 : 12;
+        //         options.categories[value] = (options.categories[value] - val) + "pm";
+        //     }
+        // }
         var chart = new viewActivity.Highcharts.Chart({
             chart: {
                 renderTo: 'visits-today--chart',
@@ -72,7 +76,6 @@ var viewActivity = {
     },
 
     renderChartDevices: function () {
-        //this.renderChart('devices--chart', this.addDataToConfig(this.chartConfig, this.buildChartData(this.getData(), 5, 0, 4, "bar")));
         var options = this.buildChartData(this.getData(), 2, 0, 1);
         var chart = new viewActivity.Highcharts.Chart({
             chart: {
@@ -101,7 +104,6 @@ var viewActivity = {
     },
 
     renderChartLandingPages: function () {
-        //this.renderChart('landing-pages--chart', this.addDataToConfig(this.chartConfig, this.buildChartData(this.getData(), 4, 0, 1, "bar")));
         var options = this.buildChartData(this.getData(), 4, 1, 2);
 
         // remove ' - Office for National Statistics' from page titles
@@ -136,7 +138,6 @@ var viewActivity = {
     },
 
     renderChartTrafficSources: function () {
-        //this.renderChart('traffic-sources--chart', this.addDataToConfig(this.chartConfig, this.buildChartData(this.getData(), 5, 0, 4, "bar")));
         var options = this.buildChartData(this.getData(), 5, 0, 2);
         var chart = new viewActivity.Highcharts.Chart({
             chart: {
@@ -163,8 +164,12 @@ var viewActivity = {
         });
     },
 
-    renderCharts: function (container, data) {
-
+    renderCharts: function () {
+        this.setChartOptions();
+        this.renderChartVisitsToday();
+        this.renderChartDevices();
+        this.renderChartLandingPages();
+        this.renderChartTrafficSources();
     },
 
     renderTemplate: function (container) {
