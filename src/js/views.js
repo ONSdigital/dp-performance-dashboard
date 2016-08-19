@@ -42,11 +42,13 @@ var view = {
 
     // remove uriHash arg - get from state store
     init: function(uriHash, uriParams) {
-        this.initView(uriHash);
+        // this.initView(uriHash);
+        this.changeView(uriHash);
         this.handleParams(uriParams);
         this.renderBase();
         this.bindClickEvents();
         this.subscribeToStateChange();
+        // this.renderAllContent();
     },
 
     renderBase: function() {
@@ -67,24 +69,47 @@ var view = {
         view.changeView(href);
     },
 
+    toggleViewVisibility: function(activeView) {
+        var sections = document.getElementsByClassName('section'),
+            sectionsLength = sections.length,
+            i;
+
+        for (i = 0; i < sectionsLength; i++) {
+            if (sections[i].getAttribute('id') != activeView + '-section') {
+                sections[i].style.display = 'none';
+            } else {
+                sections[i].style.display = 'block';
+            }
+        }
+
+    },
+
     renderContent: function(uriHash) {
         // some simple routing
-        var content = document.getElementById('content');
+        // var content = document.getElementById('content');
+        var content = document.getElementById(uriHash + '-section');
         switch (uriHash) {
             case "service-status":
                 this.viewServiceStatus.renderView(content);
+                view.store.dispatch({
+                    type: 'UPDATED_SERVICE_STATUS_VIEW'
+                });
                 break;
             case "activity":
                 this.viewActivity.renderView(content);
+                view.store.dispatch({
+                    type: 'UPDATED_ACTIVITY_VIEW'
+                });
                 break;
             default:
                 console.log('No matching hash provided');
         }
 
         // Update state with flag saying view change is no longer pending
-        view.store.dispatch({
-            type: 'UPDATED_VIEW'
-        })
+        // view.store.dispatch({
+        //     type: 'UPDATED_VIEW',
+        //     view: uriHash
+        // })
     },
 
     renderTabs: function() {
@@ -113,9 +138,11 @@ var view = {
     },
 
     changeView: function(uriHash) {
+        var activeView = uriHash ? uriHash : "activity";
+
         this.store.dispatch({
             type: 'REQUEST_VIEW',
-            view: uriHash
+            view: activeView
         });
     },
 
@@ -123,14 +150,29 @@ var view = {
         this.store.subscribe(function() {
             var currentState = view.store.getState();
 
-            // Render view is a view update is pending
+            // Toggle view display to active view
             if (currentState.pendingViewUpdate) {
-                // TODO if data crunching and rendering charts take some time tab click feels delayed. Tab should swap instantly and content should go completely empty first, then new content loaded in when it's ready.
                 view.renderTabs();
                 view.bindClickEvents();
 
-                view.renderContent(view.stringConvert.fromCameltoSlug(currentState.activeView));
+                view.toggleViewVisibility(currentState.activeView);
             }
+
+            // Render section when new data has arrived for it
+            if (currentState.activity.isNewData) {
+                view.renderContent('activity');
+            } else if (currentState.serviceStatus.isNewData) {
+                view.renderContent('service-status');
+            }
+
+            // Render view is a view update is pending
+            // if (currentState.pendingViewUpdate) {
+            //     // TODO if data crunching and rendering charts take some time tab click feels delayed. Tab should swap instantly and content should go completely empty first, then new content loaded in when it's ready.
+            //     view.renderTabs();
+            //     view.bindClickEvents();
+            //
+            //     // view.renderContent(view.stringConvert.fromCameltoSlug(currentState.activeView));
+            // }
         });
     }
 
