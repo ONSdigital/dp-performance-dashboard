@@ -1,16 +1,42 @@
 <div class="">
     <div class="wrapper">
-        <div class="col-wrap margin-top--1">
+        <div class="col-wrap">
             <div class="col">
                 <h2>Average response time</h2>
+                {{#each averageResponseTimes}}
+                    <div class="col col--lg-18 padding-right--1 padding-left-sm--1 padding-left-md--1 margin-top--2 margin-right--1" style="border-left:16px solid #E5E6E7">
+                        <p class="margin-top--0">{{description}}</p>
+                        <h2 class="flush">{{responseTime}}ms</h2>
+                        <p class="flush">Uptime: {{percentageTimeUp}}%<br/> Downtime: {{percentageTimeDown}}%</p>
+                    </div>
+                {{/each}}
             </div>
-            {{#each averageResponseTimes}}
-                <div class="col col--lg-19 padding-right--1 padding-left-sm--1 padding-left-md--1 {{#if @first}}padding-left-lg--0{{/if}} margin-top--2 margin-right--1" style="border-left:16px solid #E5E6E7">
+
+        <div class="col">
+            <h2>Average request times</h2>
+            <div class="btn-group tab-group margin-bottom--2">
+                <button class="btn btn--tab width--30 btn--tab-active" role="tab" aria-controls="request-times-daily--chart" aria-selected="true">
+                    Today
+                </button>
+                <button class="btn btn--tab width--29" role="tab" aria-controls="request-times-monthly--chart">
+                    30 days
+                </button>
+            </div>
+            <div id="request-times-daily--chart" class="tab__content height--40 margin-bottom--2" role="tabpanel">
+                <img src="../img/loader.gif" width="32px" class="margin-top--1"/>
+            </div>
+            <div id="request-times-monthly--chart" class="tab__content height--40 margin-bottom--2" role="tabpanel" aria-hidden="true">
+                <img src="../img/loader.gif" width="32px" class="margin-top--1"/>
+            </div>
+        </div>
+            <div class="col">
+                {{#each averageRequestTimes}}
+                    <div class="col col--lg-18 padding-right--1 padding-left-sm--1 padding-left-md--1 {{#if @first}}padding-left-lg--0{{/if}} margin-top--2 margin-right--1" style="border-left:16px solid #E5E6E7">
                     <p class="margin-top--0">{{description}}</p>
-                    <h2 class="flush">{{responseTime}}ms</h2>
-                    <p class="flush">Uptime: {{percentageTimeUp}}%<br/> Downtime: {{percentageTimeDown}}%</p>
+                    <h2 class="flush">{{requestTime}}ms</h2>
                 </div>
-            {{/each}}
+                {{/each}}
+            </div>
         </div>
     </div>
 </div>
