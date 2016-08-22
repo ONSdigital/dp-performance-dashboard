@@ -1,17 +1,19 @@
 <div class="">
     <div class="wrapper">
         <div class="col-wrap">
-
-            <div class="col">
-                <h2>Activity</h2>
-                <p><span style="font-size: 80px">{{activeUsers}}</span><br/>users online now</p>
-            </div>
-            <div class="col margin-bottom--2">
+            <h2 class="margin-left--1">Activity</h2>
+            <div class="col col--lg-50 margin-left--1 margin-bottom--2">
                 <h3>Visitors today</h3>
                 <div id="visits-today--chart" class="height--30">
                     <img src="../img/loader.gif" width="32px" class="margin-top--1"/>
                 </div>
             </div>
+            <div class="col col--lg-9 margin-top-lg--8 padding-top--6">
+                <!--<h3>Active users</h3>-->
+                <p class="text-center"><span style="font-size: 80px">{{activeUsers}}</span><br/>users online now</p>
+            </div>
+        </div>
+        <div class="col-wrap">
             <div class="col margin-bottom--2">
                 <h3>Devices used</h3>
                 <div id="devices--chart" class="height--40">
