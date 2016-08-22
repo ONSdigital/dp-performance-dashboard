@@ -47,7 +47,8 @@ module.exports = {
     watch: isWatching(),
     module: {
         loaders: [
-            { test: /\.handlebars$/, loader: "handlebars-loader" }
+            { test: /\.handlebars$/, loader: "handlebars-loader" },
+            { test: /\.scss$/, loaders: ["style", "css", "sass"]}
         ]
     },
     devtool: "#inline-source-map",

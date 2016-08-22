@@ -1,0 +1,62 @@
+
+// thick left border for dashboard stat blocks
+.border {
+
+    &--left-thick {
+        border-left: 16px solid #E5E6E7;
+    }
+
+    &--right-thick {
+        border-right: 16px solid #E5E6E7;
+    }
+}
+
+
+// styling for in-page tabs
+.tab {
+
+    &__btn-group {
+
+        .btn--tab {
+
+            width: 50% !important;
+            background-color: #E5E6E7;
+
+            &:hover {
+                cursor: hand;
+                background-color: #D0D2D3;
+            }
+
+        }
+
+        .btn--tab-active {
+            background-color: white;
+            border: solid 1px #E5E6E7 !important;
+            border-bottom: none !important;
+
+            &:hover {
+                cursor: default;
+                background-color: transparent;
+            }
+        }
+    }
+
+    &__content {
+        border: solid 1px #E5E6E7;
+        border-top: none;
+    }
+
+}
+
+// stand out numbers
+.size {
+
+    &--24 {
+        font-size: 24px;
+    }
+
+    &--80 {
+        font-size: 80px;
+    }
+
+}
