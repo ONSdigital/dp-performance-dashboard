@@ -34,7 +34,6 @@ var viewActivity = {
     renderChartVisitsToday: function () {
         //this.renderChart('visits-today--chart', this.addDataToConfig(this.chartConfig, this.buildChartData(this.getData(), 1, 0, 1, "column")));
         var options = this.buildChartData(this.getData(), 1, 0, 1);
-
         //format categories names with zeros to look like times
         for (value in options.categories) {
             options.categories[value] = options.categories[value] + ":00";
