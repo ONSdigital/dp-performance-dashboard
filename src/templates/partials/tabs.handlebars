@@ -1,11 +1,11 @@
 <nav>
     <ul class="list--neutral flush">
         {{#each tabs}}
-            <li class="tab__item width-sm--6">
+            <li class="tab__item width-sm--6" role="presentation">
                 {{#if isActive}}
-                    <span class="tab__link js-tab tab__link--active">{{title}}</span>
+                    <a href="#{{slug}}" class="tab__link tab__link--active" id="tab-{{slug}}" aria-selected="true">{{title}}</a>
                 {{else}}
-                    <a href="#{{slug}}" class="tab__link js-tab">{{title}}</a>
+                    <a href="#{{slug}}" class="tab__link js-tab" id="tab-{{slug}}" aria-selected="false">{{title}}</a>
                 {{/if}}
             </li>
         {{/each}}

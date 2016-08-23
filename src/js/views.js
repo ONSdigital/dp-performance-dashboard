@@ -1,35 +1,3 @@
-// var baseTemplate = require('../templates/base.handlebars');
-// var viewActivity = require('./viewActivity');
-// var viewServiceStatus = require('./viewServiceStatus');
-// var main = document.getElementById('main');
-// var baseData = {title: "Title thingy"};
-//
-//
-// // render base template
-// main.innerHTML = baseTemplate(baseData);
-// content = document.getElementById('content');
-// renderContent();
-//
-// var tabLinks = document.getElementsByClassName('js-tab');
-// console.log(tabLinks);
-//
-// for(var i=0; i<tabLinks.length; i++) {
-//     tabLinks[i].addEventListener("click", renderContent())
-// }
-//
-// renderContent = function() {
-// // some simple routing
-//     switch (uriHash) {
-//         case "service-status":
-//             console.log("service-status");
-//             viewServiceStatus.renderTemplate(content, baseData);
-//             break;
-//         default:
-//             console.log("activity");
-//             viewActivity.renderTemplate(content, baseData);
-//     }
-// };
-
 var view = {
     baseTemplate: require('../templates/base.handlebars'),
     viewTabs: require('./viewTabs'),
@@ -42,13 +10,11 @@ var view = {
 
     // remove uriHash arg - get from state store
     init: function(uriHash, uriParams) {
-        // this.initView(uriHash);
         this.changeView(uriHash);
         this.handleParams(uriParams);
         this.renderBase();
         this.bindClickEvents();
         this.subscribeToStateChange();
-        // this.renderAllContent();
     },
 
     renderBase: function() {
@@ -77,8 +43,10 @@ var view = {
         for (i = 0; i < sectionsLength; i++) {
             if (sections[i].getAttribute('id') != activeView + '-section') {
                 sections[i].style.display = 'none';
+                sections[i].setAttribute('aria-hidden', true);
             } else {
                 sections[i].style.display = 'block';
+                sections[i].setAttribute('aria-hidden', false);
             }
         }
 
@@ -104,12 +72,6 @@ var view = {
             default:
                 console.log('No matching hash provided');
         }
-
-        // Update state with flag saying view change is no longer pending
-        // view.store.dispatch({
-        //     type: 'UPDATED_VIEW',
-        //     view: uriHash
-        // })
     },
 
     renderTabs: function() {
@@ -155,6 +117,10 @@ var view = {
                 view.renderTabs();
                 view.bindClickEvents();
 
+                view.store.dispatch({
+                    type: 'UPDATED_VIEW'
+                });
+
                 view.toggleViewVisibility(currentState.activeView);
             }
 
@@ -164,15 +130,6 @@ var view = {
             } else if (currentState.serviceStatus.isNewData) {
                 view.renderContent('service-status');
             }
-
-            // Render view is a view update is pending
-            // if (currentState.pendingViewUpdate) {
-            //     // TODO if data crunching and rendering charts take some time tab click feels delayed. Tab should swap instantly and content should go completely empty first, then new content loaded in when it's ready.
-            //     view.renderTabs();
-            //     view.bindClickEvents();
-            //
-            //     // view.renderContent(view.stringConvert.fromCameltoSlug(currentState.activeView));
-            // }
         });
     }
 

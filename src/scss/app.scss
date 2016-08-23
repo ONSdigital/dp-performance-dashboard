@@ -11,7 +11,6 @@
     }
 }
 
-
 // styling for in-page tabs
 .tab {
 
@@ -22,9 +21,12 @@
             width: 50% !important;
             background-color: #E5E6E7;
 
-            &:hover {
+            &:hover,
+            &:focus {
                 cursor: hand;
                 background-color: #D0D2D3;
+                outline: 0;
+                text-decoration: underline;
             }
 
         }
@@ -34,9 +36,11 @@
             border: solid 1px #E5E6E7 !important;
             border-bottom: none !important;
 
-            &:hover {
+            &:hover,
+            &:focus {
                 cursor: default;
                 background-color: transparent;
+                outline: 0;
             }
         }
     }
@@ -44,6 +48,12 @@
     &__content {
         border: solid 1px #E5E6E7;
         border-top: none;
+    }
+
+    // There's a fix in Sixteens develop branch for the active tab having text decoration, so this is a temporary fix until that is in master branch
+    &__link--active:hover,
+    &__link--active:focus {
+        text-decoration: none;
     }
 
 }
