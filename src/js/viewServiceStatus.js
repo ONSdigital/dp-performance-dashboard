@@ -63,7 +63,7 @@ var viewServiceStatus = {
         // hide all tab content and set aria
         var tabContent = document.getElementsByClassName('tab__content');
         for (var i = 0; i < tabContent.length; i++) {
-            // tabContent[i].style.display = 'none';
+            tabContent[i].style.display = 'none';
             tabContent[i].setAttribute('aria-hidden', 'true');
         }
 
@@ -77,7 +77,7 @@ var viewServiceStatus = {
         // show tab content, add aria & add active class to button
         var activeTabName = this.getAttribute('aria-controls');
         var activeTabContent = document.getElementById(activeTabName);
-        //activeTabContent.style.display = 'block';
+        activeTabContent.style.display = 'block';
         activeTabContent.setAttribute('aria-hidden', 'false');
         this.className += ' btn--tab-active';
         this.setAttribute('aria-selected', true);

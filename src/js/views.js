@@ -79,15 +79,6 @@ var view = {
         view.viewTabs.renderView(tabs);
     },
 
-    initView: function(uriHash) {
-        var activeView = uriHash ? uriHash : "activity";
-
-        this.store.dispatch({
-            type: 'INITIALISE_VIEW',
-            view: activeView
-        });
-    },
-
     handleParams: function(uriParams) {
         if (!uriParams) {
             return

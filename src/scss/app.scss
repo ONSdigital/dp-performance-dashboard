@@ -70,3 +70,9 @@
     }
 
 }
+
+// Revert Sixteens hiding all elements with attribute aria-hidden = true
+[aria-hidden*=true] {
+    display: block;
+    visibility: visible;
+}
