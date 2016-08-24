@@ -1,36 +1,37 @@
-<div class="">
-    <div class="wrapper">
-        <div class="col-wrap">
-            {{!-- <h2 class="margin-left--1">Activity</h2> --}}
-            <div class="col col--lg-50 margin-top--2 margin-left--1 margin-bottom--2">
-                <h3>Visitors today</h3>
-                <div id="visits-today--chart" class="height--30" aria-labelledby="charts-aria">
-                    <img src="../img/loader.gif" width="32px" class="margin-top--1"/>
+<div class="wrapper">
+    <div class="col-wrap">
+        <div class="col padding-bottom--6">
+            <div class="col-wrap">
+                <div class="col col--lg-48 margin-left--1 margin-bottom--2">
+                    <h3 class="margin-top--4">Visitors today</h3>
+                    <div id="visits-today--chart" class="height--30" aria-labelledby="charts-aria">
+                        <img src="../img/loader.gif" width="32px" class="margin-top--1"/>
+                    </div>
                 </div>
-            </div>
-            <div class="col col--lg-9 margin-top-lg--8 padding-top--6">
-                <!--<h3>Active users</h3>-->
-                <p class="text-center"><span style="font-size: 80px">{{activeUsers}}</span><br/>users online now</p>
+                <div class="col col--lg-10 margin-left--1 margin-top-lg--8 padding-top--6 ">
+                    <!--<h3>Active users</h3>-->
+                    <p class="text-center"><span class="size--80">{{activeUsers}}</span><br/>users online now</p>
+                </div>
             </div>
         </div>
-        <div class="col-wrap">
-            <div class="col margin-bottom--2">
-                <h3>Devices used</h3>
-                <div id="devices--chart" class="height--40" aria-labelledby="charts-aria">
-                    <img src="../img/loader.gif" width="32px" class="margin-top--1"/>
-                </div>
+    </div>
+    <div class="col-wrap">
+        <div class="col padding-bottom--6 border-bottom--iron-light-lg margin-top--1 border-top--iron-light-lg">
+            <h3 class="margin-top--4">Devices used</h3>
+            <div id="devices--chart" class="height--40 chart-container" aria-labelledby="charts-aria">
+                <img src="../img/loader.gif" width="32px" class="margin-top--1"/>
             </div>
-            <div class="col margin-bottom--2">
-                <h3>Top pages</h3>
-                <div id="landing-pages--chart" class="height--50" aria-labelledby="charts-aria">
-                    <img src="../img/loader.gif" width="32px" class="margin-top--1"/>
-                </div>
+        </div>
+        <div class="col padding-bottom--6 border-bottom--iron-light-lg">
+            <h3 class="margin-top--4">Top pages</h3>
+            <div id="landing-pages--chart" class="height--50 chart-container" aria-labelledby="charts-aria">
+                <img src="../img/loader.gif" width="32px" class="margin-top--1"/>
             </div>
-            <div class="col margin-bottom--2">
-                <h3>Top refers</h3>
-                <div id="traffic-sources--chart" class="height--50" aria-labelledby="charts-aria">
-                    <img src="../img/loader.gif" width="32px" class="margin-top--1"/>
-                </div>
+        </div>
+        <div class="col padding-bottom--6 border-bottom--iron-light-lg">
+            <h3 class="margin-top--4">Top refers</h3>
+            <div id="traffic-sources--chart" class="height--50 chart-container" aria-labelledby="charts-aria">
+                <img src="../img/loader.gif" width="32px" class="margin-top--1"/>
             </div>
         </div>
     </div>
