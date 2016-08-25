@@ -15,6 +15,10 @@ var viewServiceStatus = {
         return currentState.serviceStatus.data;
     },
 
+    setChartOptions: function() {
+        this.Highcharts.setOptions(this.chartConfig)
+    },
+
     renderView: function (container) {
         this.buildPageData();
         this.renderTemplate(container);
@@ -200,6 +204,7 @@ var viewServiceStatus = {
     },
 
     renderCharts: function() {
+        this.setChartOptions();
         this.renderChartRequestTimesDaily();
         this.renderChartRequestTimesMonthly();
         this.renderPublishTimesChart();
