@@ -40,14 +40,6 @@ var api = {
                         data: event.data.data
                     })
                 }
-
-                // Request active view to re-render
-                // if (event.data.title == stringConvert.toCamelCase(currentState.activeView)) {
-                //     store.dispatch({
-                //         type: "REQUEST_VIEW",
-                //         view: currentState.activeView
-                //     })
-                // }
             }
         } else {
             console.log('Web workers not supported');

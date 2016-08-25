@@ -7,6 +7,7 @@ var viewServiceStatus = {
     buildChartData: require('./buildChartDataObject'),
     bodyData: {"title": "Service status"},
     store: require('./state'),
+    buildTableHtml: require('./buildTableHtml'),
 
     getData: function() {
         // Get latest activity data from state
@@ -19,7 +20,10 @@ var viewServiceStatus = {
         this.renderTemplate(container);
         this.bindClickEvents();
         // add delay before rendering charts to give browser chance to render template changes
-        setTimeout(function(){viewServiceStatus.renderCharts();}, 5);
+        setTimeout(function(){
+            viewServiceStatus.renderCharts();
+            viewServiceStatus.renderHiddenTables();
+        }, 5);
 
     },
 
@@ -199,6 +203,89 @@ var viewServiceStatus = {
         this.renderChartRequestTimesDaily();
         this.renderChartRequestTimesMonthly();
         this.renderPublishTimesChart();
+    },
+
+    renderTableRequestTimesDaily: function() {
+        var options = {
+            data: reqData,
+            id: 'request-times-daily',
+            headings: [
+                'Hour of day',
+                'Time taken (ms)'
+            ],
+            body: [
+                {
+                    dataNode: 3,
+                    valueNodes: [
+                        0,
+                        1
+                    ]
+                }
+            ]
+        };
+
+        this.buildTableHtml(options);
+    },
+
+    renderTableRequestTimesMonthly: function() {
+        var options = {
+            data: reqData,
+            id: 'request-times-monthly',
+            headings: [
+                'Date',
+                'Time taken (ms)'
+            ],
+            body: [
+                {
+                    dataNode: 4,
+                    valueNodes: [
+                        0,
+                        1
+                    ]
+                }
+            ]
+        };
+
+        this.buildTableHtml(options);
+    },
+
+    renderTablePublishTimes: function() {
+        var options = {
+            data: reqData,
+            id: 'publish-times',
+            headings: [
+                'Date',
+                'Time taken (ms)',
+                'Number of files'
+            ],
+            body: [
+                {
+                    dataNode: 5,
+                    valueNodes: [
+                        0,
+                        1
+                    ]
+                },
+                {
+                    dataNode: 6,
+                    valueNodes: [
+                        1
+                    ]
+                }
+            ]
+        };
+
+        this.buildTableHtml(options);
+    },
+
+    renderHiddenTables: function() {
+        var t0 = performance.now();
+        this.renderTableRequestTimesDaily();
+        this.renderTableRequestTimesMonthly();
+        this.renderTablePublishTimes();
+        var t1 = performance.now();
+        console.log('Took', (t1 - t0).toFixed(4), 'milliseconds to generate service status tables');
+
     },
 
     renderTemplate: function(container) {

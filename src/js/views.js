@@ -10,11 +10,11 @@ var view = {
 
     // remove uriHash arg - get from state store
     init: function(uriHash, uriParams) {
-        this.changeView(uriHash);
-        this.handleParams(uriParams);
         this.renderBase();
-        this.bindClickEvents();
+        this.handleParams(uriParams);
         this.subscribeToStateChange();
+        this.changeView(uriHash);
+        this.bindClickEvents();
     },
 
     renderBase: function() {
@@ -58,16 +58,16 @@ var view = {
         var content = document.getElementById(uriHash + '-section');
         switch (uriHash) {
             case "service-status":
-                this.viewServiceStatus.renderView(content);
                 view.store.dispatch({
                     type: 'UPDATED_SERVICE_STATUS_VIEW'
                 });
+                this.viewServiceStatus.renderView(content);
                 break;
             case "activity":
-                this.viewActivity.renderView(content);
                 view.store.dispatch({
                     type: 'UPDATED_ACTIVITY_VIEW'
                 });
+                this.viewActivity.renderView(content);
                 break;
             default:
                 console.log('No matching hash provided');
