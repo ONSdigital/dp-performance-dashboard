@@ -17,10 +17,20 @@ function dashboard(state, action) {
     switch (action.type) {
         case 'RECEIVED_ACTIVITY_DATA': {
             updatedState.activity.data = action.data;
+            updatedState.activity.isNewData = true;
             break;
         }
         case 'RECEIVED_SERVICE_STATUS_DATA': {
             updatedState.serviceStatus.data = action.data;
+            updatedState.serviceStatus.isNewData = true;
+            break;
+        }
+        case 'UPDATED_SERVICE_STATUS_VIEW': {
+            updatedState.serviceStatus.isNewData = false;
+            break;
+        }
+        case 'UPDATED_ACTIVITY_VIEW': {
+            updatedState.activity.isNewData = false;
             break;
         }
         case 'INITIALISE_VIEW': {
