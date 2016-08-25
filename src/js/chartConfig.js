@@ -1,6 +1,15 @@
 var chartConfig = {
-
-    colors: ['#55A9DC', '#E6645C', '#886DB3', '#6CC080'],
+    chart: {
+        style: {
+            fontFamily: '"Open Sans",Helvetica,Arial,sans-serif',
+            fontSize: '14px'
+        },
+        spacingTop: 15,
+        spacingBottom: 15,
+        spacingLeft: 0,
+        spacingRight: 0
+    },
+    colors: ['#3B7A9E', '#FF9933', '#55A9DC', '#E6645C', '#886DB3', '#6CC080'],
     series: [{
         marker : {
             enabled: true,

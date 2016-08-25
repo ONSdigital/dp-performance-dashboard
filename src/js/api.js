@@ -10,6 +10,7 @@ var worker = new Worker("worker.js");
 
 /* Functions to access data from JSON file */
 var api = {
+
     requestData: function (success) {
         // TODO need to use this as a back-up for browsers without web workers (IE8)
         xhr({
@@ -21,6 +22,7 @@ var api = {
             success(body)
         });
     },
+
     subscribeToDataUpdates: function () {
         if (window.Worker) {
             worker.onmessage = function (event) {
@@ -38,20 +40,48 @@ var api = {
                         data: event.data.data
                     })
                 }
-
-                // Request active view to re-render
-                if (event.data.title == stringConvert.toCamelCase(currentState.activeView)) {
-                    store.dispatch({
-                        type: "REQUEST_VIEW",
-                        view: currentState.activeView
-                    })
-                }
             }
         } else {
             console.log('Web workers not supported');
         }
+    },
+
+    subscribeToEnvironmentVariable: function() {
+        var environmentSet = false;
+
+        store.subscribe(function() {
+            var currentState = store.getState();
+
+            // Only allow environment to be set once
+            if (environmentSet) {
+                return false;
+            }
+
+            // Tell web worker where to get data from
+            if (window.Worker) {
+                switch (currentState.environment) {
+                    case 'production': {
+                        worker.postMessage('USE_LOCAL_DATA');
+                        break;
+                    }
+                    case 'develop': {
+                        worker.postMessage('USE_REMOTE_DATA');
+                        break;
+                    }
+                    default: {
+                        worker.postMessage('USE_LOCAL_DATA');
+                        break;
+                    }
+                }
+
+                environmentSet = true;
+
+            } else {
+                console.log('Web workers not supported');
+            }
+        });
     }
-}
+};
 
 // Export this object so that the api functions can be used across app
 module.exports = api;

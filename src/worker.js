@@ -4,20 +4,46 @@
 var data = [
     {
         title: 'activity',
-        uri: 'https://s3-eu-west-1.amazonaws.com/ons-metrics/analytics.json',
+        uri: 'analytics.json',
         updateTime: '',
         data: {}
     },
     {
         title: 'serviceStatus',
-        uri: 'https://s3-eu-west-1.amazonaws.com/ons-metrics/responsetimes.json',
+        uri: 'responsetimes.json',
         updateTime: '',
         data: {}
     }
 ];
 
+// Listen for message to switch to remote data sources
+onmessage = function(event) {
+
+    switch (event.data) {
+        case "USE_REMOTE_DATA": {
+            var dataLength = data.length,
+                i;
+
+            for (i = 0; i < dataLength; i++) {
+                data[i].uri = 'http://performance.develop.onsdigital.co.uk/' + data[i].uri;
+            }
+
+            getData();
+            break;
+        }
+        case "USE_LOCAL_DATA": {
+            getData();
+            break;
+        }
+        default: {
+            console.log('No message contents given to worker');
+        }
+    }
+};
+
 // Our function that requests data from API
 function getData() {
+
     var dataLength = data.length;
 
     // Loop through data and get data for each object
@@ -45,5 +71,5 @@ function getData() {
 
 }
 
-getData();
-setInterval(getData, 30000);
+setInterval(getData, 300000);
+// setInterval(getData, 10000);

@@ -17,10 +17,20 @@ function dashboard(state, action) {
     switch (action.type) {
         case 'RECEIVED_ACTIVITY_DATA': {
             updatedState.activity.data = action.data;
+            updatedState.activity.isNewData = true;
             break;
         }
         case 'RECEIVED_SERVICE_STATUS_DATA': {
             updatedState.serviceStatus.data = action.data;
+            updatedState.serviceStatus.isNewData = true;
+            break;
+        }
+        case 'UPDATED_SERVICE_STATUS_VIEW': {
+            updatedState.serviceStatus.isNewData = false;
+            break;
+        }
+        case 'UPDATED_ACTIVITY_VIEW': {
+            updatedState.activity.isNewData = false;
             break;
         }
         case 'INITIALISE_VIEW': {
@@ -36,17 +46,26 @@ function dashboard(state, action) {
             updatedState.pendingViewUpdate = false;
             break;
         }
+        case 'ENABLE_STATE_LOGGING': {
+            updatedState.enableStateLogging = true;
+            break;
+        }
+        case 'UPDATE_ENVIRONMENT_VAR': {
+            updatedState.environment = action.env;
+            break;
+        }
         default: {
-            console.log('No action type given');
+            // console.log('No state action type given');
             break;
         }
     }
 
-
-    console.log('ACTION: ', action);
-    console.log('OLD STATE: ', state);
-    console.log('NEW STATE: ', updatedState);
-    console.log('--------');
+    if (updatedState.enableStateLogging) {
+        console.log('ACTION: ', action);
+        console.log('OLD STATE: ', state);
+        console.log('NEW STATE: ', updatedState);
+        console.log('--------');
+    }
 
     return updatedState
 }
@@ -55,6 +74,8 @@ var createStore = Redux.createStore,
     initialState = {
         activeView: '',
         pendingViewUpdate: false,
+        enableStateLogging: false,
+        environment: '',
         activity: {},
         serviceStatus: {}
     },

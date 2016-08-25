@@ -1,0 +1,92 @@
+
+// thick left border for dashboard stat blocks
+.border {
+
+    &--left-thick {
+        border-left: 16px solid #E5E6E7;
+    }
+
+    &--right-thick {
+        border-right: 16px solid #E5E6E7;
+    }
+}
+
+// styling for in-page tabs
+.tab {
+
+    &__btn-group {
+
+        .btn--tab {
+
+            width: 50% !important;
+            background-color: #E5E6E7;
+
+            &:hover,
+            &:focus {
+                cursor: hand;
+                background-color: #D0D2D3;
+                outline: 0;
+                text-decoration: underline;
+            }
+
+        }
+
+        .btn--tab-active {
+            background-color: white;
+            border: solid 1px #E5E6E7 !important;
+            border-bottom: none !important;
+
+            &:hover,
+            &:focus {
+                cursor: default;
+                background-color: transparent;
+                outline: 0;
+            }
+        }
+    }
+
+    &__content {
+        border: solid 1px #E5E6E7;
+        border-top: none;
+    }
+
+    // There's a fix in Sixteens develop branch for the active tab having text decoration, so this is a temporary fix until that is in master branch
+    &__link--active:hover,
+    &__link--active:focus {
+        text-decoration: none;
+    }
+
+}
+
+// stand out numbers
+.size {
+
+    &--24 {
+        font-size: 24px;
+    }
+
+    &--80 {
+        font-size: 80px;
+    }
+
+}
+
+.chart-container {
+
+    //width: auto;
+
+    @media (min-width: 768px) {
+        width: 752px;
+    }
+
+    @media (min-width: 992px) {
+        width: 944px;
+    }
+
+}
+
+// Revert Sixteens hiding all elements with attribute aria-hidden = true
+[aria-hidden*=true] {
+    display: block;
+    visibility: visible;
+}
