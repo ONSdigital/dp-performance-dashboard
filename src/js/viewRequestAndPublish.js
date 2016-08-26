@@ -11,8 +11,7 @@ var viewRequestAndPublishTimes = {
     getData: function() {
         // Get latest activity data from state
         var currentState = this.store.getState();
-        // return currentState.requestAndPublishTimes.data;
-        return reqData;
+        return currentState.requestAndPublishTimes.data;
     },
 
     setChartOptions: function() {
@@ -20,7 +19,6 @@ var viewRequestAndPublishTimes = {
     },
 
     renderView: function (container) {
-        // console.log(container);
         this.buildPageData();
         this.renderTemplate(container);
         this.bindClickEvents();
