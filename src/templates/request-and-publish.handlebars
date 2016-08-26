@@ -1,0 +1,43 @@
+<div class="col-wrap">
+    <div class="col">
+        <h3 class="margin-top--4">Average request times</h3>
+        <div class="tabs">
+            <div class="btn-group tab__btn-group">
+                <button class="btn btn--tab width--30 btn--tab-active" aria-controls="request-times-daily--chart"
+                        aria-selected="true">
+                    Today
+                </button>
+                <button class="btn btn--tab width--29" aria-controls="request-times-monthly--chart"
+                        aria-selected="false">
+                    30 days
+                </button>
+            </div>
+            <div id="request-times-daily--chart"
+                 class="tab__content height--40 margin-bottom--2 padding-top--2 padding-bottom--2 chart-container"
+                 aria-hidden="true" aria-labelledby="charts-aria">
+                <img src="../img/loader.gif" width="32px" class="margin-top--1"/>
+            </div>
+            <div id="request-times-monthly--chart"
+                 class="tab__content height--40 margin-bottom--2 padding-top--2 padding-bottom--2 chart-container"
+                 aria-hidden="true" aria-labelledby="charts-aria" style="display: none;">
+                <img src="../img/loader.gif" width="32px" class="margin-top--1"/>
+            </div>
+        </div>
+    </div>
+
+    <div class="col padding-bottom--6 border-bottom--iron-light-lg">
+        {{#each averageRequestTimes}}
+            <div class="col col--lg-18 padding-right--1 padding-left-sm--1 padding-left-md--1 margin-top--2 margin-right--1 margin-left-sm--0 margin-left-md--0 margin-left-lg--0 border--left-thick">
+                <p class="margin-top--0">{{description}}</p>
+                <p class="margin-top--0 margin-bottom--1 size--24">{{requestTime}}ms</p>
+            </div>
+        {{/each}}
+    </div>
+
+    <div class="col margin-bottom--6">
+        <h3 class="margin-top--4">Publish times</h3>
+        <div id="publish-times--chart" class="height--40 chart-container">
+            <img src="../img/loader.gif" width="32px" class="margin-top--1"/>
+        </div>
+    </div>
+</div>

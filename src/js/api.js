@@ -26,7 +26,6 @@ var api = {
     subscribeToDataUpdates: function () {
         if (window.Worker) {
             worker.onmessage = function (event) {
-                var currentState = store.getState();
 
                 // Update state with new data
                 if (event.data.title == "activity") {
@@ -34,9 +33,14 @@ var api = {
                         type: "RECEIVED_ACTIVITY_DATA",
                         data: event.data.data
                     })
-                } else if (event.data.title == "serviceStatus") {
+                } else if (event.data.title == "responseTimes") {
                     store.dispatch({
-                        type: "RECEIVED_SERVICE_STATUS_DATA",
+                        type: "RECEIVED_RESPONSE_DATA",
+                        data: event.data.data
+                    })
+                } else if (event.data.title == "requestAndPublishTimes") {
+                    store.dispatch({
+                        type: "RECEIVED_REQUEST_PUBLISH_DATA",
                         data: event.data.data
                     })
                 }

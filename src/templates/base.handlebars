@@ -1,10 +1,14 @@
 {{> partials/header }}
 
-<!--<div id="content">-->
-
-<!--</div>-->
-<section id="activity-section" class="section" style="display: none" aria-labelledby="tab-activity" aria-hidden="true"></section>
-<section id="service-status-section" class="section" style="display: none" aria-labelledby="tab-service-status" aria-hidden="true"></section>
+<div class="wrapper">
+    <section id="activity-section" class="section" style="display: none" aria-labelledby="tab-activity" aria-hidden="true">
+        <div id="activity__container"></div>
+    </section>
+    <section id="service-status-section" class="section" style="display: none" aria-labelledby="tab-service-status" aria-hidden="true">
+        <div id="response-times__container"></div>
+        <div id="request-publish-times__container"></div>
+    </section>
+</div>
 
 {{!-- Read out by screen readers for each chart --}}
-<div id="charts-aria" style="display: none;">Interactive chart, data available in following table</div>
+<div id="charts-aria" style="position: fixed; left: -999999px;">Interactive chart, data available in following table</div>
