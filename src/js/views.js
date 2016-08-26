@@ -14,7 +14,7 @@ var view = {
         this.handleParams(uriParams);
         this.subscribeToStateChange();
         this.changeView(uriHash);
-        this.bindClickEvents();
+        this.handleHashChangeEvents();
     },
 
     renderBase: function() {
@@ -22,17 +22,11 @@ var view = {
         this.renderTabs();
     },
 
-    bindClickEvents: function() {
-        var tabLinks = document.getElementsByClassName('js-tab');
+    handleHashChangeEvents: function() {
+        window.addEventListener('hashchange', function() {
+            view.changeView(location.hash.replace('#', ''));
+        }, false)
 
-        for(var i =0 ; i < tabLinks.length; i++) {
-            tabLinks[i].addEventListener("click", this.handleTabClick, false);
-        }
-    },
-
-    handleTabClick: function() {
-        var href = this.getAttribute("href").substring(1);
-        view.changeView(href);
     },
 
     toggleViewVisibility: function(activeView) {
@@ -112,7 +106,6 @@ var view = {
             // Toggle view display to active view
             if (currentState.pendingViewUpdate) {
                 view.renderTabs();
-                view.bindClickEvents();
 
                 view.store.dispatch({
                     type: 'UPDATED_VIEW'
