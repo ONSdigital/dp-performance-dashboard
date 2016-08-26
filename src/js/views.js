@@ -2,9 +2,9 @@ var view = {
     baseTemplate: require('../templates/base.handlebars'),
     viewTabs: require('./viewTabs'),
     viewActivity: require('./viewActivity'),
-    viewServiceStatus: require('./viewServiceStatus'),
+    viewResponseTimes: require('./viewResponseTimes'),
+    viewRequestAndPublishTimes: require('./viewRequestAndPublish'),
     main: document.getElementById('main'),
-    baseData: {title: "Title thingy"},
     store: require('./state'),
     stringConvert: require('./stringConvert'),
 
@@ -18,7 +18,7 @@ var view = {
     },
 
     renderBase: function() {
-        this.main.innerHTML = this.baseTemplate(this.baseData);
+        this.main.innerHTML = this.baseTemplate();
         this.renderTabs();
     },
 
@@ -52,22 +52,28 @@ var view = {
 
     },
 
-    renderContent: function(uriHash) {
+    renderContent: function(id) {
         // some simple routing
         // var content = document.getElementById('content');
-        var content = document.getElementById(uriHash + '-section');
-        switch (uriHash) {
-            case "service-status":
-                view.store.dispatch({
-                    type: 'UPDATED_SERVICE_STATUS_VIEW'
-                });
-                this.viewServiceStatus.renderView(content);
-                break;
+        var container = document.getElementById(id + '__container');
+        switch (id) {
             case "activity":
                 view.store.dispatch({
                     type: 'UPDATED_ACTIVITY_VIEW'
                 });
-                this.viewActivity.renderView(content);
+                this.viewActivity.renderView(container);
+                break;
+            case "response-times":
+                view.store.dispatch({
+                    type: 'UPDATED_RESPONSE_VIEW'
+                });
+                this.viewResponseTimes.renderView(container);
+                break;
+            case "request-publish-times":
+                view.store.dispatch({
+                    type: 'UPDATED_REQUEST_PUBLISH_VIEW'
+                });
+                this.viewRequestAndPublishTimes.renderView(container)
                 break;
             default:
                 console.log('No matching hash provided');
@@ -118,8 +124,10 @@ var view = {
             // Render section when new data has arrived for it
             if (currentState.activity.isNewData) {
                 view.renderContent('activity');
-            } else if (currentState.serviceStatus.isNewData) {
-                view.renderContent('service-status');
+            } else if (currentState.responseTimes.isNewData) {
+                view.renderContent('response-times');
+            } else if (currentState.requestAndPublishTimes.isNewData) {
+                view.renderContent('request-publish-times');
             }
         });
     }

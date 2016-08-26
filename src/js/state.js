@@ -20,17 +20,26 @@ function dashboard(state, action) {
             updatedState.activity.isNewData = true;
             break;
         }
-        case 'RECEIVED_SERVICE_STATUS_DATA': {
-            updatedState.serviceStatus.data = action.data;
-            updatedState.serviceStatus.isNewData = true;
+        case 'RECEIVED_RESPONSE_DATA': {
+            updatedState.responseTimes.data = action.data;
+            updatedState.responseTimes.isNewData = true;
             break;
         }
-        case 'UPDATED_SERVICE_STATUS_VIEW': {
-            updatedState.serviceStatus.isNewData = false;
+        case 'RECEIVED_REQUEST_PUBLISH_DATA': {
+            updatedState.requestAndPublishTimes.data = action.data;
+            updatedState.requestAndPublishTimes.isNewData = true;
+            break;
+        }
+        case 'UPDATED_RESPONSE_VIEW': {
+            updatedState.responseTimes.isNewData = false;
             break;
         }
         case 'UPDATED_ACTIVITY_VIEW': {
             updatedState.activity.isNewData = false;
+            break;
+        }
+        case 'UPDATED_REQUEST_PUBLISH_VIEW': {
+            updatedState.requestAndPublishTimes.isNewData = false;
             break;
         }
         case 'INITIALISE_VIEW': {
@@ -77,7 +86,8 @@ var createStore = Redux.createStore,
         enableStateLogging: false,
         environment: '',
         activity: {},
-        serviceStatus: {}
+        responseTimes: {},
+        requestAndPublishTimes: {}
     },
     store = createStore(dashboard);
 

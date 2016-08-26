@@ -9,8 +9,14 @@ var data = [
         data: {}
     },
     {
-        title: 'serviceStatus',
+        title: 'responseTimes',
         uri: 'responsetimes.json',
+        updateTime: '',
+        data: {}
+    },
+    {
+        title: 'requestAndPublishTimes',
+        uri: 'metrics.json',
         updateTime: '',
         data: {}
     }
