@@ -15,7 +15,8 @@ function getPlugins() {
     plugins.push(new CopyWebpackPlugin([
         { from: 'src/index.html', to: 'index.html' },
         { from: 'src/worker.js', to: 'worker.js' },
-        { from: 'src/img/loader.gif', to: 'img/loader.gif' }
+        { from: 'src/img/loader.gif', to: 'img/loader.gif' },
+        { from: 'src/favicon.ico', to: 'favicon.ico' }
     ]));
 
     // environment variable plugin
