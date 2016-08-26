@@ -37,53 +37,45 @@ function buildTableHtml(options) {
     }
 
     if (!multipleDataSrcs) {
+        // Data all from one object - build table as normal
         buildBodyMarkup(data[options.body[0].dataNode], options.body[0].valueNodes);
     } else {
-        // TODO Get table with multiple data sources working
-        // var i,
-        //     dataSrcLength = options.body.length,
-        //     tableRows = [];
-        //
-        // for (i = 0; i < dataSrcLength; i++) {
-        //
-        //     var valuesLength = data[options.body[i].dataNode].values.length,
-        //         valueNodes = options.body[i].valueNodes;
-        //
-        //     for (index = 0; index < valuesLength; index++) {
-        //         var tableRow = [];
-        //         for (var valuesIndex = 0, arrLength = valueNodes.length; valuesIndex < arrLength; valuesIndex++) {
-        //             if (!tableRows[index]) {
-        //                 tableRows[index] = [];
-        //             }
-        //             tableRows[index].push((data[options.body[i].dataNode].values[index][valueNodes[valuesIndex]]));
-        //         }
-        //         // tableBody[index] = '<tr><td>' + tableRow.join('</td><td>') + '</td></tr>';
-        //
-        //         // if (!multipleDataSrcs) {
-        //         // } else if (multipleDataSrcs && tableRow.length > 0) {
-        //         //     tableRow[index] += dataObj.values[index][valueNodes[i]];
-        //         //     console.log(tableRow);
-        //         // } else {
-        //         // }
-        //     }
-        //
-        //     // If first loop create array of rows, else add to existing array node
-        //     // if (i === 0) {
-        //     //
-        //     // } else {
-        //     //
-        //     // }
-        //     // buildBodyMarkup(data[options.body[i].dataNode], options.body[i].valueNodes);
-        //     // console.log(tableBody);
-        //     // console.log(data[options.body[i].dataNode]);
-        //
-        // }
-        //
-        // console.log(tableRows);
-        // for (var i = 0, tableRowsLength = tableRows.length; i < tableRowsLength; i++) {
-        //
-        // }
+        // Data comes from multiple different objects - custom function to build up HTML
+        var i,
+            dataSrcLength = options.body.length,
+            tableRows = [];
+
+        // Loop through each data source / object
+        for (i = 0; i < dataSrcLength; i++) {
+
+            var valuesLength = data[options.body[i].dataNode].values.length,
+                valueNodes = options.body[i].valueNodes;
+
+            // Do ordinary loop through each value array
+            for (index = 0; index < valuesLength; index++) {
+
+                // Get specific value nodes from the value array
+                for (var valuesIndex = 0, arrLength = valueNodes.length; valuesIndex < arrLength; valuesIndex++) {
+
+                    // Build array for each row of the table with arrays containing data
+                    if (!tableRows[index]) {
+                        tableRows[index] = [];
+                    }
+                    tableRows[index].push((data[options.body[i].dataNode].values[index][valueNodes[valuesIndex]]));
+                }
+            }
+        }
+
+        // Join together each individual array in the row array
+        var tableRowsLength = tableRows.length;
+        for (i = 0; i < tableRowsLength; i++) {
+            tableRows[i] = '<tr><td>' + tableRows[i].join('</td><td>') + '</td></tr>';
+        }
+
+        tableBody = tableRows;
     }
+
+    // Join together rows to
     tableBody = tableBody.join('');
 
 
