@@ -73,7 +73,7 @@ var view = {
                 view.store.dispatch({
                     type: 'UPDATED_REQUEST_PUBLISH_VIEW'
                 });
-                this.viewRequestAndPublishTimes.renderView(container)
+                this.viewRequestAndPublishTimes.renderView(container);
                 break;
             default:
                 console.log('No matching hash provided');
