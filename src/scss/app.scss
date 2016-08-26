@@ -81,6 +81,12 @@
 
     @media (min-width: 992px) {
         width: 944px;
+
+        &--48 {
+            width: 768px;
+        }
+
+
     }
 
 }
