@@ -7,6 +7,7 @@ var viewRequestAndPublishTimes = {
     bodyData: {},
     store: require('./state'),
     buildTableHtml: require('./buildTableHtml'),
+    activeChartTab: 'request-times-daily--chart',
 
     getData: function() {
         // Get latest activity data from state
@@ -26,6 +27,7 @@ var viewRequestAndPublishTimes = {
         setTimeout(function(){
             viewRequestAndPublishTimes.renderCharts();
             viewRequestAndPublishTimes.renderHiddenTables();
+            viewRequestAndPublishTimes.toggleChartTabs();
         }, 5);
 
     },
@@ -36,7 +38,73 @@ var viewRequestAndPublishTimes = {
         for(var i =0 ; i < tabLinks.length; i++) {
             tabLinks[i].addEventListener("click", this.handleTabClick, false);
         }
+    },
 
+    toggleChartTabs: function (thisElement) {
+
+        // Either pass in parameter of 'this' or use the default (ie chart of today's data)
+        thisElement = thisElement ? thisElement : document.querySelectorAll('[aria-controls="' + this.activeChartTab + '"]')[0];
+
+        console.log(thisElement);
+
+        // hide all tab content and set aria
+        var tabContent = document.getElementsByClassName('tab__content'),
+            tabContentLength = tabContent.length,
+            i;
+        for (i = 0; i < tabContentLength; i++) {
+            tabContent[i].style.display = 'none';
+            tabContent[i].setAttribute('aria-hidden', 'true');
+        }
+
+        // remove active class from all buttons and set aria
+        var tabLinks = document.getElementsByClassName('btn--tab'),
+            tabLinksLength = tabLinks.length;
+        for (i = 0; i < tabLinksLength; i++) {
+            tabLinks[i].className = tabLinks[i].className.replace(' btn--tab-active', '');
+            tabLinks[i].setAttribute('aria-selected', false);
+        }
+
+        // show tab content, add aria, toggle active tab object & add active class to button
+        var activeTabName = thisElement.getAttribute('aria-controls');
+        var activeTabContent = document.getElementById(activeTabName);
+        activeTabContent.style.display = 'block';
+        activeTabContent.setAttribute('aria-hidden', 'false');
+        thisElement.className += ' btn--tab-active';
+        thisElement.setAttribute('aria-selected', true);
+
+        // set active tab so same tab is shown on re-render of charts
+        viewRequestAndPublishTimes.activeChartTab = activeTabName;
+    },
+
+    handleTabClick: function() {
+        //TODO abstract out Jon's dodgy code
+
+        viewRequestAndPublishTimes.toggleChartTabs(this);
+        // // hide all tab content and set aria
+        // var tabContent = document.getElementsByClassName('tab__content'),
+        //     tabContentLength = tabContent.length,
+        //     i;
+        // for (i = 0; i < tabContentLength; i++) {
+        //     tabContent[i].style.display = 'none';
+        //     tabContent[i].setAttribute('aria-hidden', 'true');
+        // }
+        //
+        // // remove active class from all buttons and set aria
+        // var tabLinks = document.getElementsByClassName('btn--tab'),
+        //     tabLinksLength = tabLinks.length;
+        // for (i = 0; i < tabLinksLength; i++) {
+        //     tabLinks[i].className = tabLinks[i].className.replace(' btn--tab-active', '');
+        //     tabLinks[i].setAttribute('aria-selected', false);
+        // }
+        //
+        // // show tab content, add aria, toggle active tab object & add active class to button
+        // var activeTabName = this.getAttribute('aria-controls');
+        // var activeTabContent = document.getElementById(activeTabName);
+        // activeTabContent.style.display = 'block';
+        // activeTabContent.setAttribute('aria-hidden', 'false');
+        // viewRequestAndPublishTimes.setActiveTab(activeTabName);
+        // this.className += ' btn--tab-active';
+        // this.setAttribute('aria-selected', true);
     },
 
     buildPageData: function() {
@@ -46,34 +114,10 @@ var viewRequestAndPublishTimes = {
             var requestTimeData = {
                 'name': data[i].definition.meta.name,
                 'description': data[i].definition.meta.description,
-                'requestTime': data[i].values[0][1]
+                // 'requestTime': data[i].values[0][1]
             };
             this.bodyData.averageRequestTimes.push(requestTimeData);
         }
-    },
-
-    handleTabClick: function() {
-        // hide all tab content and set aria
-        var tabContent = document.getElementsByClassName('tab__content');
-        for (var i = 0; i < tabContent.length; i++) {
-            tabContent[i].style.display = 'none';
-            tabContent[i].setAttribute('aria-hidden', 'true');
-        }
-
-        // remove active class from all buttons and set aria
-        var tabLinks = document.getElementsByClassName('btn--tab');
-        for (var i = 0; i < tabLinks.length; i++) {
-            tabLinks[i].className = tabLinks[i].className.replace(' btn--tab-active', '');
-            tabLinks[i].setAttribute('aria-selected', false);
-        }
-
-        // show tab content, add aria & add active class to button
-        var activeTabName = this.getAttribute('aria-controls');
-        var activeTabContent = document.getElementById(activeTabName);
-        activeTabContent.style.display = 'block';
-        activeTabContent.setAttribute('aria-hidden', 'false');
-        this.className += ' btn--tab-active';
-        this.setAttribute('aria-selected', true);
     },
 
     renderChartRequestTimesDaily: function () {
@@ -280,5 +324,3 @@ var viewRequestAndPublishTimes = {
 };
 
 module.exports = viewRequestAndPublishTimes;
-
-var reqData = [{"name":"request-time-1-day","definition":{"name":"request-time-1-day","frequency":"hourly","query":{"query":"(index\u003dsandbox) metricsType\u003dREQUEST_TIME | timechart span\u003d1d avg(timeTaken)","start-date":"1daysAgo","end-date":"today"},"meta":{"name":"Average request time","description":"Average request time over the last day"}},"columns":["_time","avg(timeTaken)","_span","_spandays"],"values":[["2016-08-22T00:00:00.000+01:00","41.069767","86400","1"]]},{"name":"request-time-7-day","definition":{"name":"request-time-7-day","frequency":"hourly","query":{"query":"(index\u003dsandbox) metricsType\u003dREQUEST_TIME | timechart span\u003d1d avg(timeTaken)","start-date":"7daysAgo","end-date":"today"},"meta":{"name":"Average request time","description":"Average request time over the last 7 days"}},"columns":["_time","avg(timeTaken)","_span","_spandays"],"values":[["2016-08-16T00:00:00.000+01:00","0","86400","1"],["2016-08-17T00:00:00.000+01:00","0","86400","1"],["2016-08-18T00:00:00.000+01:00","0","86400","1"],["2016-08-19T00:00:00.000+01:00","0","86400","1"],["2016-08-20T00:00:00.000+01:00","0","86400","1"],["2016-08-21T00:00:00.000+01:00","0","86400","1"],["2016-08-22T00:00:00.000+01:00","41.069767","86400","1"]]},{"name":"request-time-30-day","definition":{"name":"request-time-30-day","frequency":"hourly","query":{"query":"(index\u003dsandbox) metricsType\u003dREQUEST_TIME | timechart span\u003d1d avg(timeTaken)","start-date":"30daysAgo","end-date":"today"},"meta":{"name":"Average request time","description":"Average request time over the last 30 days"}},"columns":["_time","avg(timeTaken)","_span","_spandays"],"values":[["2016-07-24T00:00:00.000+01:00","0","86400","1"],["2016-07-25T00:00:00.000+01:00","0","86400","1"],["2016-07-26T00:00:00.000+01:00","0","86400","1"],["2016-07-27T00:00:00.000+01:00","0","86400","1"],["2016-07-28T00:00:00.000+01:00","0","86400","1"],["2016-07-29T00:00:00.000+01:00","0","86400","1"],["2016-07-30T00:00:00.000+01:00","0","86400","1"],["2016-07-31T00:00:00.000+01:00","0","86400","1"],["2016-08-01T00:00:00.000+01:00","0","86400","1"],["2016-08-02T00:00:00.000+01:00","0","86400","1"],["2016-08-03T00:00:00.000+01:00","0","86400","1"],["2016-08-04T00:00:00.000+01:00","0","86400","1"],["2016-08-05T00:00:00.000+01:00","0","86400","1"],["2016-08-06T00:00:00.000+01:00","0","86400","1"],["2016-08-07T00:00:00.000+01:00","0","86400","1"],["2016-08-08T00:00:00.000+01:00","0","86400","1"],["2016-08-09T00:00:00.000+01:00","0","86400","1"],["2016-08-10T00:00:00.000+01:00","0","86400","1"],["2016-08-11T00:00:00.000+01:00","0","86400","1"],["2016-08-12T00:00:00.000+01:00","0","86400","1"],["2016-08-13T00:00:00.000+01:00","0","86400","1"],["2016-08-14T00:00:00.000+01:00","0","86400","1"],["2016-08-15T00:00:00.000+01:00","0","86400","1"],["2016-08-16T00:00:00.000+01:00","0","86400","1"],["2016-08-17T00:00:00.000+01:00","0","86400","1"],["2016-08-18T00:00:00.000+01:00","0","86400","1"],["2016-08-19T00:00:00.000+01:00","0","86400","1"],["2016-08-20T00:00:00.000+01:00","0","86400","1"],["2016-08-21T00:00:00.000+01:00","0","86400","1"],["2016-08-22T00:00:00.000+01:00","41.069767","86400","1"]]},{"name":"request-time-1-day-hourly","definition":{"name":"request-time-1-day-hourly","frequency":"hourly","query":{"query":"(index\u003dsandbox) metricsType\u003dREQUEST_TIME | timechart span\u003d1h avg(timeTaken)","start-date":"1daysAgo","end-date":"today"},"meta":{"name":"Average request time","description":"Average request times hourly over the last day"}},"columns":["_time","avg(timeTaken)","_span"],"values":[["2016-08-22T00:00:00.000+01:00","0","3600"],["2016-08-22T01:00:00.000+01:00","0","3600"],["2016-08-22T02:00:00.000+01:00","0","3600"],["2016-08-22T03:00:00.000+01:00","0","3600"],["2016-08-22T04:00:00.000+01:00","0","3600"],["2016-08-22T05:00:00.000+01:00","0","3600"],["2016-08-22T06:00:00.000+01:00","0","3600"],["2016-08-22T07:00:00.000+01:00","0","3600"],["2016-08-22T08:00:00.000+01:00","0","3600"],["2016-08-22T09:00:00.000+01:00","0","3600"],["2016-08-22T10:00:00.000+01:00","45.821212","3600"],["2016-08-22T11:00:00.000+01:00","25.390000","3600"],["2016-08-22T12:00:00.000+01:00","0","3600"],["2016-08-22T13:00:00.000+01:00","0","3600"],["2016-08-22T14:00:00.000+01:00","0","3600"],["2016-08-22T15:00:00.000+01:00","0","3600"],["2016-08-22T16:00:00.000+01:00","0","3600"],["2016-08-22T17:00:00.000+01:00","0","3600"],["2016-08-22T18:00:00.000+01:00","0","3600"],["2016-08-22T19:00:00.000+01:00","0","3600"],["2016-08-22T20:00:00.000+01:00","0","3600"],["2016-08-22T21:00:00.000+01:00","0","3600"],["2016-08-22T22:00:00.000+01:00","0","3600"],["2016-08-22T23:00:00.000+01:00","0","3600"]]},{"name":"request-time-30-day-daily","definition":{"name":"request-time-30-day-daily","frequency":"hourly","query":{"query":"(index\u003dsandbox) metricsType\u003dREQUEST_TIME | timechart span\u003d1d avg(timeTaken)","start-date":"30daysAgo","end-date":"today"},"meta":{"name":"Average request time","description":"Average request times daily over the last 30 days"}},"columns":["_time","avg(timeTaken)","_span","_spandays"],"values":[["2016-07-24T00:00:00.000+01:00","0","86400","1"],["2016-07-25T00:00:00.000+01:00","0","86400","1"],["2016-07-26T00:00:00.000+01:00","0","86400","1"],["2016-07-27T00:00:00.000+01:00","0","86400","1"],["2016-07-28T00:00:00.000+01:00","0","86400","1"],["2016-07-29T00:00:00.000+01:00","0","86400","1"],["2016-07-30T00:00:00.000+01:00","0","86400","1"],["2016-07-31T00:00:00.000+01:00","0","86400","1"],["2016-08-01T00:00:00.000+01:00","0","86400","1"],["2016-08-02T00:00:00.000+01:00","0","86400","1"],["2016-08-03T00:00:00.000+01:00","0","86400","1"],["2016-08-04T00:00:00.000+01:00","0","86400","1"],["2016-08-05T00:00:00.000+01:00","0","86400","1"],["2016-08-06T00:00:00.000+01:00","0","86400","1"],["2016-08-07T00:00:00.000+01:00","0","86400","1"],["2016-08-08T00:00:00.000+01:00","0","86400","1"],["2016-08-09T00:00:00.000+01:00","0","86400","1"],["2016-08-10T00:00:00.000+01:00","0","86400","1"],["2016-08-11T00:00:00.000+01:00","0","86400","1"],["2016-08-12T00:00:00.000+01:00","0","86400","1"],["2016-08-13T00:00:00.000+01:00","0","86400","1"],["2016-08-14T00:00:00.000+01:00","0","86400","1"],["2016-08-15T00:00:00.000+01:00","0","86400","1"],["2016-08-16T00:00:00.000+01:00","0","86400","1"],["2016-08-17T00:00:00.000+01:00","0","86400","1"],["2016-08-18T00:00:00.000+01:00","0","86400","1"],["2016-08-19T00:00:00.000+01:00","0","86400","1"],["2016-08-20T00:00:00.000+01:00","0","86400","1"],["2016-08-21T00:00:00.000+01:00","0","86400","1"],["2016-08-22T00:00:00.000+01:00","41.069767","86400","1"]]},{"name":"publish-time-30-day","definition":{"name":"publish-time-30-day","frequency":"hourly","query":{"query":"(index\u003dsandbox) metricsType\u003dCOLLECTIONS_PUBLISH_TIME | timechart span\u003d1d avg(collectionsPublishTime)","start-date":"30daysAgo","end-date":"today"},"meta":{"name":"Average request time","description":"Average request times daily over the last 30 days"}},"columns":["_time","avg(collectionsPublishTime)","_span","_spandays"],"values":[["2016-07-24T00:00:00.000+01:00","0","86400","1"],["2016-07-25T00:00:00.000+01:00","0","86400","1"],["2016-07-26T00:00:00.000+01:00","0","86400","1"],["2016-07-27T00:00:00.000+01:00","0","86400","1"],["2016-07-28T00:00:00.000+01:00","0","86400","1"],["2016-07-29T00:00:00.000+01:00","0","86400","1"],["2016-07-30T00:00:00.000+01:00","0","86400","1"],["2016-07-31T00:00:00.000+01:00","0","86400","1"],["2016-08-01T00:00:00.000+01:00","0","86400","1"],["2016-08-02T00:00:00.000+01:00","0","86400","1"],["2016-08-03T00:00:00.000+01:00","0","86400","1"],["2016-08-04T00:00:00.000+01:00","0","86400","1"],["2016-08-05T00:00:00.000+01:00","0","86400","1"],["2016-08-06T00:00:00.000+01:00","0","86400","1"],["2016-08-07T00:00:00.000+01:00","0","86400","1"],["2016-08-08T00:00:00.000+01:00","0","86400","1"],["2016-08-09T00:00:00.000+01:00","0","86400","1"],["2016-08-10T00:00:00.000+01:00","0","86400","1"],["2016-08-11T00:00:00.000+01:00","0","86400","1"],["2016-08-12T00:00:00.000+01:00","0","86400","1"],["2016-08-13T00:00:00.000+01:00","0","86400","1"],["2016-08-14T00:00:00.000+01:00","0","86400","1"],["2016-08-15T00:00:00.000+01:00","0","86400","1"],["2016-08-16T00:00:00.000+01:00","0","86400","1"],["2016-08-17T00:00:00.000+01:00","0","86400","1"],["2016-08-18T00:00:00.000+01:00","0","86400","1"],["2016-08-19T00:00:00.000+01:00","0","86400","1"],["2016-08-20T00:00:00.000+01:00","0","86400","1"],["2016-08-21T00:00:00.000+01:00","0","86400","1"],["2016-08-22T00:00:00.000+01:00","735200246900.666626","86400","1"]]},{"name":"publish-file-30-day","definition":{"name":"publish-file-30-day","frequency":"hourly","query":{"query":"(index\u003dsandbox) metricsType\u003dCOLLECTIONS_PUBLISH_TIME | timechart span\u003d1d avg(collectionsPublishFileCount)","start-date":"30daysAgo","end-date":"today"},"meta":{"name":"Average publish file count","description":"Average publish file counts daily over the last 30 days"}},"columns":["_time","avg(collectionsPublishFileCount)","_span","_spandays"],"values":[["2016-07-24T00:00:00.000+01:00","0","86400","1"],["2016-07-25T00:00:00.000+01:00","0","86400","1"],["2016-07-26T00:00:00.000+01:00","0","86400","1"],["2016-07-27T00:00:00.000+01:00","0","86400","1"],["2016-07-28T00:00:00.000+01:00","0","86400","1"],["2016-07-29T00:00:00.000+01:00","0","86400","1"],["2016-07-30T00:00:00.000+01:00","0","86400","1"],["2016-07-31T00:00:00.000+01:00","0","86400","1"],["2016-08-01T00:00:00.000+01:00","0","86400","1"],["2016-08-02T00:00:00.000+01:00","0","86400","1"],["2016-08-03T00:00:00.000+01:00","0","86400","1"],["2016-08-04T00:00:00.000+01:00","0","86400","1"],["2016-08-05T00:00:00.000+01:00","0","86400","1"],["2016-08-06T00:00:00.000+01:00","0","86400","1"],["2016-08-07T00:00:00.000+01:00","0","86400","1"],["2016-08-08T00:00:00.000+01:00","0","86400","1"],["2016-08-09T00:00:00.000+01:00","0","86400","1"],["2016-08-10T00:00:00.000+01:00","0","86400","1"],["2016-08-11T00:00:00.000+01:00","0","86400","1"],["2016-08-12T00:00:00.000+01:00","0","86400","1"],["2016-08-13T00:00:00.000+01:00","0","86400","1"],["2016-08-14T00:00:00.000+01:00","0","86400","1"],["2016-08-15T00:00:00.000+01:00","0","86400","1"],["2016-08-16T00:00:00.000+01:00","0","86400","1"],["2016-08-17T00:00:00.000+01:00","0","86400","1"],["2016-08-18T00:00:00.000+01:00","0","86400","1"],["2016-08-19T00:00:00.000+01:00","0","86400","1"],["2016-08-20T00:00:00.000+01:00","0","86400","1"],["2016-08-21T00:00:00.000+01:00","0","86400","1"],["2016-08-22T00:00:00.000+01:00","38.000000","86400","1"]]}];
