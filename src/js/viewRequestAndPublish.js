@@ -4,10 +4,14 @@ var viewRequestAndPublishTimes = {
     Highcharts: require('highcharts'),
     chartConfig: require('./chartConfig'),
     buildChartData: require('./buildChartDataObject'),
-    bodyData: {},
+    bodyData: {
+        activeChartTab: {
+            today: true,
+            month: false
+        }
+    },
     store: require('./state'),
     buildTableHtml: require('./buildTableHtml'),
-    activeChartTab: 'request-times-daily--chart',
 
     getData: function() {
         // Get latest activity data from state
@@ -27,7 +31,6 @@ var viewRequestAndPublishTimes = {
         setTimeout(function(){
             viewRequestAndPublishTimes.renderCharts();
             viewRequestAndPublishTimes.renderHiddenTables();
-            viewRequestAndPublishTimes.toggleChartTabs();
         }, 5);
 
     },
@@ -40,13 +43,22 @@ var viewRequestAndPublishTimes = {
         }
     },
 
-    toggleChartTabs: function (thisElement) {
+    setActiveTab: function (activeTabId) {
+        switch (activeTabId) {
+            case 'request-times-daily--chart': {
+                this.bodyData.activeChartTab.today = true;
+                this.bodyData.activeChartTab.month = false;
+                break;
+            }
+            case 'request-times-monthly--chart': {
+                this.bodyData.activeChartTab.month = true;
+                this.bodyData.activeChartTab.today = false;
+                break;
+            }
+        }
+    },
 
-        // Either pass in parameter of 'this' or use the default (ie chart of today's data)
-        thisElement = thisElement ? thisElement : document.querySelectorAll('[aria-controls="' + this.activeChartTab + '"]')[0];
-
-        console.log(thisElement);
-
+    handleTabClick: function() {
         // hide all tab content and set aria
         var tabContent = document.getElementsByClassName('tab__content'),
             tabContentLength = tabContent.length,
@@ -65,46 +77,15 @@ var viewRequestAndPublishTimes = {
         }
 
         // show tab content, add aria, toggle active tab object & add active class to button
-        var activeTabName = thisElement.getAttribute('aria-controls');
+        var activeTabName = this.getAttribute('aria-controls');
         var activeTabContent = document.getElementById(activeTabName);
         activeTabContent.style.display = 'block';
         activeTabContent.setAttribute('aria-hidden', 'false');
-        thisElement.className += ' btn--tab-active';
-        thisElement.setAttribute('aria-selected', true);
+        this.className += ' btn--tab-active';
+        this.setAttribute('aria-selected', true);
 
         // set active tab so same tab is shown on re-render of charts
-        viewRequestAndPublishTimes.activeChartTab = activeTabName;
-    },
-
-    handleTabClick: function() {
-        //TODO abstract out Jon's dodgy code
-
-        viewRequestAndPublishTimes.toggleChartTabs(this);
-        // // hide all tab content and set aria
-        // var tabContent = document.getElementsByClassName('tab__content'),
-        //     tabContentLength = tabContent.length,
-        //     i;
-        // for (i = 0; i < tabContentLength; i++) {
-        //     tabContent[i].style.display = 'none';
-        //     tabContent[i].setAttribute('aria-hidden', 'true');
-        // }
-        //
-        // // remove active class from all buttons and set aria
-        // var tabLinks = document.getElementsByClassName('btn--tab'),
-        //     tabLinksLength = tabLinks.length;
-        // for (i = 0; i < tabLinksLength; i++) {
-        //     tabLinks[i].className = tabLinks[i].className.replace(' btn--tab-active', '');
-        //     tabLinks[i].setAttribute('aria-selected', false);
-        // }
-        //
-        // // show tab content, add aria, toggle active tab object & add active class to button
-        // var activeTabName = this.getAttribute('aria-controls');
-        // var activeTabContent = document.getElementById(activeTabName);
-        // activeTabContent.style.display = 'block';
-        // activeTabContent.setAttribute('aria-hidden', 'false');
-        // viewRequestAndPublishTimes.setActiveTab(activeTabName);
-        // this.className += ' btn--tab-active';
-        // this.setAttribute('aria-selected', true);
+        viewRequestAndPublishTimes.setActiveTab(activeTabName);
     },
 
     buildPageData: function() {
@@ -114,7 +95,7 @@ var viewRequestAndPublishTimes = {
             var requestTimeData = {
                 'name': data[i].definition.meta.name,
                 'description': data[i].definition.meta.description,
-                // 'requestTime': data[i].values[0][1]
+                'requestTime': data[i].values[0][1]
             };
             this.bodyData.averageRequestTimes.push(requestTimeData);
         }
