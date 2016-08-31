@@ -91,6 +91,10 @@ function buildTableHtml(options) {
     // Update table element with headings and body
     tableHtml.innerHTML = tableHeadings + tableBody;
 
+    if (!chartElement) {
+        debugger;
+    }
+
     // Append table after chart in DOM
     chartElement.parentNode.insertBefore(tableHtml, chartElement.nextSibling);
 }

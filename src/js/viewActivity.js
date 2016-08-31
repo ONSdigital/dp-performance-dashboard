@@ -286,8 +286,10 @@ var viewActivity = {
     renderHiddenTables: function() {
         this.renderTableVisitsToday();
         this.renderTableDevices();
-        this.renderTableLandingPages();
-        this.renderTableTrafficSources();
+
+        /* Uncomment if we put charts back in */
+        // this.renderTableLandingPages();
+        // this.renderTableTrafficSources();
     },
 
     renderTemplate: function (container) {
