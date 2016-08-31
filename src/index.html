@@ -9,7 +9,18 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="#58595B">
     <title>Performance dashboard - Office for National Statistics</title>
 
-    <link rel="stylesheet" href="dist/css/main.css">
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="dist/css/old-ie.css"/>
+    <![endif]-->
+    <!--[if IE 9]>
+    <link rel="stylesheet" type="text/css" href="dist/css/ie-9.css">
+    <![endif]-->
+    <!--[if gt IE 9]><!-->
+    <link rel="stylesheet" type="text/css" href="dist/css/main.css">
+    <![endif]-->
+
+
+    <!--<link rel="stylesheet" href="dist/css/main.css">-->
 </head>
 <body>
     <div class="wrapper">
