@@ -1,5 +1,6 @@
 var webpack = require('webpack');
 var isProduction = process.env.ENV === 'production';
+var isStatic = process.env.ENV === 'static';
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 var environment = (process.env.ENV === 'production') ? 'production' : 'develop';
 
@@ -32,7 +33,7 @@ function getPlugins() {
 function isWatching() {
     var bool = true;
 
-    if (isProduction) {
+    if (isProduction || isStatic) {
         bool = false;
     }
 

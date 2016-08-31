@@ -6,15 +6,16 @@ var store = require('./state');
 var stringConvert = require('./stringConvert');
 
 /* Register web worker */
-var worker = new Worker("worker.js");
+if (window.Worker) {
+    var worker = new Worker("worker.js");
+}
 
 /* Functions to access data from JSON file */
 var api = {
 
-    requestData: function (success) {
-        // TODO need to use this as a back-up for browsers without web workers (IE8)
+    requestData: function (uri, success) {
         xhr({
-            uri: "https://s3-eu-west-1.amazonaws.com/ons-metrics/responsetimes.json"
+            uri: uri
         }, function (err, response, body) {
             if (err) {
                 throw err;
@@ -24,7 +25,7 @@ var api = {
     },
 
     subscribeToDataUpdates: function () {
-        if (window.Worker) {
+        if (worker) {
             worker.onmessage = function (event) {
 
                 // Update state with new data
@@ -46,7 +47,7 @@ var api = {
                 }
             }
         } else {
-            console.log('Web workers not supported');
+            this.nonWebWorkerRequest();
         }
     },
 
@@ -62,7 +63,7 @@ var api = {
             }
 
             // Tell web worker where to get data from
-            if (window.Worker) {
+            if (worker) {
                 switch (currentState.environment) {
                     case 'production': {
                         worker.postMessage('USE_LOCAL_DATA');
@@ -80,10 +81,61 @@ var api = {
 
                 environmentSet = true;
 
-            } else {
-                console.log('Web workers not supported');
             }
         });
+    },
+
+    nonWebWorkerRequest: function() {
+        var data = [
+            {
+                title: 'activity',
+                uri: 'analytics.json',
+                data: {}
+            },
+            {
+                title: 'responseTimes',
+                uri: 'responsetimes.json',
+                data: {}
+            },
+            {
+                title: 'requestAndPublishTimes',
+                uri: 'metrics.json',
+                data: {}
+            }
+        ],
+        dataLength = data.length;
+
+        for (var i = 0; i < dataLength; i++) {
+            (function(i) {
+                api.requestData(data[i].uri, function(response) {
+                    switch (data[i].title) {
+                        case 'activity': {
+                            store.dispatch({
+                                type: "RECEIVED_ACTIVITY_DATA",
+                                data: JSON.parse(response)
+                            });
+                            break;
+                        }
+                        case 'responseTimes': {
+                            store.dispatch({
+                                type: "RECEIVED_RESPONSE_DATA",
+                                data: JSON.parse(response)
+                            });
+                            break;
+                        }
+                        case 'requestAndPublishTimes': {
+                            store.dispatch({
+                                type: "RECEIVED_REQUEST_PUBLISH_DATA",
+                                data: JSON.parse(response)
+                            });
+                            break;
+                        }
+                    }
+                });
+            })(i);
+        }
+
+
     }
 };
 
