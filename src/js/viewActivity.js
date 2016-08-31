@@ -33,6 +33,40 @@ var viewActivity = {
     buildPageData: function () {
         var data = this.getData();
         this.bodyData.activeUsers = data[0].values[0].toString();
+
+        // traffic sources (refers)
+        var trafficSources = {
+            'name': data[5].definition.meta.name,
+            'description': data[5].definition.meta.description,
+            'values': []
+        };
+        this.bodyData.trafficSources = trafficSources;
+        for (var i = 0; i < 5; i++) {
+            var trafficSource = {
+                'name': data[5].values[i][0],
+                'sessions': data[5].values[i][2],
+                'users': data[5].values[i][3]
+            };
+            trafficSources.values.push(trafficSource);
+        }
+        // landing pages
+        var landingPages = {
+            'name': data[4].definition.meta.name,
+            'description': data[4].definition.meta.description,
+            'values': []
+        };
+        this.bodyData.landingPages = landingPages;
+        for (var i = 0; i < 5; i++) {
+            var name = data[4].values[i][1].split(' - Office for National Statistics');
+            var landingPage = {
+                'name': name[0],
+                'uri': data[4].values[i][0],
+                'sessions': data[4].values[i][2],
+                'users': data[4].values[i][3]
+            };
+            landingPages.values.push(landingPage);
+        }
+
     },
 
     renderChartVisitsToday: function () {
@@ -163,8 +197,8 @@ var viewActivity = {
         this.setChartOptions();
         this.renderChartVisitsToday();
         this.renderChartDevices();
-        this.renderChartLandingPages();
-        this.renderChartTrafficSources();
+        //this.renderChartLandingPages();
+        //this.renderChartTrafficSources();
     },
 
     renderTableVisitsToday: function() {
