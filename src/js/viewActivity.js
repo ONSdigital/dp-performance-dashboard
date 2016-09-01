@@ -6,7 +6,7 @@ var viewActivity = {
     Highcharts: require('highcharts'),
     chartConfig: require('./chartConfig'),
     buildChartData: require('./buildChartDataObject'),
-    bodyData: {"title": "Activity"},
+    bodyData: {},
     store: require('./state'),
     buildTableHtml: require('./buildTableHtml'),
 
@@ -33,6 +33,40 @@ var viewActivity = {
     buildPageData: function () {
         var data = this.getData();
         this.bodyData.activeUsers = data[0].values[0].toString();
+
+        // traffic sources (refers)
+        var trafficSources = {
+            'name': data[5].definition.meta.name,
+            'description': data[5].definition.meta.description,
+            'values': []
+        };
+        this.bodyData.trafficSources = trafficSources;
+        for (var i = 0; i < 5; i++) {
+            var trafficSource = {
+                'name': data[5].values[i][0],
+                'sessions': data[5].values[i][2],
+                'users': data[5].values[i][3]
+            };
+            trafficSources.values.push(trafficSource);
+        }
+        // landing pages
+        var landingPages = {
+            'name': data[4].definition.meta.name,
+            'description': data[4].definition.meta.description,
+            'values': []
+        };
+        this.bodyData.landingPages = landingPages;
+        for (var i = 0; i < 5; i++) {
+            var name = data[4].values[i][1].split(' - Office for National Statistics');
+            var landingPage = {
+                'name': name[0],
+                'uri': data[4].values[i][0],
+                'sessions': data[4].values[i][2],
+                'users': data[4].values[i][3]
+            };
+            landingPages.values.push(landingPage);
+        }
+
     },
 
     renderChartVisitsToday: function () {
@@ -163,8 +197,8 @@ var viewActivity = {
         this.setChartOptions();
         this.renderChartVisitsToday();
         this.renderChartDevices();
-        this.renderChartLandingPages();
-        this.renderChartTrafficSources();
+        //this.renderChartLandingPages();
+        //this.renderChartTrafficSources();
     },
 
     renderTableVisitsToday: function() {
@@ -184,55 +218,6 @@ var viewActivity = {
         };
 
         this.buildTableHtml(options);
-
-        // var data = this.getData(),
-        //     tableHtml = document.getElementById('visits-today--table') ? document.getElementById('visits-today--table') : document.createElement('table'),
-        //     tableHeadings = ['<tr>'],
-        //     tableBody = [],
-        //     valuesLength = data[1].values.length,
-        //     columnsLength = data[1].columns.length,
-        //     valuesIndex,
-        //     columnsIndex,
-        //     chartElement = document.getElementById('visits-today--chart');
-        //
-        //
-        // // Build the headings for the table
-        // for (columnsIndex = 0; columnsIndex < columnsLength; columnsIndex++) {
-        //     var headingTitle;
-        //     switch (data[1].columns[columnsIndex]) {
-        //         case 'ga:hour': {
-        //             headingTitle = "Time (hour)";
-        //             break;
-        //         }
-        //         case 'ga:sessions': {
-        //             headingTitle = "Sessions";
-        //             break;
-        //         }
-        //     }
-        //
-        //     tableHeadings.push('<th scope="col">' + headingTitle + '</th>');
-        // }
-        // tableHeadings.push('</tr>');
-        // tableHeadings = tableHeadings.join('');
-        //
-        // // Build the body/data for the table
-        // for (valuesIndex = 0; valuesIndex < valuesLength; valuesIndex++) {
-        //     tableBody[valuesIndex] = '<tr><td>' + data[1].values[valuesIndex].join('</td><td>') + '</td></tr>';
-        // }
-        // tableBody = tableBody.join('');
-        //
-        // // Give our table element an ID
-        // tableHtml.setAttribute('id', 'visits-today--table');
-        //
-        // // Hide table off of canvas
-        // tableHtml.style.position = "fixed";
-        // tableHtml.style.left = "-999999px";
-        //
-        // // Update table element with headings and body
-        // tableHtml.innerHTML = tableHeadings + tableBody;
-        //
-        // // Append table after chart in DOM
-        // chartElement.parentNode.insertBefore(tableHtml, chartElement.nextSibling);
     },
 
     renderTableDevices: function() {
@@ -299,13 +284,12 @@ var viewActivity = {
     },
 
     renderHiddenTables: function() {
-        var t0 = performance.now();
         this.renderTableVisitsToday();
         this.renderTableDevices();
-        this.renderTableLandingPages();
-        this.renderTableTrafficSources();
-        var t1 = performance.now();
-        console.log('Took', (t1 - t0).toFixed(4), 'milliseconds to generate activity tables');
+
+        /* Uncomment if we put charts back in */
+        // this.renderTableLandingPages();
+        // this.renderTableTrafficSources();
     },
 
     renderTemplate: function (container) {

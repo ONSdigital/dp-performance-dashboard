@@ -9,8 +9,14 @@ var data = [
         data: {}
     },
     {
-        title: 'serviceStatus',
+        title: 'responseTimes',
         uri: 'responsetimes.json',
+        updateTime: '',
+        data: {}
+    },
+    {
+        title: 'requestAndPublishTimes',
+        uri: 'metrics.json',
         updateTime: '',
         data: {}
     }
@@ -72,4 +78,4 @@ function getData() {
 }
 
 setInterval(getData, 300000);
-// setInterval(getData, 10000);
+// setInterval(getData, 5000);
