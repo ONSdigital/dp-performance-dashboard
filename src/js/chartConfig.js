@@ -1,4 +1,7 @@
 var chartConfig = {
+    credits: {
+        enabled: false
+    },
     chart: {
         style: {
             fontFamily: '"Open Sans",Helvetica,Arial,sans-serif',
