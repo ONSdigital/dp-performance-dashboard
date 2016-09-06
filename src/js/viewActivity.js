@@ -91,7 +91,7 @@ var viewActivity = {
             },
             yAxis: {
                 title: {
-                    text: "Visits"
+                    text: "Number of visits"
                 }
             },
             series: [{
@@ -120,7 +120,7 @@ var viewActivity = {
             },
             yAxis: {
                 title: {
-                    text: "Visits"
+                    text: "Number of visits"
                 }
             },
             series: [{
