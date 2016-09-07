@@ -31,7 +31,7 @@ var api = {
                 // Update state with new data
                 if (event.data.title == "activity") {
                     store.dispatch({
-                        type: "RECEIVED_ACTIVITY_DATA",
+                        type: "RECEIVED_TRAFFIC_DATA",
                         data: event.data.data
                     })
                 } else if (event.data.title == "responseTimes") {
@@ -88,7 +88,7 @@ var api = {
     nonWebWorkerRequest: function() {
         var data = [
             {
-                title: 'activity',
+                title: 'webTraffic',
                 uri: 'analytics.json',
                 data: {}
             },
@@ -111,7 +111,7 @@ var api = {
                     switch (data[i].title) {
                         case 'activity': {
                             store.dispatch({
-                                type: "RECEIVED_ACTIVITY_DATA",
+                                type: "RECEIVED_TRAFFIC_DATA",
                                 data: JSON.parse(response)
                             });
                             break;

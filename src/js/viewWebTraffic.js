@@ -1,8 +1,8 @@
-var viewActivity = {
+var viewWebTraffic = {
     container: (function () {
         return document.getElementById('content');
     })(),
-    activityTemplate: require('../templates/activity.handlebars'),
+    webTrafficTemplate: require('../templates/web-traffic.handlebars'),
     Highcharts: require('highcharts'),
     chartConfig: require('./chartConfig'),
     buildChartData: require('./buildChartDataObject'),
@@ -14,7 +14,7 @@ var viewActivity = {
     getData: function() {
         // Get latest activity data from state
         var currentState = this.store.getState();
-        return currentState.activity.data;
+        return currentState.webTraffic.data;
     },
 
     renderView: function (container) {
@@ -22,8 +22,8 @@ var viewActivity = {
         this.renderTemplate(container);
         // add delay before rendering charts to give browser chance to render template changes
         setTimeout(function(){
-            viewActivity.renderCharts();
-            viewActivity.renderHiddenTables();
+            viewWebTraffic.renderCharts();
+            viewWebTraffic.renderHiddenTables();
         }, 5);
     },
 
@@ -46,8 +46,8 @@ var viewActivity = {
         for (var i = 0; i < 5; i++) {
             var trafficSource = {
                 'name': data[trafficSourcesIndex].values[i][0],
-                'sessions': viewActivity.numberFormatter(parseInt(data[trafficSourcesIndex].values[i][2])),
-                'users': viewActivity.numberFormatter(parseInt(data[trafficSourcesIndex].values[i][3]))
+                'sessions': viewWebTraffic.numberFormatter(parseInt(data[trafficSourcesIndex].values[i][2])),
+                'users': viewWebTraffic.numberFormatter(parseInt(data[trafficSourcesIndex].values[i][3]))
             };
             trafficSources.values.push(trafficSource);
         }
@@ -63,8 +63,8 @@ var viewActivity = {
             var landingPage = {
                 'name': name[0],
                 'uri': data[5].values[i][0],
-                'sessions': viewActivity.numberFormatter(parseInt(data[5].values[i][2])),
-                'users': viewActivity.numberFormatter(parseInt(data[5].values[i][3]))
+                'sessions': viewWebTraffic.numberFormatter(parseInt(data[5].values[i][2])),
+                'users': viewWebTraffic.numberFormatter(parseInt(data[5].values[i][3]))
             };
             landingPages.values.push(landingPage);
         }
@@ -78,7 +78,7 @@ var viewActivity = {
             options.categories[value] = options.categories[value] + ":00";
         }
 
-        var chart = new viewActivity.Highcharts.Chart({
+        var chart = new viewWebTraffic.Highcharts.Chart({
             chart: {
                 renderTo: 'visits-today--chart',
                 type: 'column'
@@ -106,13 +106,13 @@ var viewActivity = {
                 labels: {
                     //format: '{value}'
                     formatter: function () {
-                        return viewActivity.numberFormatter(this.value);
+                        return viewWebTraffic.numberFormatter(this.value);
                     }
                 }
             },
             series: [{
                 data: options.series,
-                marker: viewActivity.chartConfig.series[0].marker,
+                marker: viewWebTraffic.chartConfig.series[0].marker,
                 name: "Visitors",
                 showInLegend: false
             }]
@@ -122,7 +122,7 @@ var viewActivity = {
 
     renderChartDevices: function () {
         var options = this.buildChartData(this.getData(), 'devices', 0, 1);
-        var chart = new viewActivity.Highcharts.Chart({
+        var chart = new viewWebTraffic.Highcharts.Chart({
             chart: {
                 renderTo: 'devices--chart',
                 type: 'column'
@@ -148,13 +148,13 @@ var viewActivity = {
                 },
                 labels: {
                     formatter: function () {
-                        return viewActivity.numberFormatter(this.value);
+                        return viewWebTraffic.numberFormatter(this.value);
                     }
                 }
             },
             series: [{
                 data: options.series,
-                marker: viewActivity.chartConfig.series[0].marker,
+                marker: viewWebTraffic.chartConfig.series[0].marker,
                 name: "Device",
                 showInLegend: false
             }]
@@ -170,7 +170,7 @@ var viewActivity = {
         //     options.categories[value] = str[0];
         // }
 
-        var chart = new viewActivity.Highcharts.Chart({
+        var chart = new viewWebTraffic.Highcharts.Chart({
             chart: {
                 renderTo: 'landing-pages--chart',
                 type: 'bar'
@@ -189,7 +189,7 @@ var viewActivity = {
             },
             series: [{
                 data: options.series,
-                marker: viewActivity.chartConfig.series[0].marker,
+                marker: viewWebTraffic.chartConfig.series[0].marker,
                 name: "Sessions",
                 showInLegend: false
             }]
@@ -198,7 +198,7 @@ var viewActivity = {
 
     renderChartTrafficSources: function () {
         var options = this.buildChartData(this.getData(), 5, 0, 2);
-        var chart = new viewActivity.Highcharts.Chart({
+        var chart = new viewWebTraffic.Highcharts.Chart({
             chart: {
                 renderTo: 'traffic-sources--chart',
                 type: 'bar'
@@ -217,7 +217,7 @@ var viewActivity = {
             },
             series: [{
                 data: options.series,
-                marker: viewActivity.chartConfig.series[0].marker,
+                marker: viewWebTraffic.chartConfig.series[0].marker,
                 name: 'Sessions',
                 showInLegend: false
             }]
@@ -324,9 +324,9 @@ var viewActivity = {
     },
 
     renderTemplate: function (container) {
-        container.innerHTML = this.activityTemplate(this.bodyData);
+        container.innerHTML = this.webTrafficTemplate(this.bodyData);
     }
 
 };
 
-module.exports = viewActivity;
+module.exports = viewWebTraffic;

@@ -4,8 +4,8 @@ var viewTabs = {
     tabsData: {
         tabs: [
             {
-                title: 'Activity',
-                slug: 'activity',
+                title: 'Web traffic',
+                slug: 'web-traffic',
                 isActive: false
             },
             {
