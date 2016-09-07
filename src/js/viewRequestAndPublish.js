@@ -95,15 +95,14 @@ var viewRequestAndPublishTimes = {
             var requestTimeData = {
                 'name': data[i].definition.meta.name,
                 'description': data[i].definition.meta.description,
-                'requestTime': data[i].values[0][1]
+                'requestTime': parseInt(data[i].values[0][1]).toFixed(0)
             };
             this.bodyData.averageRequestTimes.push(requestTimeData);
         }
     },
 
     renderChartRequestTimesDaily: function () {
-        //this.renderChart('response-times--chart', this.addDataToConfig(this.chartConfig, this.buildChartData(this.getData(), 1, 0, 1, "line")));
-        var options = this.buildChartData(this.getData(), 3, 0, 1);
+        var options = this.buildChartData(this.getData(), 'request-time-1-day-hourly', 0, 1);
 
         // format time to hh:mm
         for (value in options.categories) {
@@ -120,11 +119,19 @@ var viewRequestAndPublishTimes = {
                 align: "left"
             },
             xAxis: {
-                type: 'category',
-                categories: options.categories
+                //type: 'category',
+                categories: options.categories,
+                labels: {
+                    autoRotation: 0
+                },
+                tickInterval: 2
             },
             yAxis: {
                 title: {
+                    align: 'high',
+                    offset: -35,
+                    rotation: 0,
+                    y: -15,
                     text: "Time (ms)"
                 }
             },
@@ -132,14 +139,17 @@ var viewRequestAndPublishTimes = {
                 data: options.series,
                 marker: viewRequestAndPublishTimes.chartConfig.series[0].marker,
                 name: "Request time",
-                showInLegend: false
+                showInLegend: false,
+                tooltip: {
+                    valueSuffix: 'ms'
+                }
             }]
         });
     },
 
     renderChartRequestTimesMonthly: function () {
         //this.renderChart('response-times--chart', this.addDataToConfig(this.chartConfig, this.buildChartData(this.getData(), 1, 0, 1, "line")));
-        var options = this.buildChartData(this.getData(), 4, 0, 1);
+        var options = this.buildChartData(this.getData(), 'request-time-30-day-daily', 0, 1);
 
         // format the date to dd/mm/yyyy
         for (value in options.categories) {
@@ -157,10 +167,18 @@ var viewRequestAndPublishTimes = {
             },
             xAxis: {
                 type: 'category',
-                categories: options.categories
+                categories: options.categories,
+                labels: {
+                    autoRotation: 0
+                },
+                tickInterval: 4
             },
             yAxis: {
                 title: {
+                    align: 'high',
+                    offset: -35,
+                    rotation: 0,
+                    y: -15,
                     text: "Time (ms)"
                 }
             },
@@ -168,14 +186,17 @@ var viewRequestAndPublishTimes = {
                 data: options.series,
                 marker: viewRequestAndPublishTimes.chartConfig.series[0].marker,
                 name: "Request time",
-                showInLegend: false
+                showInLegend: false,
+                tooltip: {
+                    valueSuffix: 'ms'
+                }
             }]
         });
     },
 
     renderPublishTimesChart: function() {
-        var time = this.buildChartData(this.getData(), 5, 0, 1);
-        var files = this.buildChartData(this.getData(), 6, 0, 1);
+        var time = this.buildChartData(this.getData(), 'publish-time-30-day', 0, 1);
+        var files = this.buildChartData(this.getData(), 'publish-file-30-day', 0, 1);
 
         // format the date to dd/mm/yyyy
         for (value in time.categories) {
@@ -194,17 +215,43 @@ var viewRequestAndPublishTimes = {
             },
             xAxis: {
                 type: 'category',
-                categories: time.categories
+                categories: time.categories,
+                labels: {
+                    autoRotation: 0
+                },
+                tickInterval: 4
             },
-            yAxis: {
+            yAxis: [{ // Primary yAxis
+                labels: {
+                    format: '{value}'
+                },
                 title: {
-                    text: "Time (ms)"
+                    text: 'Time (ms)',
+                    align: 'high',
+                    offset: -30,
+                    rotation: 0,
+                    y: -15
                 }
-            },
+            }, { // Secondary yAxis
+                title: {
+                    text: 'Files',
+                    align: 'high',
+                    offset: -30,
+                    rotation: 0,
+                    y: -15
+                },
+                labels: {
+                    format: '{value} files'
+                },
+                opposite: true
+            }],
             series: [{
                 name: 'Time',
                 data: time.series,
-                marker: viewRequestAndPublishTimes.chartConfig.series[0].marker
+                marker: viewRequestAndPublishTimes.chartConfig.series[0].marker,
+                tooltip: {
+                    valueSuffix: 'ms'
+                }
             }, {
                 name: 'Files',
                 data: files.series,

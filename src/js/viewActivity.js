@@ -9,6 +9,7 @@ var viewActivity = {
     bodyData: {},
     store: require('./state'),
     buildTableHtml: require('./buildTableHtml'),
+    numberFormatter: require('./numberFormatter'),
 
     getData: function() {
         // Get latest activity data from state
@@ -35,47 +36,48 @@ var viewActivity = {
         this.bodyData.activeUsers = data[0].values[0].toString();
 
         // traffic sources (refers)
+        trafficSourcesIndex = 6;
         var trafficSources = {
-            'name': data[5].definition.meta.name,
-            'description': data[5].definition.meta.description,
+            'name': data[trafficSourcesIndex].definition.meta.name,
+            'description': data[trafficSourcesIndex].definition.meta.description,
             'values': []
         };
         this.bodyData.trafficSources = trafficSources;
         for (var i = 0; i < 5; i++) {
             var trafficSource = {
-                'name': data[5].values[i][0],
-                'sessions': data[5].values[i][2],
-                'users': data[5].values[i][3]
+                'name': data[trafficSourcesIndex].values[i][0],
+                'sessions': viewActivity.numberFormatter(parseInt(data[trafficSourcesIndex].values[i][2])),
+                'users': viewActivity.numberFormatter(parseInt(data[trafficSourcesIndex].values[i][3]))
             };
             trafficSources.values.push(trafficSource);
         }
         // landing pages
         var landingPages = {
-            'name': data[4].definition.meta.name,
-            'description': data[4].definition.meta.description,
+            'name': data[5].definition.meta.name,
+            'description': data[5].definition.meta.description,
             'values': []
         };
         this.bodyData.landingPages = landingPages;
         for (var i = 0; i < 5; i++) {
-            var name = data[4].values[i][1].split(' - Office for National Statistics');
+            var name = data[5].values[i][1].split(' - Office for National Statistics');
             var landingPage = {
                 'name': name[0],
-                'uri': data[4].values[i][0],
-                'sessions': data[4].values[i][2],
-                'users': data[4].values[i][3]
+                'uri': data[5].values[i][0],
+                'sessions': viewActivity.numberFormatter(parseInt(data[5].values[i][2])),
+                'users': viewActivity.numberFormatter(parseInt(data[5].values[i][3]))
             };
             landingPages.values.push(landingPage);
         }
-
     },
 
     renderChartVisitsToday: function () {
         //this.renderChart('visits-today--chart', this.addDataToConfig(this.chartConfig, this.buildChartData(this.getData(), 1, 0, 1, "column")));
-        var options = this.buildChartData(this.getData(), 1, 0, 1);
+        var options = this.buildChartData(this.getData(), 'today', 0, 1);
         //format categories names with zeros to look like times
         for (value in options.categories) {
             options.categories[value] = options.categories[value] + ":00";
         }
+
         var chart = new viewActivity.Highcharts.Chart({
             chart: {
                 renderTo: 'visits-today--chart',
@@ -83,15 +85,29 @@ var viewActivity = {
             },
             title: {
                 text: '',
-                align: "left"
+                align: 'left'
             },
             xAxis: {
-                type: 'category',
-                categories: options.categories
+                //type: 'category',
+                categories: options.categories,
+                labels: {
+                    autoRotation: 0
+                },
+                tickInterval: 2
             },
             yAxis: {
                 title: {
-                    text: "Number of visits"
+                    align: 'high',
+                    offset: -64,
+                    rotation: 0,
+                    y: -15,
+                    text: 'Number of visits'
+                },
+                labels: {
+                    //format: '{value}'
+                    formatter: function () {
+                        return viewActivity.numberFormatter(this.value);
+                    }
                 }
             },
             series: [{
@@ -105,7 +121,7 @@ var viewActivity = {
     },
 
     renderChartDevices: function () {
-        var options = this.buildChartData(this.getData(), 2, 0, 1);
+        var options = this.buildChartData(this.getData(), 'devices', 0, 1);
         var chart = new viewActivity.Highcharts.Chart({
             chart: {
                 renderTo: 'devices--chart',
@@ -116,11 +132,24 @@ var viewActivity = {
                 align: "left"
             },
             xAxis: {
-                categories: ['Desktop', 'Mobile', 'Tablet']
+                categories: ['Desktop', 'Mobile', 'Tablet'],
+                labels: {
+                    autoRotation: 0
+                },
+                tickWidth: 0
             },
             yAxis: {
                 title: {
+                    align: 'high',
+                    offset: -44,
+                    rotation: 0,
+                    y: -15,
                     text: "Number of visits"
+                },
+                labels: {
+                    formatter: function () {
+                        return viewActivity.numberFormatter(this.value);
+                    }
                 }
             },
             series: [{
@@ -136,10 +165,10 @@ var viewActivity = {
         var options = this.buildChartData(this.getData(), 4, 1, 2);
 
         // remove ' - Office for National Statistics' from page titles
-        for (value in options.categories) {
-            str = options.categories[value].split(' - Office for National Statistics');
-            options.categories[value] = str[0];
-        }
+        // for (value in options.categories) {
+        //     str = options.categories[value].split(' - Office for National Statistics');
+        //     options.categories[value] = str[0];
+        // }
 
         var chart = new viewActivity.Highcharts.Chart({
             chart: {
@@ -150,7 +179,8 @@ var viewActivity = {
                 text: ''
             },
             xAxis: {
-                categories: options.categories
+                categories: options.categories,
+                tickWidth: 0
             },
             yAxis: {
                 title: {
@@ -177,7 +207,8 @@ var viewActivity = {
                 text: ''
             },
             xAxis: {
-                categories: options.categories
+                categories: options.categories,
+                tickWidth: 0
             },
             yAxis: {
                 title: {
