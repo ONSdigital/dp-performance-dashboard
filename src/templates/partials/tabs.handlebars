@@ -3,9 +3,13 @@
         {{#each tabs}}
             <li class="tab__item width-sm--6" role="presentation">
                 {{#if isActive}}
-                    <a href="#{{slug}}" class="tab__link tab__link--active" id="tab-{{slug}}" aria-selected="true">{{title}}</a>
+                    <h2 class="flush padding-top--0 padding-bottom--0">
+                        <a href="#{{slug}}" class="tab__link tab__link--active" id="tab-{{slug}}" aria-selected="true">{{title}}</a>
+                    </h2>
                 {{else}}
-                    <a href="#{{slug}}" class="tab__link js-tab" id="tab-{{slug}}" aria-selected="false">{{title}}</a>
+                    <h2 class="flush padding-top--0 padding-bottom--0">
+                        <a href="#{{slug}}" class="tab__link js-tab" id="tab-{{slug}}" aria-selected="false">{{title}}</a>
+                    </h2>
                 {{/if}}
             </li>
         {{/each}}
