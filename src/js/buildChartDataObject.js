@@ -7,9 +7,19 @@
  * @param {string} chartType - type of chart to render
  */
 
-module.exports = function(data, dimension, categoryColumn, valueColumn) {
+module.exports = function(data, dimensionName, categoryColumn, valueColumn) {
 
-    var dataSeries = data[dimension].values,
+    // get the array index of dimension e.g. active users index = 0
+    function getDimensionIndex() {
+        for (var i = 0; i < data.length; i++) {
+            if (dimensionName == data[i].name) {
+                return i;
+            }
+        }
+    }
+
+    var dimension = getDimensionIndex(),
+        dataSeries = data[dimension].values,
         name = data[dimension].definition.meta.description,
         categories = [],
         series = [],
