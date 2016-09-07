@@ -148,7 +148,6 @@ var viewRequestAndPublishTimes = {
     },
 
     renderChartRequestTimesMonthly: function () {
-        //this.renderChart('response-times--chart', this.addDataToConfig(this.chartConfig, this.buildChartData(this.getData(), 1, 0, 1, "line")));
         var options = this.buildChartData(this.getData(), 'request-time-30-day-daily', 0, 1);
 
         // format the date to dd/mm/yyyy
@@ -196,7 +195,7 @@ var viewRequestAndPublishTimes = {
 
     renderPublishTimesChart: function() {
         var time = this.buildChartData(this.getData(), 'publish-time-30-day', 0, 1);
-        var files = this.buildChartData(this.getData(), 'publish-file-30-day', 0, 1);
+        var files = this.buildChartData(this.getData(), 'publish-time-30-day', 0, 2);
 
         // format the date to dd/mm/yyyy
         for (value in time.categories) {
