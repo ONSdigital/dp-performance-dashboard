@@ -328,9 +328,9 @@ var viewRequestAndPublishTimes = {
                     ]
                 },
                 {
-                    dataNode: 6,
+                    dataNode: 5,
                     valueNodes: [
-                        1
+                        2
                     ]
                 }
             ]
