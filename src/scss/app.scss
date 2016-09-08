@@ -86,10 +86,13 @@ a:hover {
     @media (min-width: 992px) {
         width: 944px;
 
-        &--45 {
-            width: 720px;
+        &--29 {
+            width: 29 * 16px
         }
 
+        &--45 {
+            width: 45 * 16px;
+        }
 
     }
 
