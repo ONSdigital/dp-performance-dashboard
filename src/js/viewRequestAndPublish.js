@@ -64,7 +64,10 @@ var viewRequestAndPublishTimes = {
             tabContentLength = tabContent.length,
             i;
         for (i = 0; i < tabContentLength; i++) {
-            tabContent[i].style.display = 'none';
+            // tabContent[i].style.display = 'none';
+            tabContent[i].style.overflow = 'hidden';
+            tabContent[i].style.position = 'absolute';
+            tabContent[i].style.left = '-99999px';
             tabContent[i].setAttribute('aria-hidden', 'true');
         }
 
@@ -79,13 +82,24 @@ var viewRequestAndPublishTimes = {
         // show tab content, add aria, toggle active tab object & add active class to button
         var activeTabName = this.getAttribute('aria-controls');
         var activeTabContent = document.getElementById(activeTabName);
-        activeTabContent.style.display = 'block';
+        // activeTabContent.style.display = 'block';
+        activeTabContent.style.overflow = 'initial';
+        activeTabContent.style.position = 'static';
+        activeTabContent.style.left = 'auto';
         activeTabContent.setAttribute('aria-hidden', 'false');
         this.className += ' btn--tab-active';
         this.setAttribute('aria-selected', true);
 
         // set active tab so same tab is shown on re-render of charts
         viewRequestAndPublishTimes.setActiveTab(activeTabName);
+
+        // redraw chart to stop it's width being incorrect from a window resize - code credit to (http://www.ilearnttoday.com/trigger-window-resize-event-via-javascript/)
+        var fireRefreshEventOnWindow = function () {
+            var evt = document.createEvent("HTMLEvents");
+            evt.initEvent('resize', true, false);
+            window.dispatchEvent(evt);
+        };
+        fireRefreshEventOnWindow();
     },
 
     buildPageData: function() {
