@@ -3,6 +3,7 @@ var isProduction = process.env.ENV === 'production';
 var isStatic = process.env.ENV === 'static';
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 var environment = (process.env.ENV === 'production') ? 'production' : 'develop';
+var devTool = isProduction ? '#source-map' : '#inline-source-map';
 
 function getPlugins() {
     var plugins = [];
@@ -53,7 +54,7 @@ module.exports = {
             { test: /\.scss$/, loaders: ["style", "css", "sass"]}
         ]
     },
-    devtool: "#inline-source-map",
+    devtool: devTool,
     devServer: {
         outputPath: "dist"
     },
