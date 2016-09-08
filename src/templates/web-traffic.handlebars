@@ -12,13 +12,27 @@
             </div>
         </div>
     </div>
-    <div class="col-wrap">
-        <div class="col padding-bottom--6 border-bottom--iron-light-lg margin-top--1 border-top--iron-light-lg">
+    <div class="col-wrap border-top--iron-light-lg">
+        <div class="col col--lg-30 padding-bottom--6  margin-top--1 margin-left--1 ">
             <h3 class="margin-top--4">Devices used</h3>
-            <div id="devices--chart" class="height--40 chart-container" aria-labelledby="charts-aria">
+            <div id="devices--chart" class="height--40 chart-container--29" aria-labelledby="charts-aria">
                 <img src="../img/loader.gif" width="32px" class="margin-top--1"/>
             </div>
         </div>
+        {{#if browsers}}
+            <div class="col col--lg-29">
+                <h2>Browsers</h2>
+                <p class="flush">Sources that referred traffic</p>
+                <div class="padding-right-lg--2 padding-left-sm--1 padding-left-md--1 margin-top--2 margin-right--1 margin-left-sm--0 margin-left-md--0 margin-left-lg--0 border--left-thick">
+                    {{!-- <p class="margin-top--0">{{trafficSources.name}}</p> --}}
+                    <ol>
+                        {{#each browsers.values}}
+                            <li class="flush">{{name}} <span style="float:right">{{sessions}}</span></li>
+                        {{/each}}
+                    </ol>
+                </div>
+            </div>
+        {{/if}}
         <!--<div class="col padding-bottom--6 border-bottom--iron-light-lg">-->
             <!--<h3 class="margin-top--4">Top pages</h3>-->
             <!--<div id="landing-pages--chart" class="height--50 chart-container" aria-labelledby="charts-aria">-->
@@ -31,7 +45,7 @@
                 <!--<img src="../img/loader.gif" width="32px" class="margin-top--1"/>-->
             <!--</div>-->
         <!--</div>-->
-        <div class="col">
+        <div class="col border-top--iron-light-lg">
         {{#if trafficSources}}
             <div class="col col--lg-30">
                 <h2>Top referrers</h2>

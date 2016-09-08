@@ -35,6 +35,22 @@ var viewWebTraffic = {
         var data = this.getData();
         this.bodyData.activeUsers = data[0].values[0].toString();
 
+        // browser stats
+        var browsersIndex = 3;
+        var browsers = {
+            'name': data[browsersIndex].definition.meta.name,
+            'description': data[browsersIndex].definition.meta.description,
+            'values': []
+        };
+        this.bodyData.browsers = browsers;
+        for (var i = 0; i < 5; i++) {
+            var browser = {
+                'name': data[browsersIndex].values[i][0],
+                'sessions': viewWebTraffic.numberFormatter(parseInt(data[browsersIndex].values[i][1]))
+            };
+            browsers.values.push(browser);
+        }
+
         // traffic sources (refers)
         trafficSourcesIndex = 6;
         var trafficSources = {
@@ -125,38 +141,71 @@ var viewWebTraffic = {
         var chart = new viewWebTraffic.Highcharts.Chart({
             chart: {
                 renderTo: 'devices--chart',
-                type: 'column'
+                type: 'pie'
+            },
+            plotOptions: {
+                pie: {
+                    dataLabels: {
+                        format: '{point.name}<br/>{point.percentage:.1f} %',
+                        distance: 10,
+                        connectorWidth: 0,
+                        x: -5,
+                        y: -15,
+                        style: {
+                            color: '#414042',
+                            fontFamily: '"Open Sans",Helvetica,Arial,sans-serif',
+                            fontSize: '13px',
+                            fontWeight: 400,
+                            textAlign: 'center',
+                            textTransform: 'capitalize'
+                        }
+                    }
+                }
             },
             title: {
                 text: '',
                 align: "left"
             },
-            xAxis: {
-                categories: ['Desktop', 'Mobile', 'Tablet'],
-                labels: {
-                    autoRotation: 0
-                },
-                tickWidth: 0
-            },
-            yAxis: {
-                title: {
-                    align: 'high',
-                    offset: -44,
-                    rotation: 0,
-                    y: -15,
-                    text: "Number of visits"
-                },
-                labels: {
-                    formatter: function () {
-                        return viewWebTraffic.numberFormatter(this.value);
-                    }
-                }
-            },
+            // xAxis: {
+            //     categories: ['Desktop', 'Mobile', 'Tablet'],
+            //     labels: {
+            //         autoRotation: 0
+            //     },
+            //     tickWidth: 0
+            // },
+            // yAxis: {
+            //     title: {
+            //         align: 'high',
+            //         offset: -44,
+            //         rotation: 0,
+            //         y: -15,
+            //         text: "Number of visits"
+            //     },
+            //     labels: {
+            //         formatter: function () {
+            //             return viewWebTraffic.numberFormatter(this.value);
+            //         }
+            //     }
+            // },
+            // series: [{
+            //     data: options.series,
+            //     marker: viewWebTraffic.chartConfig.series[0].marker,
+            //     name: "Visits",
+            //     showInLegend: false
+            // }]
             series: [{
-                data: options.series,
-                marker: viewWebTraffic.chartConfig.series[0].marker,
-                name: "Device",
-                showInLegend: false
+                name: 'Visits',
+                colorByPoint: true,
+                data: [{
+                    name: options.categories[0],
+                    y: options.series[0]
+                }, {
+                    name: options.categories[1],
+                    y: options.series[1]
+                }, {
+                    name: options.categories[2],
+                    y: options.series[2]
+                }]
             }]
         });
     },
