@@ -29,7 +29,7 @@ var api = {
             worker.onmessage = function (event) {
 
                 // Update state with new data
-                if (event.data.title == "activity") {
+                if (event.data.title == "webTraffic") {
                     store.dispatch({
                         type: "RECEIVED_TRAFFIC_DATA",
                         data: event.data.data
@@ -109,7 +109,7 @@ var api = {
             (function(i) {
                 api.requestData(data[i].uri, function(response) {
                     switch (data[i].title) {
-                        case 'activity': {
+                        case 'webTraffic': {
                             store.dispatch({
                                 type: "RECEIVED_TRAFFIC_DATA",
                                 data: JSON.parse(response)

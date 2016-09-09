@@ -3,7 +3,7 @@
 // Object that will later be messaged back to client
 var data = [
     {
-        title: 'activity',
+        title: 'webTraffic',
         uri: 'analytics.json',
         updateTime: '',
         data: {}

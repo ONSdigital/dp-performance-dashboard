@@ -34,6 +34,7 @@ var viewWebTraffic = {
     buildPageData: function () {
         var data = this.getData();
         this.bodyData.activeUsers = data[0].values[0].toString();
+        var i;
 
         // browser stats
         var browsersIndex = 3;
@@ -43,7 +44,7 @@ var viewWebTraffic = {
             'values': []
         };
         this.bodyData.browsers = browsers;
-        for (var i = 0; i < 5; i++) {
+        for (i = 0; i < 5; i++) {
             var browser = {
                 'name': data[browsersIndex].values[i][0],
                 'sessions': viewWebTraffic.numberFormatter(parseInt(data[browsersIndex].values[i][1]))
@@ -59,7 +60,7 @@ var viewWebTraffic = {
             'values': []
         };
         this.bodyData.trafficSources = trafficSources;
-        for (var i = 0; i < 5; i++) {
+        for (i = 0; i < 5; i++) {
             var trafficSource = {
                 'name': data[trafficSourcesIndex].values[i][0],
                 'sessions': viewWebTraffic.numberFormatter(parseInt(data[trafficSourcesIndex].values[i][2])),
@@ -74,7 +75,7 @@ var viewWebTraffic = {
             'values': []
         };
         this.bodyData.landingPages = landingPages;
-        for (var i = 0; i < 5; i++) {
+        for (i = 0; i < 5; i++) {
             var name = data[5].values[i][1].split(' - Office for National Statistics');
             var landingPage = {
                 'name': name[0],

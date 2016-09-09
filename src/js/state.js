@@ -70,9 +70,9 @@ function dashboard(state, action) {
     }
 
     if (updatedState.enableStateLogging) {
-        console.log('ACTION: ', action);
-        console.log('OLD STATE: ', state);
-        console.log('NEW STATE: ', updatedState);
+        console.log('ACTION: ', JSON.stringify(action));
+        console.log('OLD STATE: ', JSON.stringify(state));
+        console.log('NEW STATE: ', JSON.stringify(updatedState));
         console.log('--------');
     }
 
