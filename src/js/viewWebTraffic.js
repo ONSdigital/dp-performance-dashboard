@@ -147,11 +147,11 @@ var viewWebTraffic = {
             plotOptions: {
                 pie: {
                     dataLabels: {
-                        format: '{point.name}<br/>{point.percentage:.1f} %',
+                        format: '{point.name}<br/>{point.percentage:.1f}%',
                         distance: 10,
                         connectorWidth: 0,
-                        x: -5,
-                        y: -15,
+                        x: 15,
+                        y: -20,
                         style: {
                             color: '#414042',
                             fontFamily: '"Open Sans",Helvetica,Arial,sans-serif',
