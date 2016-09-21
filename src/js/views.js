@@ -1,7 +1,7 @@
 var view = {
     baseTemplate: require('../templates/base.handlebars'),
     viewTabs: require('./viewTabs'),
-    viewActivity: require('./viewActivity'),
+    viewWebTraffic: require('./viewWebTraffic'),
     viewResponseTimes: require('./viewResponseTimes'),
     viewRequestAndPublishTimes: require('./viewRequestAndPublish'),
     main: document.getElementById('main'),
@@ -51,11 +51,11 @@ var view = {
         // var content = document.getElementById('content');
         var container = document.getElementById(id + '__container');
         switch (id) {
-            case "activity":
+            case "web-traffic":
                 view.store.dispatch({
-                    type: 'UPDATED_ACTIVITY_VIEW'
+                    type: 'UPDATED_TRAFFIC_VIEW'
                 });
-                this.viewActivity.renderView(container);
+                this.viewWebTraffic.renderView(container);
                 break;
             case "response-times":
                 view.store.dispatch({
@@ -91,7 +91,7 @@ var view = {
     },
 
     changeView: function(uriHash) {
-        var activeView = uriHash ? uriHash : "activity";
+        var activeView = uriHash ? uriHash : "web-traffic";
 
         this.store.dispatch({
             type: 'REQUEST_VIEW',
@@ -115,8 +115,8 @@ var view = {
             }
 
             // Render section when new data has arrived for it
-            if (currentState.activity.isNewData) {
-                view.renderContent('activity');
+            if (currentState.webTraffic.isNewData) {
+                view.renderContent('web-traffic');
             } else if (currentState.responseTimes.isNewData) {
                 view.renderContent('response-times');
             } else if (currentState.requestAndPublishTimes.isNewData) {

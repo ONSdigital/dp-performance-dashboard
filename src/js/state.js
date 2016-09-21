@@ -15,9 +15,9 @@ function dashboard(state, action) {
 
     // Reducer switch function, updates the state as necessary
     switch (action.type) {
-        case 'RECEIVED_ACTIVITY_DATA': {
-            updatedState.activity.data = action.data;
-            updatedState.activity.isNewData = true;
+        case 'RECEIVED_TRAFFIC_DATA': {
+            updatedState.webTraffic.data = action.data;
+            updatedState.webTraffic.isNewData = true;
             break;
         }
         case 'RECEIVED_RESPONSE_DATA': {
@@ -34,8 +34,8 @@ function dashboard(state, action) {
             updatedState.responseTimes.isNewData = false;
             break;
         }
-        case 'UPDATED_ACTIVITY_VIEW': {
-            updatedState.activity.isNewData = false;
+        case 'UPDATED_TRAFFIC_VIEW': {
+            updatedState.webTraffic.isNewData = false;
             break;
         }
         case 'UPDATED_REQUEST_PUBLISH_VIEW': {
@@ -70,9 +70,9 @@ function dashboard(state, action) {
     }
 
     if (updatedState.enableStateLogging) {
-        console.log('ACTION: ', action);
-        console.log('OLD STATE: ', state);
-        console.log('NEW STATE: ', updatedState);
+        console.log('ACTION: ', JSON.stringify(action));
+        console.log('OLD STATE: ', JSON.stringify(state));
+        console.log('NEW STATE: ', JSON.stringify(updatedState));
         console.log('--------');
     }
 
@@ -85,7 +85,7 @@ var createStore = Redux.createStore,
         pendingViewUpdate: false,
         enableStateLogging: false,
         environment: '',
-        activity: {},
+        webTraffic: {},
         responseTimes: {},
         requestAndPublishTimes: {}
     },

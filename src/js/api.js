@@ -29,9 +29,9 @@ var api = {
             worker.onmessage = function (event) {
 
                 // Update state with new data
-                if (event.data.title == "activity") {
+                if (event.data.title == "webTraffic") {
                     store.dispatch({
-                        type: "RECEIVED_ACTIVITY_DATA",
+                        type: "RECEIVED_TRAFFIC_DATA",
                         data: event.data.data
                     })
                 } else if (event.data.title == "responseTimes") {
@@ -88,7 +88,7 @@ var api = {
     nonWebWorkerRequest: function() {
         var data = [
             {
-                title: 'activity',
+                title: 'webTraffic',
                 uri: 'analytics.json',
                 data: {}
             },
@@ -109,9 +109,9 @@ var api = {
             (function(i) {
                 api.requestData(data[i].uri, function(response) {
                     switch (data[i].title) {
-                        case 'activity': {
+                        case 'webTraffic': {
                             store.dispatch({
-                                type: "RECEIVED_ACTIVITY_DATA",
+                                type: "RECEIVED_TRAFFIC_DATA",
                                 data: JSON.parse(response)
                             });
                             break;

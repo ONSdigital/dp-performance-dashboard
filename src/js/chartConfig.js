@@ -1,4 +1,10 @@
 var chartConfig = {
+    credits: {
+        enabled: false
+    },
+    lang: {
+        thousandsSep: ','
+    },
     chart: {
         style: {
             fontFamily: '"Open Sans",Helvetica,Arial,sans-serif',
@@ -7,9 +13,10 @@ var chartConfig = {
         spacingTop: 15,
         spacingBottom: 15,
         spacingLeft: 0,
-        spacingRight: 0
+        spacingRight: 0,
+        marginTop: 32
     },
-    colors: ['#3B7A9E', '#FF9933', '#55A9DC', '#E6645C', '#886DB3', '#6CC080'],
+    colors: ['#3B7A9E', '#FF9933', '#9E9E9E', '#55A9DC', '#E6645C', '#886DB3', '#6CC080'],
     series: [{
         marker : {
             enabled: true,

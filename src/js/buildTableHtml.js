@@ -1,7 +1,7 @@
 function buildTableHtml(options) {
     var data = options.data,
         id = options.id,
-        tableHtml = document.getElementById(id + '--table') ? document.getElementById(id + '--table') : document.createElement('table'),
+        tableHtml = document.getElementById(id + '--table') ? document.getElementById(id + '--table') : document.createElement('div'), // use div because IE9 makes table innerHTML read-only
         tableHeadings = options.headings,
         tableBody = [],
         index,
@@ -89,7 +89,7 @@ function buildTableHtml(options) {
     tableHtml.style.left = "-999999px";
 
     // Update table element with headings and body
-    tableHtml.innerHTML = tableHeadings + tableBody;
+    tableHtml.innerHTML = "<table>" + tableHeadings + tableBody + "</table>";
 
     if (!chartElement) {
         debugger;

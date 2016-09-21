@@ -38,7 +38,7 @@ var viewServiceStatus = {
             var responseTimeData = {
                 'name': data[i].definition.meta.name,
                 'description': data[i].definition.meta.description,
-                'responseTime': data[i].values[0][2],
+                'responseTime': parseInt(data[i].values[0][2]).toFixed(0),
                 'timeUp': data[i].values[0][3],
                 'timeDown': data[i].values[0][4],
                 'percentageTimeUp': data[i].values[0][6],

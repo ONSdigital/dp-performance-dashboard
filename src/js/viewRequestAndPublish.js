@@ -64,7 +64,10 @@ var viewRequestAndPublishTimes = {
             tabContentLength = tabContent.length,
             i;
         for (i = 0; i < tabContentLength; i++) {
-            tabContent[i].style.display = 'none';
+            // tabContent[i].style.display = 'none';
+            tabContent[i].style.overflow = 'hidden';
+            tabContent[i].style.position = 'absolute';
+            tabContent[i].style.left = '-99999px';
             tabContent[i].setAttribute('aria-hidden', 'true');
         }
 
@@ -79,13 +82,24 @@ var viewRequestAndPublishTimes = {
         // show tab content, add aria, toggle active tab object & add active class to button
         var activeTabName = this.getAttribute('aria-controls');
         var activeTabContent = document.getElementById(activeTabName);
-        activeTabContent.style.display = 'block';
+        // activeTabContent.style.display = 'block';
+        activeTabContent.style.overflow = 'initial';
+        activeTabContent.style.position = 'static';
+        activeTabContent.style.left = 'auto';
         activeTabContent.setAttribute('aria-hidden', 'false');
         this.className += ' btn--tab-active';
         this.setAttribute('aria-selected', true);
 
         // set active tab so same tab is shown on re-render of charts
         viewRequestAndPublishTimes.setActiveTab(activeTabName);
+
+        // redraw chart to stop it's width being incorrect from a window resize - code credit to (http://www.ilearnttoday.com/trigger-window-resize-event-via-javascript/)
+        var fireRefreshEventOnWindow = function () {
+            var evt = document.createEvent("HTMLEvents");
+            evt.initEvent('resize', true, false);
+            window.dispatchEvent(evt);
+        };
+        fireRefreshEventOnWindow();
     },
 
     buildPageData: function() {
@@ -95,15 +109,14 @@ var viewRequestAndPublishTimes = {
             var requestTimeData = {
                 'name': data[i].definition.meta.name,
                 'description': data[i].definition.meta.description,
-                'requestTime': data[i].values[0][1]
+                'requestTime': parseInt(data[i].values[0][1]).toFixed(0)
             };
             this.bodyData.averageRequestTimes.push(requestTimeData);
         }
     },
 
     renderChartRequestTimesDaily: function () {
-        //this.renderChart('response-times--chart', this.addDataToConfig(this.chartConfig, this.buildChartData(this.getData(), 1, 0, 1, "line")));
-        var options = this.buildChartData(this.getData(), 3, 0, 1);
+        var options = this.buildChartData(this.getData(), 'request-time-1-day-hourly', 0, 1);
 
         // format time to hh:mm
         for (value in options.categories) {
@@ -120,11 +133,19 @@ var viewRequestAndPublishTimes = {
                 align: "left"
             },
             xAxis: {
-                type: 'category',
-                categories: options.categories
+                //type: 'category',
+                categories: options.categories,
+                labels: {
+                    autoRotation: 0
+                },
+                tickInterval: 2
             },
             yAxis: {
                 title: {
+                    align: 'high',
+                    offset: -35,
+                    rotation: 0,
+                    y: -15,
                     text: "Time (ms)"
                 }
             },
@@ -132,14 +153,16 @@ var viewRequestAndPublishTimes = {
                 data: options.series,
                 marker: viewRequestAndPublishTimes.chartConfig.series[0].marker,
                 name: "Request time",
-                showInLegend: false
+                showInLegend: false,
+                tooltip: {
+                    valueSuffix: 'ms'
+                }
             }]
         });
     },
 
     renderChartRequestTimesMonthly: function () {
-        //this.renderChart('response-times--chart', this.addDataToConfig(this.chartConfig, this.buildChartData(this.getData(), 1, 0, 1, "line")));
-        var options = this.buildChartData(this.getData(), 4, 0, 1);
+        var options = this.buildChartData(this.getData(), 'request-time-30-day-daily', 0, 1);
 
         // format the date to dd/mm/yyyy
         for (value in options.categories) {
@@ -157,10 +180,18 @@ var viewRequestAndPublishTimes = {
             },
             xAxis: {
                 type: 'category',
-                categories: options.categories
+                categories: options.categories,
+                labels: {
+                    autoRotation: 0
+                },
+                tickInterval: 4
             },
             yAxis: {
                 title: {
+                    align: 'high',
+                    offset: -35,
+                    rotation: 0,
+                    y: -15,
                     text: "Time (ms)"
                 }
             },
@@ -168,14 +199,17 @@ var viewRequestAndPublishTimes = {
                 data: options.series,
                 marker: viewRequestAndPublishTimes.chartConfig.series[0].marker,
                 name: "Request time",
-                showInLegend: false
+                showInLegend: false,
+                tooltip: {
+                    valueSuffix: 'ms'
+                }
             }]
         });
     },
 
     renderPublishTimesChart: function() {
-        var time = this.buildChartData(this.getData(), 5, 0, 1);
-        var files = this.buildChartData(this.getData(), 6, 0, 1);
+        var time = this.buildChartData(this.getData(), 'publish-time-30-day', 0, 1);
+        var files = this.buildChartData(this.getData(), 'publish-time-30-day', 0, 2);
 
         // format the date to dd/mm/yyyy
         for (value in time.categories) {
@@ -194,17 +228,43 @@ var viewRequestAndPublishTimes = {
             },
             xAxis: {
                 type: 'category',
-                categories: time.categories
+                categories: time.categories,
+                labels: {
+                    autoRotation: 0
+                },
+                tickInterval: 4
             },
-            yAxis: {
+            yAxis: [{ // Primary yAxis
+                labels: {
+                    format: '{value}'
+                },
                 title: {
-                    text: "Time (ms)"
+                    text: 'Time (ms)',
+                    align: 'high',
+                    offset: -30,
+                    rotation: 0,
+                    y: -15
                 }
-            },
+            }, { // Secondary yAxis
+                title: {
+                    text: 'Files',
+                    align: 'high',
+                    offset: -30,
+                    rotation: 0,
+                    y: -15
+                },
+                labels: {
+                    format: '{value} files'
+                },
+                opposite: true
+            }],
             series: [{
                 name: 'Time',
                 data: time.series,
-                marker: viewRequestAndPublishTimes.chartConfig.series[0].marker
+                marker: viewRequestAndPublishTimes.chartConfig.series[0].marker,
+                tooltip: {
+                    valueSuffix: 'ms'
+                }
             }, {
                 name: 'Files',
                 data: files.series,
@@ -282,9 +342,9 @@ var viewRequestAndPublishTimes = {
                     ]
                 },
                 {
-                    dataNode: 6,
+                    dataNode: 5,
                     valueNodes: [
-                        1
+                        2
                     ]
                 }
             ]
