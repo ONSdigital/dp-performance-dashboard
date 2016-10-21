@@ -91,8 +91,9 @@ function buildTableHtml(options) {
     // Update table element with headings and body
     tableHtml.innerHTML = "<table>" + tableHeadings + tableBody + "</table>";
 
+    // TODO - remove this once Splunk is working
     if (!chartElement) {
-        debugger;
+        return
     }
 
     // Append table after chart in DOM

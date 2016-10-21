@@ -31,7 +31,7 @@ onmessage = function(event) {
                 i;
 
             for (i = 0; i < dataLength; i++) {
-                data[i].uri = 'http://performance.develop.onsdigital.co.uk/' + data[i].uri;
+                data[i].uri = 'https://performance.ons.gov.uk/' + data[i].uri;
             }
 
             getData();

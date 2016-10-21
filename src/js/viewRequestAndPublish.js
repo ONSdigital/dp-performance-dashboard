@@ -91,7 +91,7 @@ var viewRequestAndPublishTimes = {
         this.setAttribute('aria-selected', true);
 
         // set active tab so same tab is shown on re-render of charts
-        viewRequestAndPublishTimes.setActiveTab(activeTabName);
+        // viewRequestAndPublishTimes.setActiveTab(activeTabName);
 
         // redraw chart to stop it's width being incorrect from a window resize - code credit to (http://www.ilearnttoday.com/trigger-window-resize-event-via-javascript/)
         var fireRefreshEventOnWindow = function () {
@@ -275,8 +275,8 @@ var viewRequestAndPublishTimes = {
 
     renderCharts: function() {
         this.setChartOptions();
-        this.renderChartRequestTimesDaily();
-        this.renderChartRequestTimesMonthly();
+        // this.renderChartRequestTimesDaily();
+        // this.renderChartRequestTimesMonthly();
         this.renderPublishTimesChart();
     },
 
