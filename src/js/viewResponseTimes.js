@@ -10,7 +10,7 @@ var viewServiceStatus = {
     buildTableHtml: require('./buildTableHtml'),
 
     getData: function() {
-        // Get latest activity data from state
+        // Get latest activity dataSources from state
         var currentState = this.store.getState();
         return currentState.responseTimes.data;
     },
@@ -119,7 +119,7 @@ var viewServiceStatus = {
     //             }
     //         },
     //         series: [{
-    //             data: options.series,
+    //             dataSources: options.series,
     //             marker: viewServiceStatus.chartConfig.series[0].marker,
     //             name: "Request time",
     //             showInLegend: false
@@ -155,7 +155,7 @@ var viewServiceStatus = {
     //             }
     //         },
     //         series: [{
-    //             data: options.series,
+    //             dataSources: options.series,
     //             marker: viewServiceStatus.chartConfig.series[0].marker,
     //             name: "Request time",
     //             showInLegend: false
@@ -193,11 +193,11 @@ var viewServiceStatus = {
     //         },
     //         series: [{
     //             name: 'Time',
-    //             data: time.series,
+    //             dataSources: time.series,
     //             marker: viewServiceStatus.chartConfig.series[0].marker
     //         }, {
     //             name: 'Files',
-    //             data: files.series,
+    //             dataSources: files.series,
     //             marker: viewServiceStatus.chartConfig.series[0].marker
     //         }]
     //     });
@@ -212,7 +212,7 @@ var viewServiceStatus = {
     //
     // renderTableRequestTimesDaily: function() {
     //     var options = {
-    //         data: reqData,
+    //         dataSources: reqData,
     //         id: 'request-times-daily',
     //         headings: [
     //             'Hour of day',
@@ -234,7 +234,7 @@ var viewServiceStatus = {
     //
     // renderTableRequestTimesMonthly: function() {
     //     var options = {
-    //         data: reqData,
+    //         dataSources: reqData,
     //         id: 'request-times-monthly',
     //         headings: [
     //             'Date',
@@ -256,7 +256,7 @@ var viewServiceStatus = {
     //
     // renderTablePublishTimes: function() {
     //     var options = {
-    //         data: reqData,
+    //         dataSources: reqData,
     //         id: 'publish-times',
     //         headings: [
     //             'Date',

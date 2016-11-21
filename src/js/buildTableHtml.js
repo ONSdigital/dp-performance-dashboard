@@ -8,13 +8,11 @@ function buildTableHtml(options) {
         chartElement = document.getElementById(id + '--chart'),
         multipleDataSrcs = options.body.length > 1;
 
-
     /* Build table headings */
     tableHeadings = '<tr><th scope="col">' + tableHeadings.join('</th><th scope="col">') + '</th></tr>';
 
 
     /* Build table body*/
-
     function buildBodyMarkup(dataObj, valueNodes) {
         var valuesLength = dataObj.values.length;
 

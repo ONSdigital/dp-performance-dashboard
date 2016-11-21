@@ -20,7 +20,7 @@ var environment = process.env.ENV;
 
 /* Initialise app */
 
-// Set environment and get either remote or local data sources depending on environment
+// Set environment and get either remote or local dataSources sources depending on environment
 setEnvironment(environment);
 api.subscribeToEnvironmentVariable();
 

@@ -4,6 +4,8 @@ var view = {
     viewWebTraffic: require('./viewWebTraffic'),
     viewResponseTimes: require('./viewResponseTimes'),
     viewRequestAndPublishTimes: require('./viewRequestAndPublish'),
+    viewPublishTimes: require('./viewPublishTimes'),
+    viewRequestTimes: require('./viewRequestTimes'),
     main: document.getElementById('main'),
     store: require('./state'),
     stringConvert: require('./stringConvert'),
@@ -27,7 +29,6 @@ var view = {
         window.addEventListener('hashchange', function() {
             view.changeView(location.hash.replace('#', ''));
         }, false)
-
     },
 
     toggleViewVisibility: function(activeView) {
@@ -50,7 +51,7 @@ var view = {
     renderContent: function(id) {
         var container = document.getElementById(id + '__container');
         switch (id) {
-            case "web-traffic":
+            case "ons-website":
                 this.viewWebTraffic.renderView(container);
                 break;
             case "response-times":
@@ -58,6 +59,12 @@ var view = {
                 break;
             case "request-publish-times":
                 this.viewRequestAndPublishTimes.renderView(container);
+                break;
+            case "request-times":
+                this.viewRequestTimes.renderView(container);
+                break;
+            case "publish-times":
+                this.viewPublishTimes.renderView(container);
                 break;
             default:
                 console.log('No matching hash provided');
@@ -81,7 +88,7 @@ var view = {
     },
 
     changeView: function(uriHash) {
-        var activeView = uriHash ? uriHash : "web-traffic";
+        var activeView = uriHash ? uriHash : "ons-website";
 
         this.store.dispatch({
             type: 'REQUEST_VIEW',
@@ -93,6 +100,8 @@ var view = {
         this.watchActiveView();
         this.watchWebTrafficData();
         this.watchResponseTimesData();
+        this.watchRequestTimes();
+        this.watchPublishTimes();
         this.watchRequestAndPublishData();
     },
 
@@ -105,13 +114,25 @@ var view = {
 
     watchWebTrafficData: function() {
         this.watch('webTraffic.data', function() {
-            view.renderContent('web-traffic');
+            view.renderContent('ons-website');
         });
     },
 
     watchResponseTimesData: function() {
         this.watch('responseTimes.data', function() {
             view.renderContent('response-times');
+        });
+    },
+
+    watchRequestTimes: function() {
+        this.watch('requestTimes.data', function() {
+            //TODO add request times renderer
+        });
+    },
+
+    watchPublishTimes: function() {
+        this.watch('publishTimes.data', function() {
+            view.renderContent('publish-times');
         });
     },
 

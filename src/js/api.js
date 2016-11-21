@@ -11,7 +11,7 @@ if (window.Worker) {
     var worker = new Worker("worker.js");
 }
 
-/* Functions to access data from JSON file */
+/* Functions to access dataSources from JSON file */
 var api = {
 
     requestData: function (uri, success) {
@@ -27,25 +27,40 @@ var api = {
 
     subscribeToDataUpdates: function () {
         if (worker) {
+            // Update state with newly received data from web worker
             worker.onmessage = function (event) {
+                var dispatchType = "";
 
-                // Update state with new data
-                if (event.data.title == "webTraffic") {
-                    store.dispatch({
-                        type: "RECEIVED_TRAFFIC_DATA",
-                        data: event.data.data
-                    })
-                } else if (event.data.title == "responseTimes") {
-                    store.dispatch({
-                        type: "RECEIVED_RESPONSE_DATA",
-                        data: event.data.data
-                    })
-                } else if (event.data.title == "requestAndPublishTimes") {
-                    store.dispatch({
-                        type: "RECEIVED_REQUEST_PUBLISH_DATA",
-                        data: event.data.data
-                    })
+                switch (event.data.title) {
+                    case ("webTraffic"): {
+                        dispatchType = "RECEIVED_TRAFFIC_DATA";
+                        break;
+                    }
+                    case ("responseTimes"): {
+                        dispatchType = "RECEIVED_RESPONSE_DATA";
+                        break;
+                    }
+                    case ("requestAndPublishTimes"): {
+                        dispatchType = "RECEIVED_REQUEST_PUBLISH_DATA";
+                        break;
+                    }
+                    case ("requestTimes"): {
+                        dispatchType = "RECEIVED_REQUEST_DATA";
+                      break;
+                    }
+                    case ("publishTimes"): {
+                        dispatchType = "RECEIVED_PUBLISH_DATA";
+                      break;
+                    }
+                    default: {
+                        break;
+                    }
                 }
+
+                store.dispatch({
+                    type: dispatchType,
+                    data: event.data.data
+                });
             }
         } else {
             this.nonWebWorkerRequest();
@@ -62,7 +77,7 @@ var api = {
                 return false;
             }
 
-            // Tell web worker where to get data from
+            // Tell web worker where to get dataSources from
             if (worker) {
                 switch (newEnvironment) {
                     case 'production': {

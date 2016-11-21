@@ -12,7 +12,7 @@ var state = require('./state'),
 
 var watchState = function(stateProperty, onChange) {
 
-    // console.log("Registered state observation for '" + stateProperty + "'");
+    console.log("Registered state observation for '" + stateProperty + "'");
 
     var currentValue;
 
@@ -22,7 +22,7 @@ var watchState = function(stateProperty, onChange) {
 
         if (previousValue !== currentValue) {
             onChange(currentValue, previousValue);
-            console.log(stateProperty + ' changed from "',previousValue,'" to "',currentValue,'"');
+            // console.log(stateProperty + ' changed from "',previousValue,'" to "',currentValue,'"');
         }
     }
 

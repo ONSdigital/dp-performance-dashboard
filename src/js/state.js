@@ -27,6 +27,14 @@ function dashboard(state, action) {
             updatedState.requestAndPublishTimes.data = action.data;
             break;
         }
+        case 'RECEIVED_REQUEST_DATA': {
+            updatedState.requestTimes.data = action.data;
+            break;
+        }
+        case 'RECEIVED_PUBLISH_DATA': {
+            updatedState.publishTimes.data = action.data;
+            break;
+        }
         case 'INITIALISE_VIEW': {
             updatedState.activeView = action.view;
             break;
@@ -67,7 +75,9 @@ var createStore = Redux.createStore,
         environment: '',
         webTraffic: {},
         responseTimes: {},
-        requestAndPublishTimes: {}
+        requestAndPublishTimes: {},
+        requestTimes: {},
+        publishTimes: {}
     },
     store = createStore(dashboard);
 
