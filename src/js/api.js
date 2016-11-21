@@ -4,6 +4,7 @@
 var xhr = require('../../node_modules/xhr/index');
 var store = require('./state');
 var stringConvert = require('./stringConvert');
+var watch = require('./watchState');
 
 /* Register web worker */
 if (window.Worker) {
@@ -54,8 +55,7 @@ var api = {
     subscribeToEnvironmentVariable: function() {
         var environmentSet = false;
 
-        store.subscribe(function() {
-            var currentState = store.getState();
+        function onChange(newEnvironment) {
 
             // Only allow environment to be set once
             if (environmentSet) {
@@ -64,7 +64,7 @@ var api = {
 
             // Tell web worker where to get data from
             if (worker) {
-                switch (currentState.environment) {
+                switch (newEnvironment) {
                     case 'production': {
                         worker.postMessage('USE_LOCAL_DATA');
                         break;
@@ -82,7 +82,9 @@ var api = {
                 environmentSet = true;
 
             }
-        });
+        }
+
+        watch('environment', onChange);
     },
 
     nonWebWorkerRequest: function() {

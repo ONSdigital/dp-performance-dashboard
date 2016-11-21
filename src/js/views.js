@@ -7,12 +7,13 @@ var view = {
     main: document.getElementById('main'),
     store: require('./state'),
     stringConvert: require('./stringConvert'),
+    watch: require('./watchState'),
 
     // remove uriHash arg - get from state store
     init: function(uriHash, uriParams) {
         this.renderBase();
         this.handleParams(uriParams);
-        this.subscribeToStateChange();
+        this.updateOnStateChanges();
         this.changeView(uriHash);
         this.handleHashChangeEvents();
     },
@@ -47,26 +48,15 @@ var view = {
     },
 
     renderContent: function(id) {
-        // some simple routing
-        // var content = document.getElementById('content');
         var container = document.getElementById(id + '__container');
         switch (id) {
             case "web-traffic":
-                view.store.dispatch({
-                    type: 'UPDATED_TRAFFIC_VIEW'
-                });
                 this.viewWebTraffic.renderView(container);
                 break;
             case "response-times":
-                view.store.dispatch({
-                    type: 'UPDATED_RESPONSE_VIEW'
-                });
                 this.viewResponseTimes.renderView(container);
                 break;
             case "request-publish-times":
-                view.store.dispatch({
-                    type: 'UPDATED_REQUEST_PUBLISH_VIEW'
-                });
                 this.viewRequestAndPublishTimes.renderView(container);
                 break;
             default:
@@ -82,12 +72,12 @@ var view = {
     handleParams: function(uriParams) {
         if (!uriParams) {
             return
-        } else if (uriParams == "stateLogging") {
-            // Enable state logging out in console
-            this.store.dispatch({
-                type: 'ENABLE_STATE_LOGGING'
-            });
         }
+
+        // Enable state logging out in console
+        this.store.dispatch({
+            type: 'ENABLE_STATE_LOGGING'
+        });
     },
 
     changeView: function(uriHash) {
@@ -99,31 +89,38 @@ var view = {
         });
     },
 
-    subscribeToStateChange: function() {
-        this.store.subscribe(function() {
-            var currentState = view.store.getState();
+    updateOnStateChanges: function() {
+        this.watchActiveView();
+        this.watchWebTrafficData();
+        this.watchResponseTimesData();
+        this.watchRequestAndPublishData();
+    },
 
-            // Toggle view display to active view
-            if (currentState.pendingViewUpdate) {
-                view.renderTabs();
+    watchActiveView: function() {
+        this.watch('activeView', function(newView) {
+            view.renderTabs();
+            view.toggleViewVisibility(newView);
+        });
+    },
 
-                view.store.dispatch({
-                    type: 'UPDATED_VIEW'
-                });
+    watchWebTrafficData: function() {
+        this.watch('webTraffic.data', function() {
+            view.renderContent('web-traffic');
+        });
+    },
 
-                view.toggleViewVisibility(currentState.activeView);
-            }
+    watchResponseTimesData: function() {
+        this.watch('responseTimes.data', function() {
+            view.renderContent('response-times');
+        });
+    },
 
-            // Render section when new data has arrived for it
-            if (currentState.webTraffic.isNewData) {
-                view.renderContent('web-traffic');
-            } else if (currentState.responseTimes.isNewData) {
-                view.renderContent('response-times');
-            } else if (currentState.requestAndPublishTimes.isNewData) {
-                view.renderContent('request-publish-times');
-            }
+    watchRequestAndPublishData: function() {
+        this.watch('requestAndPublishTimes.data', function() {
+            view.renderContent('request-publish-times');
         });
     }
+
 
 };
 
