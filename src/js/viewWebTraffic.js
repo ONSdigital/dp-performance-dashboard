@@ -3,6 +3,7 @@ var viewWebTraffic = {
         return document.getElementById('content');
     })(),
     webTrafficTemplate: require('../templates/web-traffic.handlebars'),
+    buildHighCharts: require('./buildHighCharts'),
     Highcharts: require('highcharts'),
     chartConfig: require('./chartConfig'),
     buildChartData: require('./buildChartDataObject'),
@@ -18,7 +19,9 @@ var viewWebTraffic = {
     },
 
     renderView: function (container) {
+        console.log('Returned data: ', this.getData());
         this.buildPageData();
+        console.log('BODY DATA:', this.bodyData);
         this.renderTemplate(container);
         // add delay before rendering charts to give browser chance to render template changes
         setTimeout(function(){
@@ -27,64 +30,70 @@ var viewWebTraffic = {
         }, 5);
     },
 
-    setChartOptions: function() {
-        this.Highcharts.setOptions(this.chartConfig)
+    getTrend: function(currentMonth, previousMonth) {
+        if (currentMonth > previousMonth) {
+            return "greater";
+        }
+        if (currentMonth < previousMonth) {
+            return "less";
+        }
+        if (currentMonth == previousMonth) {
+            return "equal";
+        }
     },
 
     buildPageData: function () {
         var data = this.getData();
         this.bodyData.activeUsers = data[0].values[0].toString();
-        var i;
 
-        // browser stats
-        var browsersIndex = 3;
-        var browsers = {
-            'name': data[browsersIndex].definition.meta.name,
-            'description': data[browsersIndex].definition.meta.description,
-            'values': []
+        //search refinement
+        var searchRefinementData = data[7];
+        var searchRefinementAverage30 = data[8];
+        var searchRefinementAverage60 = data[9];
+        var searchRefinement = {
+            'name': searchRefinementData.definition.meta.name,
+            'description': searchRefinementData.definition.meta.description,
+            'highlightValue': parseInt(searchRefinementAverage30.values[0][0]),
+            'trend': this.getTrend(searchRefinementAverage30.values[0][0], searchRefinementAverage60.values[0][0])
         };
-        this.bodyData.browsers = browsers;
-        for (i = 0; i < 5; i++) {
-            var browser = {
-                'name': data[browsersIndex].values[i][0],
-                'sessions': viewWebTraffic.numberFormatter(parseInt(data[browsersIndex].values[i][1]))
-            };
-            browsers.values.push(browser);
-        }
+        this.bodyData.searchRefinement = searchRefinement;
 
-        // traffic sources (refers)
-        trafficSourcesIndex = 6;
-        var trafficSources = {
-            'name': data[trafficSourcesIndex].definition.meta.name,
-            'description': data[trafficSourcesIndex].definition.meta.description,
-            'values': []
+        // search exit
+        var searchExitData = data[10];
+        var searchExitAverage30 = data[11];
+        var searchExitAverage60 = data[12];
+        var searchExit = {
+            'name': searchExitData.definition.meta.name,
+            'description': searchExitData.definition.meta.description,
+            'highlightValue': parseInt(searchExitAverage30.values[0][0]),
+            'trend': this.getTrend(searchExitAverage30.values[0][0], searchExitAverage60.values[0][0])
         };
-        this.bodyData.trafficSources = trafficSources;
-        for (i = 0; i < 5; i++) {
-            var trafficSource = {
-                'name': data[trafficSourcesIndex].values[i][0],
-                'sessions': viewWebTraffic.numberFormatter(parseInt(data[trafficSourcesIndex].values[i][2])),
-                'users': viewWebTraffic.numberFormatter(parseInt(data[trafficSourcesIndex].values[i][3]))
-            };
-            trafficSources.values.push(trafficSource);
-        }
-        // landing pages
-        var landingPages = {
-            'name': data[5].definition.meta.name,
-            'description': data[5].definition.meta.description,
-            'values': []
+        this.bodyData.searchExit = searchExit;
+
+        // direct traffic
+        var directTrafficData = data[16];
+        var directTrafficAverage30 = data[17];
+        var directTrafficAverage60 = data[18];
+        var directTraffic = {
+            'name': directTrafficData.definition.meta.name,
+            'description': directTrafficData.definition.meta.description,
+            'highlightValue': parseInt(directTrafficAverage30.values[0][0]),
+            'trend': this.getTrend(directTrafficAverage30.values[0][0], directTrafficAverage60.values[0][0])
         };
-        this.bodyData.landingPages = landingPages;
-        for (i = 0; i < 5; i++) {
-            var name = data[5].values[i][1].split(' - Office for National Statistics');
-            var landingPage = {
-                'name': name[0],
-                'uri': data[5].values[i][0],
-                'sessions': viewWebTraffic.numberFormatter(parseInt(data[5].values[i][2])),
-                'users': viewWebTraffic.numberFormatter(parseInt(data[5].values[i][3]))
-            };
-            landingPages.values.push(landingPage);
-        }
+        this.bodyData.directTraffic = directTraffic;
+
+        // visits
+        var visitsData = data[13];
+        var visitsAverage30 = data[14];
+        var visitsAverage60 = data[15];
+        var visits = {
+            'name': visitsData.definition.meta.name,
+            'description': visitsData.definition.meta.description,
+            'highlightValue': parseInt(visitsAverage30.values[0][0]),
+            'trend': this.getTrend(visitsAverage30.values[0][0], visitsAverage60.values[0][0])
+        };
+        this.bodyData.visits = visits;
+
     },
 
     renderChartVisitsToday: function () {
@@ -95,7 +104,7 @@ var viewWebTraffic = {
             options.categories[value] = options.categories[value] + ":00";
         }
 
-        var chart = new viewWebTraffic.Highcharts.Chart({
+        var chartOptions = {
             chart: {
                 renderTo: 'visits-today--chart',
                 type: 'column'
@@ -133,153 +142,116 @@ var viewWebTraffic = {
                 name: "Visitors",
                 showInLegend: false
             }]
-        });
-        //chart.series[0].setData([3,4,5,6,7,255,8,967,4]);
+        };
+        this.buildHighCharts.chart(chartOptions);
     },
 
-    renderChartDevices: function () {
-        var options = this.buildChartData(this.getData(), 'devices', 0, 1);
-        var chart = new viewWebTraffic.Highcharts.Chart({
+    renderSparklineRefinedSearch: function () {
+        var options = this.buildChartData(this.getData(), 'search-refinement-percentage', 0, 1);
+        var data = options.series;
+        options.series = [{
+            data: data,
+            pointStart: 1
+        }];
+        options.chart = {};
+        options.chart.renderTo = 'sparkline--refined-search';
+        this.buildHighCharts.sparkline(options);
+    },
+
+    renderSparklineSearchBounce: function () {
+        var options = this.buildChartData(this.getData(), 'search-exit-percentage', 0, 1);
+        var data = options.series;
+        options.series = [{
+            data: data,
+            pointStart: 1
+        }];
+        options.chart = {};
+        options.chart.renderTo = 'sparkline--search-bounce';
+        this.buildHighCharts.sparkline(options);
+     },
+
+    renderSparklineDirectVisits: function () {
+        var options = this.buildChartData(this.getData(), 'direct-visits-daily-30-days', 0, 1);
+        var data = options.series;
+        options.series = [{
+            data: data,
+            pointStart: 1
+        }];
+        options.chart = {};
+        options.chart.renderTo = 'sparkline--direct-traffic';
+        this.buildHighCharts.sparkline(options);
+    },
+
+    renderSparklineVisits: function () {
+        var options = this.buildChartData(this.getData(), 'visits-daily-30-days', 0, 1);
+        var data = options.series;
+        options.series = [{
+            data: data,
+            pointStart: 1
+        }];
+        options.chart = {};
+        options.chart.renderTo = 'sparkline--visits';
+        this.buildHighCharts.sparkline(options);
+    },
+
+    renderChartVisitsMonth: function () {
+        //this.renderChart('visits-today--chart', this.addDataToConfig(this.chartConfig, this.buildChartData(this.getData(), 1, 0, 1, "column")));
+        var options = this.buildChartData(this.getData(), 'today', 0, 1);
+        //format categories names with zeros to look like times
+        for (value in options.categories) {
+            options.categories[value] = options.categories[value] + ":00";
+        }
+
+        var chartOptions = {
             chart: {
-                renderTo: 'devices--chart',
-                type: 'pie'
-            },
-            plotOptions: {
-                pie: {
-                    dataLabels: {
-                        format: '{point.name}<br/>{point.percentage:.1f}%',
-                        distance: 10,
-                        connectorWidth: 0,
-                        x: 15,
-                        y: -20,
-                        style: {
-                            color: '#414042',
-                            fontFamily: '"Open Sans",Helvetica,Arial,sans-serif',
-                            fontSize: '13px',
-                            fontWeight: 400,
-                            textAlign: 'center',
-                            textTransform: 'capitalize'
-                        }
-                    }
-                }
+                renderTo: 'visits-today--chart',
+                type: 'column'
             },
             title: {
                 text: '',
-                align: "left"
-            },
-            // xAxis: {
-            //     categories: ['Desktop', 'Mobile', 'Tablet'],
-            //     labels: {
-            //         autoRotation: 0
-            //     },
-            //     tickWidth: 0
-            // },
-            // yAxis: {
-            //     title: {
-            //         align: 'high',
-            //         offset: -44,
-            //         rotation: 0,
-            //         y: -15,
-            //         text: "Number of visits"
-            //     },
-            //     labels: {
-            //         formatter: function () {
-            //             return viewWebTraffic.numberFormatter(this.value);
-            //         }
-            //     }
-            // },
-            // series: [{
-            //     data: options.series,
-            //     marker: viewWebTraffic.chartConfig.series[0].marker,
-            //     name: "Visits",
-            //     showInLegend: false
-            // }]
-            series: [{
-                name: 'Visits',
-                colorByPoint: true,
-                data: [{
-                    name: options.categories[0],
-                    y: options.series[0]
-                }, {
-                    name: options.categories[1],
-                    y: options.series[1]
-                }, {
-                    name: options.categories[2],
-                    y: options.series[2]
-                }]
-            }]
-        });
-    },
-
-    renderChartLandingPages: function () {
-        var options = this.buildChartData(this.getData(), 4, 1, 2);
-
-        // remove ' - Office for National Statistics' from page titles
-        // for (value in options.categories) {
-        //     str = options.categories[value].split(' - Office for National Statistics');
-        //     options.categories[value] = str[0];
-        // }
-
-        var chart = new viewWebTraffic.Highcharts.Chart({
-            chart: {
-                renderTo: 'landing-pages--chart',
-                type: 'bar'
-            },
-            title: {
-                text: ''
+                align: 'left'
             },
             xAxis: {
+                //type: 'category',
                 categories: options.categories,
-                tickWidth: 0
+                labels: {
+                    autoRotation: 0
+                },
+                tickInterval: 2
             },
             yAxis: {
                 title: {
-                    text: 'Sessions'
+                    align: 'high',
+                    offset: -64,
+                    rotation: 0,
+                    y: -15,
+                    text: 'Number of visits'
+                },
+                labels: {
+                    //format: '{value}'
+                    formatter: function () {
+                        return viewWebTraffic.numberFormatter(this.value);
+                    }
                 }
             },
             series: [{
                 data: options.series,
                 marker: viewWebTraffic.chartConfig.series[0].marker,
-                name: "Sessions",
+                name: "Visitors",
                 showInLegend: false
             }]
-        });
+        };
+        this.buildHighCharts.chart(chartOptions);
     },
 
-    renderChartTrafficSources: function () {
-        var options = this.buildChartData(this.getData(), 5, 0, 2);
-        var chart = new viewWebTraffic.Highcharts.Chart({
-            chart: {
-                renderTo: 'traffic-sources--chart',
-                type: 'bar'
-            },
-            title: {
-                text: ''
-            },
-            xAxis: {
-                categories: options.categories,
-                tickWidth: 0
-            },
-            yAxis: {
-                title: {
-                    text: 'Sessions'
-                }
-            },
-            series: [{
-                data: options.series,
-                marker: viewWebTraffic.chartConfig.series[0].marker,
-                name: 'Sessions',
-                showInLegend: false
-            }]
-        });
-    },
 
     renderCharts: function () {
-        this.setChartOptions();
+        this.buildHighCharts.setChartOptions();
         this.renderChartVisitsToday();
-        this.renderChartDevices();
-        //this.renderChartLandingPages();
-        //this.renderChartTrafficSources();
+        this.renderSparklineRefinedSearch();
+        this.renderSparklineSearchBounce();
+        this.renderSparklineDirectVisits();
+        this.renderSparklineVisits();
     },
 
     renderTableVisitsToday: function() {
