@@ -15,7 +15,7 @@
     </div>
 
     {{!-- Web performance --}}
-    <div class="col-wrap margin-top-lg--2 border-top--iron-light-lg">
+    <div class="col-wrap border-top--iron-light-lg padding-top-md--6">
         <h3 class="margin-left-md--1">Performance of the website</h3>
         <div class="col col--lg-29 margin-left-lg--1">
             <h4 class="margin-bottom--0">Are users navigating as we expect?</h4>
@@ -59,12 +59,12 @@
                 <div class="col col--lg-14 margin-left-lg--1 ">
                     <div id="sparkline--direct-traffic" style="width:100%;height:70px;"></div>
                     <h5 class="margin-top--1 height-lg--8">Users accessing a page on the site directly</h5>
-                    <p class="size--24">{{directTraffic.highlightValue}} <span class="trend trend--{{directTraffic.trend}}"></span></p>
+                    <p class="size--24">{{directTraffic.highlightValue}}% <span class="trend trend--{{directTraffic.trend}}"></span></p>
                 </div>
                 <div class="col col--lg-14 margin-left-lg--1 border-top--iron-light-sm">
                     <div id="sparkline--external-links" style="width:100%;height:70px;"></div>
                     <h5 class="margin-top--1 height-lg--8">Users following links from our site to other websites</h5>
-                    <p class="size--24">{{searchRefinement.highlightValue}}% <span class="trend trend--{{searchRefinement.trend}}"></span></p>
+                    <p class="size--24">{{externalLinks.highlightValue}}% <span class="trend trend--{{externalLinks.trend}}"></span></p>
                 </div>
             </div>
 
