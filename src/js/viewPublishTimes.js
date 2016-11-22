@@ -68,13 +68,25 @@ var viewPublishTimes = {
                 labels: {
                     format: '{value}'
                 },
+                max: 60000,
                 title: {
                     text: 'Time (ms)',
                     align: 'high',
-                    offset: -30,
+                    offset: -16,
                     rotation: 0,
                     y: -15
-                }
+                },
+                plotLines: [{
+                    color: '#41403E', // Color value
+                    dashStyle: 'shortdash', // Style of the plot line. Default to solid
+                    value: 59000, // Value of where the line will appear
+                    width: 1, // Width of the line
+                    label: {
+                        text: 'Allowed publish time',
+                        style: {'color': '#41403E', 'font-size': '12px'},
+                        y: 15
+                    }
+                }]
             }, { // Secondary yAxis
                 title: {
                     text: 'Files',
