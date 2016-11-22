@@ -6,6 +6,7 @@ var view = {
     viewRequestAndPublishTimes: require('./viewRequestAndPublish'),
     viewPublishTimes: require('./viewPublishTimes'),
     viewRequestTimes: require('./viewRequestTimes'),
+    viewMonthlyVisits: require('./viewMonthlyVisits'),
     main: document.getElementById('main'),
     store: require('./state'),
     stringConvert: require('./stringConvert'),
@@ -15,6 +16,7 @@ var view = {
     init: function(uriHash, uriParams) {
         this.renderBase();
         this.handleParams(uriParams);
+
         this.updateOnStateChanges();
         this.changeView(uriHash);
         this.handleHashChangeEvents();
@@ -66,6 +68,9 @@ var view = {
             case "publish-times":
                 this.viewPublishTimes.renderView(container);
                 break;
+            case "monthly-visits":
+                this.viewMonthlyVisits.renderView(container);
+                break;
             default:
                 console.log('No matching hash provided');
         }
@@ -103,6 +108,7 @@ var view = {
         this.watchRequestTimes();
         this.watchPublishTimes();
         this.watchRequestAndPublishData();
+        this.watchMonthlyVisitsData();
     },
 
     watchActiveView: function() {
@@ -139,6 +145,12 @@ var view = {
     watchRequestAndPublishData: function() {
         this.watch('requestAndPublishTimes.data', function() {
             view.renderContent('request-publish-times');
+        });
+    },
+
+    watchMonthlyVisitsData: function() {
+        this.watch('webTraffic.data', function() {
+            view.renderContent('monthly-visits');
         });
     }
 
