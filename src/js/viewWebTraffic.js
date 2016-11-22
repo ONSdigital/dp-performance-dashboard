@@ -47,52 +47,53 @@ var viewWebTraffic = {
         this.bodyData.activeUsers = data[0].values[0].toString();
 
         //search refinement
-        var searchRefinementData = data[7];
-        var searchRefinementAverage30 = data[8];
-        var searchRefinementAverage60 = data[9];
-        var searchRefinement = {
-            'name': searchRefinementData.definition.meta.name,
-            'description': searchRefinementData.definition.meta.description,
-            'highlightValue': parseInt(searchRefinementAverage30.values[0][0]),
-            'trend': this.getTrend(searchRefinementAverage30.values[0][0], searchRefinementAverage60.values[0][0])
-        };
+        var searchRefinementData = data[7],
+            searchRefinementAverage30 = data[8],
+            searchRefinementAverage60 = data[9],
+            searchRefinement = {
+                'name': searchRefinementData.definition.meta.name,
+                'description': searchRefinementData.definition.meta.description,
+                'highlightValue': parseInt(searchRefinementAverage30.values[0][0]),
+                'trend': this.getTrend(searchRefinementAverage30.values[0][0], searchRefinementAverage60.values[0][0])
+            };
         this.bodyData.searchRefinement = searchRefinement;
 
         // search exit
-        var searchExitData = data[10];
-        var searchExitAverage30 = data[11];
-        var searchExitAverage60 = data[12];
-        var searchExit = {
-            'name': searchExitData.definition.meta.name,
-            'description': searchExitData.definition.meta.description,
-            'highlightValue': parseInt(searchExitAverage30.values[0][0]),
-            'trend': this.getTrend(searchExitAverage30.values[0][0], searchExitAverage60.values[0][0])
-        };
+        var searchExitData = data[10],
+            searchExitAverage30 = data[11],
+            searchExitAverage60 = data[12],
+            searchExit = {
+                'name': searchExitData.definition.meta.name,
+                'description': searchExitData.definition.meta.description,
+                'highlightValue': parseInt(searchExitAverage30.values[0][0]),
+                'trend': this.getTrend(searchExitAverage30.values[0][0], searchExitAverage60.values[0][0])
+            };
         this.bodyData.searchExit = searchExit;
 
+        // visits
+        var visitsData = data[13],
+            visitsAverage30 = data[14],
+            visitsAverage60 = data[15],
+            visits = {
+                'name': visitsData.definition.meta.name,
+                'description': visitsData.definition.meta.description,
+                'highlightValue': parseInt(visitsAverage30.values[0][0]),
+                'trend': this.getTrend(visitsAverage30.values[0][0], visitsAverage60.values[0][0])
+            };
+        this.bodyData.visits = visits;
+
         // direct traffic
-        var directTrafficData = data[16];
-        var directTrafficAverage30 = data[17];
-        var directTrafficAverage60 = data[18];
-        var directTraffic = {
+        var directTrafficData = data[16],
+            directTrafficAverage30 = data[17],
+            directTrafficAverage60 = data[18],
+            percent = (directTrafficAverage30.values[0][0] / visitsAverage30.values[0][0]) * 100;
+        directTraffic = {
             'name': directTrafficData.definition.meta.name,
             'description': directTrafficData.definition.meta.description,
-            'highlightValue': parseInt(directTrafficAverage30.values[0][0]),
+            'highlightValue': parseInt(percent),
             'trend': this.getTrend(directTrafficAverage30.values[0][0], directTrafficAverage60.values[0][0])
         };
         this.bodyData.directTraffic = directTraffic;
-
-        // visits
-        var visitsData = data[13];
-        var visitsAverage30 = data[14];
-        var visitsAverage60 = data[15];
-        var visits = {
-            'name': visitsData.definition.meta.name,
-            'description': visitsData.definition.meta.description,
-            'highlightValue': parseInt(visitsAverage30.values[0][0]),
-            'trend': this.getTrend(visitsAverage30.values[0][0], visitsAverage60.values[0][0])
-        };
-        this.bodyData.visits = visits;
 
     },
 
