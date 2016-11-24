@@ -30,13 +30,18 @@ var viewMonthlyVisits = {
 
     renderCharts: function () {
         buildHighCharts.setChartOptions();
-        //this.setChartOptions();
         this.renderMonthlyVisitsChart();
     },
 
     renderMonthlyVisitsChart: function () {
 
         var options = buildChartData(this.getData(), 'visits-daily-30-days', 0, 1);
+
+        // format the date to dd/mm/yyyy
+        // for (value in options.categories) {
+        //     var date = new Date(options.categories[value]);
+        //     options.categories[value] = date.getDate() + '/' + date.getMonth() + '/' + date.getFullYear();
+        // }
 
         var chartOptions = {
             chart: {
@@ -73,7 +78,6 @@ var viewMonthlyVisits = {
                 marker: chartConfig.series[0].marker
             }]
         };
-        console.log(chartOptions);
         buildHighCharts.chart(chartOptions);
     },
 

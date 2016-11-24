@@ -19,9 +19,7 @@ var viewWebTraffic = {
     },
 
     renderView: function (container) {
-        console.log('Returned data: ', this.getData());
         this.buildPageData();
-        console.log('BODY DATA:', this.bodyData);
         this.renderTemplate(container);
         // add delay before rendering charts to give browser chance to render template changes
         setTimeout(function(){
