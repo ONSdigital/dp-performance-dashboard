@@ -1,20 +1,21 @@
-var viewWebTraffic = {
-    container: (function () {
+var container = (function () {
         return document.getElementById('content');
     })(),
-    webTrafficTemplate: require('../templates/web-traffic.handlebars'),
-    buildHighCharts: require('./buildHighCharts'),
-    Highcharts: require('highcharts'),
-    chartConfig: require('./chartConfig'),
-    buildChartData: require('./buildChartDataObject'),
-    bodyData: {},
-    store: require('./state'),
-    buildTableHtml: require('./buildTableHtml'),
-    numberFormatter: require('./numberFormatter'),
+    webTrafficTemplate = require('../templates/web-traffic.handlebars'),
+    buildHighCharts = require('./buildHighCharts'),
+    Highcharts = require('highcharts'),
+    chartConfig = require('./chartConfig'),
+    buildChartData = require('./buildChartDataObject'),
+    bodyData = {},
+    store = require('./state'),
+    buildTableHtml = require('./buildTableHtml'),
+    numberFormatter = require('./numberFormatter');
+
+var viewWebTraffic = {
 
     getData: function() {
         // Get latest activity data from state
-        var currentState = this.store.getState();
+        var currentState = store.getState();
         return currentState.webTraffic.data;
     },
 
@@ -42,7 +43,7 @@ var viewWebTraffic = {
 
     buildPageData: function () {
         var data = this.getData();
-        this.bodyData.activeUsers = data[0].values[0].toString();
+        bodyData.activeUsers = data[0].values[0].toString();
 
         //search refinement
         var searchRefinementData = data[7],
@@ -54,7 +55,7 @@ var viewWebTraffic = {
                 'highlightValue': parseInt(searchRefinementAverage30.values[0][0]),
                 'trend': this.getTrend(searchRefinementAverage30.values[0][0], searchRefinementAverage60.values[0][0])
             };
-        this.bodyData.searchRefinement = searchRefinement;
+        bodyData.searchRefinement = searchRefinement;
 
         // search exit
         var searchExitData = data[10],
@@ -66,7 +67,7 @@ var viewWebTraffic = {
                 'highlightValue': parseInt(searchExitAverage30.values[0][0]),
                 'trend': this.getTrend(searchExitAverage30.values[0][0], searchExitAverage60.values[0][0])
             };
-        this.bodyData.searchExit = searchExit;
+        bodyData.searchExit = searchExit;
 
         // visits
         var visitsData = data[13],
@@ -78,26 +79,26 @@ var viewWebTraffic = {
                 'highlightValue': parseInt(visitsAverage30.values[0][0]),
                 'trend': this.getTrend(visitsAverage30.values[0][0], visitsAverage60.values[0][0])
             };
-        this.bodyData.visits = visits;
+        bodyData.visits = visits;
 
         // direct traffic
         var directTrafficData = data[16],
             directTrafficAverage30 = data[17],
             directTrafficAverage60 = data[18],
             percent = (directTrafficAverage30.values[0][0] / visitsAverage30.values[0][0]) * 100;
-        directTraffic = {
-            'name': directTrafficData.definition.meta.name,
-            'description': directTrafficData.definition.meta.description,
-            'highlightValue': parseInt(percent),
-            'trend': this.getTrend(directTrafficAverage30.values[0][0], directTrafficAverage60.values[0][0])
-        };
-        this.bodyData.directTraffic = directTraffic;
+            directTraffic = {
+                'name': directTrafficData.definition.meta.name,
+                'description': directTrafficData.definition.meta.description,
+                'highlightValue': parseInt(percent),
+                'trend': this.getTrend(directTrafficAverage30.values[0][0], directTrafficAverage60.values[0][0])
+            };
+        bodyData.directTraffic = directTraffic;
 
     },
 
     renderChartVisitsToday: function () {
         //this.renderChart('visits-today--chart', this.addDataToConfig(this.chartConfig, this.buildChartData(this.getData(), 1, 0, 1, "column")));
-        var options = this.buildChartData(this.getData(), 'today', 0, 1);
+        var options = buildChartData(this.getData(), 'today', 0, 1);
         //format categories names with zeros to look like times
         for (value in options.categories) {
             options.categories[value] = options.categories[value] + ":00";
@@ -131,22 +132,22 @@ var viewWebTraffic = {
                 labels: {
                     //format: '{value}'
                     formatter: function () {
-                        return viewWebTraffic.numberFormatter(this.value);
+                        return numberFormatter(this.value);
                     }
                 }
             },
             series: [{
                 data: options.series,
-                marker: viewWebTraffic.chartConfig.series[0].marker,
+                marker: chartConfig.series[0].marker,
                 name: "Visitors",
                 showInLegend: false
             }]
         };
-        this.buildHighCharts.chart(chartOptions);
+        buildHighCharts.chart(chartOptions);
     },
 
     renderSparklineRefinedSearch: function () {
-        var options = this.buildChartData(this.getData(), 'search-refinement-percentage', 0, 1);
+        var options = buildChartData(this.getData(), 'search-refinement-percentage', 0, 1);
         var data = options.series;
         options.series = [{
             data: data,
@@ -154,11 +155,11 @@ var viewWebTraffic = {
         }];
         options.chart = {};
         options.chart.renderTo = 'sparkline--refined-search';
-        this.buildHighCharts.sparkline(options);
+        buildHighCharts.sparkline(options);
     },
 
     renderSparklineSearchBounce: function () {
-        var options = this.buildChartData(this.getData(), 'search-exit-percentage', 0, 1);
+        var options = buildChartData(this.getData(), 'search-exit-percentage', 0, 1);
         var data = options.series;
         options.series = [{
             data: data,
@@ -166,11 +167,11 @@ var viewWebTraffic = {
         }];
         options.chart = {};
         options.chart.renderTo = 'sparkline--search-bounce';
-        this.buildHighCharts.sparkline(options);
+        buildHighCharts.sparkline(options);
      },
 
     renderSparklineDirectVisits: function () {
-        var options = this.buildChartData(this.getData(), 'direct-visits-daily-30-days', 0, 1);
+        var options = buildChartData(this.getData(), 'direct-visits-daily-30-days', 0, 1);
         var data = options.series;
         options.series = [{
             data: data,
@@ -178,11 +179,11 @@ var viewWebTraffic = {
         }];
         options.chart = {};
         options.chart.renderTo = 'sparkline--direct-traffic';
-        this.buildHighCharts.sparkline(options);
+        buildHighCharts.sparkline(options);
     },
 
     renderSparklineVisits: function () {
-        var options = this.buildChartData(this.getData(), 'visits-daily-30-days', 0, 1);
+        var options = buildChartData(this.getData(), 'visits-daily-30-days', 0, 1);
         var data = options.series;
         options.series = [{
             data: data,
@@ -190,7 +191,7 @@ var viewWebTraffic = {
         }];
         options.chart = {};
         options.chart.renderTo = 'sparkline--visits';
-        this.buildHighCharts.sparkline(options);
+        buildHighCharts.sparkline(options);
     },
 
     renderChartVisitsMonth: function () {
@@ -245,7 +246,7 @@ var viewWebTraffic = {
 
 
     renderCharts: function () {
-        this.buildHighCharts.setChartOptions();
+        buildHighCharts.setChartOptions();
         this.renderChartVisitsToday();
         this.renderSparklineRefinedSearch();
         this.renderSparklineSearchBounce();
@@ -269,7 +270,7 @@ var viewWebTraffic = {
             ]
         };
 
-        this.buildTableHtml(options);
+        buildTableHtml(options);
     },
 
     renderTableDevices: function() {
@@ -288,7 +289,7 @@ var viewWebTraffic = {
             ]
         };
 
-        this.buildTableHtml(options);
+        buildTableHtml(options);
     },
 
     renderTableLandingPages: function() {
@@ -310,7 +311,7 @@ var viewWebTraffic = {
             ]
         };
 
-        this.buildTableHtml(options);
+        buildTableHtml(options);
     },
 
     renderTableTrafficSources: function() {
@@ -332,7 +333,7 @@ var viewWebTraffic = {
             ]
         };
 
-        this.buildTableHtml(options);
+        buildTableHtml(options);
     },
 
     renderHiddenTables: function() {
@@ -345,7 +346,7 @@ var viewWebTraffic = {
     },
 
     renderTemplate: function (container) {
-        container.innerHTML = this.webTrafficTemplate(this.bodyData);
+        container.innerHTML = webTrafficTemplate(bodyData);
     }
 
 };
