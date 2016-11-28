@@ -1,9 +1,5 @@
-var container = (function () {
-        return document.getElementById('content');
-    })(),
-    webTrafficTemplate = require('../templates/web-traffic.handlebars'),
+var webTrafficTemplate = require('../templates/web-traffic.handlebars'),
     buildHighCharts = require('./buildHighCharts'),
-    Highcharts = require('highcharts'),
     chartConfig = require('./chartConfig'),
     buildChartData = require('./buildChartDataObject'),
     bodyData = {},
@@ -192,56 +188,6 @@ var viewWebTraffic = {
         options.chart = {};
         options.chart.renderTo = 'sparkline--visits';
         buildHighCharts.sparkline(options);
-    },
-
-    renderChartVisitsMonth: function () {
-        //this.renderChart('visits-today--chart', this.addDataToConfig(this.chartConfig, this.buildChartData(this.getData(), 1, 0, 1, "column")));
-        var options = this.buildChartData(this.getData(), 'today', 0, 1);
-        //format categories names with zeros to look like times
-        for (value in options.categories) {
-            options.categories[value] = options.categories[value] + ":00";
-        }
-
-        var chartOptions = {
-            chart: {
-                renderTo: 'visits-today--chart',
-                type: 'column'
-            },
-            title: {
-                text: '',
-                align: 'left'
-            },
-            xAxis: {
-                //type: 'category',
-                categories: options.categories,
-                labels: {
-                    autoRotation: 0
-                },
-                tickInterval: 2
-            },
-            yAxis: {
-                title: {
-                    align: 'high',
-                    offset: -64,
-                    rotation: 0,
-                    y: -15,
-                    text: 'Number of visits'
-                },
-                labels: {
-                    //format: '{value}'
-                    formatter: function () {
-                        return viewWebTraffic.numberFormatter(this.value);
-                    }
-                }
-            },
-            series: [{
-                data: options.series,
-                marker: viewWebTraffic.chartConfig.series[0].marker,
-                name: "Visitors",
-                showInLegend: false
-            }]
-        };
-        this.buildHighCharts.chart(chartOptions);
     },
 
 
