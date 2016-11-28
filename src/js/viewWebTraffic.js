@@ -5,7 +5,8 @@ var webTrafficTemplate = require('../templates/web-traffic.handlebars'),
     bodyData = {},
     store = require('./state'),
     buildTableHtml = require('./buildTableHtml'),
-    numberFormatter = require('./numberFormatter');
+    numberFormatter = require('./numberFormatter'),
+    getTrend = require('./getTrend');
 
 var viewWebTraffic = {
 
@@ -25,18 +26,6 @@ var viewWebTraffic = {
         }, 5);
     },
 
-    getTrend: function(currentMonth, previousMonth) {
-        if (currentMonth > previousMonth) {
-            return "greater";
-        }
-        if (currentMonth < previousMonth) {
-            return "less";
-        }
-        if (currentMonth == previousMonth) {
-            return "equal";
-        }
-    },
-
     buildPageData: function () {
         var data = this.getData();
         bodyData.activeUsers = data[0].values[0].toString();
@@ -49,7 +38,7 @@ var viewWebTraffic = {
                 'name': searchRefinementData.definition.meta.name,
                 'description': searchRefinementData.definition.meta.description,
                 'highlightValue': parseInt(searchRefinementAverage30.values[0][0]),
-                'trend': this.getTrend(searchRefinementAverage30.values[0][0], searchRefinementAverage60.values[0][0])
+                'trend': getTrend(searchRefinementAverage30.values[0][0], searchRefinementAverage60.values[0][0])
             };
         bodyData.searchRefinement = searchRefinement;
 
@@ -61,7 +50,7 @@ var viewWebTraffic = {
                 'name': searchExitData.definition.meta.name,
                 'description': searchExitData.definition.meta.description,
                 'highlightValue': parseInt(searchExitAverage30.values[0][0]),
-                'trend': this.getTrend(searchExitAverage30.values[0][0], searchExitAverage60.values[0][0])
+                'trend': getTrend(searchExitAverage30.values[0][0], searchExitAverage60.values[0][0])
             };
         bodyData.searchExit = searchExit;
 
@@ -73,7 +62,7 @@ var viewWebTraffic = {
                 'name': visitsData.definition.meta.name,
                 'description': visitsData.definition.meta.description,
                 'highlightValue': parseInt(visitsAverage30.values[0][0]),
-                'trend': this.getTrend(visitsAverage30.values[0][0], visitsAverage60.values[0][0])
+                'trend': getTrend(visitsAverage30.values[0][0], visitsAverage60.values[0][0])
             };
         bodyData.visits = visits;
 
@@ -86,7 +75,7 @@ var viewWebTraffic = {
                 'name': directTrafficData.definition.meta.name,
                 'description': directTrafficData.definition.meta.description,
                 'highlightValue': parseInt(percent),
-                'trend': this.getTrend(directTrafficAverage30.values[0][0], directTrafficAverage60.values[0][0])
+                'trend': getTrend(directTrafficAverage30.values[0][0], directTrafficAverage60.values[0][0])
             };
         bodyData.directTraffic = directTraffic;
 
@@ -189,7 +178,6 @@ var viewWebTraffic = {
         options.chart.renderTo = 'sparkline--visits';
         buildHighCharts.sparkline(options);
     },
-
 
     renderCharts: function () {
         buildHighCharts.setChartOptions();
