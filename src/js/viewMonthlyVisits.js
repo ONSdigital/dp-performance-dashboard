@@ -5,6 +5,7 @@ var monthlyVisitsTemplate = require('../templates/partials/monthly-visits.handle
     buildChartData = require('./buildChartDataObject'),
     store = require('./state'),
     buildTableHtml = require('./buildTableHtml');
+    numberFormatter = require('./numberFormatter');
 
 var viewMonthlyVisits = {
 
@@ -62,12 +63,15 @@ var viewMonthlyVisits = {
             },
             yAxis: [{ // Primary yAxis
                 labels: {
-                    format: '{value}'
+                    //format: '{value}'
+                    formatter: function () {
+                        return numberFormatter(this.value);
+                    }
                 },
                 title: {
                     text: 'Visits',
                     align: 'high',
-                    offset: 12,
+                    offset: 14,
                     rotation: 0,
                     y: -15
                 }
@@ -81,28 +85,18 @@ var viewMonthlyVisits = {
         buildHighCharts.chart(chartOptions);
     },
 
-    renderTablePublishTimes: function() {
+    renderTableVisits: function() {
         var options = {
             data: this.getData(),
-            id: 'monthly-visits', //TODO remove new from id once requestAndPublish function removed§
+            id: 'monthly-visits',
             headings: [
                 'Date',
-                'Time taken (ms)',
-                'Number of files'
+                'Visits'
             ],
             body: [
                 {
-                    dataNode: 0,
-                    valueNodes: [
-                        0,
-                        1
-                    ]
-                },
-                {
-                    dataNode: 0,
-                    valueNodes: [
-                        2
-                    ]
+                    dataNode: 13,
+                    valueNodes: []
                 }
             ]
         };
@@ -111,7 +105,7 @@ var viewMonthlyVisits = {
     },
 
     renderHiddenTables: function() {
-        this.renderTablePublishTimes();
+        this.renderTableVisits();
     }
 };
 
