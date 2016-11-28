@@ -10,7 +10,7 @@ var monthlyVisitsTemplate = require('../templates/partials/monthly-visits.handle
 var viewMonthlyVisits = {
 
     getData: function () {
-        // Get latest activity data from state
+        // Get latest traffic data from state
         var currentState = store.getState();
         return currentState.webTraffic.data;
     },
@@ -46,7 +46,7 @@ var viewMonthlyVisits = {
 
         var chartOptions = {
             chart: {
-                renderTo: 'monthly-visits--chart', // TODO remove 'new' from ID once old requestAndPublish removed
+                renderTo: 'monthly-visits--chart',
                 type: 'line'
             },
             title: {
