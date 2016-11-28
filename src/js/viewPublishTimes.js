@@ -4,6 +4,7 @@ var publishTimesTemplate = require('../templates/partials/publish-times.handleba
     buildChartData = require('./buildChartDataObject'),
     store = require('./state'),
     buildTableHtml = require('./buildTableHtml');
+    numberFormatter = require('./numberFormatter');
 
 var viewPublishTimes = {
 
@@ -66,13 +67,16 @@ var viewPublishTimes = {
             },
             yAxis: [{ // Primary yAxis
                 labels: {
-                    format: '{value}'
+                    //format: '{value}'
+                    formatter: function () {
+                        return numberFormatter(this.value);
+                    }
                 },
                 max: 60000,
                 title: {
                     text: 'Time (ms)',
                     align: 'high',
-                    offset: -16,
+                    offset: -14,
                     rotation: 0,
                     y: -15
                 },
