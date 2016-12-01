@@ -30,6 +30,30 @@ var viewWebTraffic = {
         var data = this.getData();
         bodyData.activeUsers = data[0].values[0].toString();
 
+        // dataset downloads
+        var datasetDownloadsData = data[19],
+            datasetDownloadsAverage30 = data[20],
+            datasetDownloadsAverage60 = data[21],
+            datasetDownloads = {
+                'name': datasetDownloadsData.definition.meta.name,
+                'description': datasetDownloadsData.definition.meta.description,
+                'highlightValue': parseInt(datasetDownloadsAverage30.values[0][0]),
+                'trend': getTrend(datasetDownloadsAverage30.values[0][0], datasetDownloadsAverage60.values[0][0])
+            };
+        bodyData.datasetDownloads = datasetDownloads;
+
+        // navigation bounce
+        var navBounceData = data[7],
+            navBounceAverage30 = data[8],
+            navBounceAverage60 = data[9],
+            navBounce = {
+                'name': navBounceData.definition.meta.name,
+                'description': navBounceData.definition.meta.description,
+                'highlightValue': parseInt(navBounceAverage30.values[0][0]),
+                'trend': getTrend(navBounceAverage30.values[0][0], navBounceAverage60.values[0][0])
+            };
+        bodyData.navBounce = navBounce;
+
         //search refinement
         var searchRefinementData = data[7],
             searchRefinementAverage30 = data[8],
@@ -53,6 +77,18 @@ var viewWebTraffic = {
                 'trend': getTrend(searchExitAverage30.values[0][0], searchExitAverage60.values[0][0])
             };
         bodyData.searchExit = searchExit;
+
+        // external links
+        var externalLinksData = data[22],
+            externalLinksAverage30 = data[23],
+            externalLinksAverage60 = data[24],
+            externalLinks = {
+                'name': externalLinksData.definition.meta.name,
+                'description': externalLinksData.definition.meta.description,
+                'highlightValue': parseInt(externalLinksAverage30.values[0][0]),
+                'trend': getTrend(externalLinksAverage30.values[0][0], externalLinksAverage60.values[0][0])
+            };
+        bodyData.externalLinks = externalLinks;
 
         // visits
         var visitsData = data[13],
@@ -79,10 +115,21 @@ var viewWebTraffic = {
             };
         bodyData.directTraffic = directTraffic;
 
+        // 30 secs on bulletin
+        var bulletinData = data[25],
+            bulletinAverage30 = data[26],
+            bulletinAverage60 = data[27],
+            bulletin = {
+                'name': bulletinData.definition.meta.name,
+                'description': bulletinData.definition.meta.description,
+                'highlightValue': parseInt(bulletinAverage30.values[0][0]),
+                'trend': getTrend(bulletinAverage30.values[0][0], bulletinAverage60.values[0][0])
+            };
+        bodyData.bulletin = bulletin;
+
     },
 
     renderChartVisitsToday: function () {
-        //this.renderChart('visits-today--chart', this.addDataToConfig(this.chartConfig, this.buildChartData(this.getData(), 1, 0, 1, "column")));
         var options = buildChartData(this.getData(), 'today', 0, 1);
         //format categories names with zeros to look like times
         for (value in options.categories) {
@@ -131,6 +178,30 @@ var viewWebTraffic = {
         buildHighCharts.chart(chartOptions);
     },
 
+    renderSparklineDatasetDownloads: function () {
+        var options = buildChartData(this.getData(), 'dataset-page-downloads-daily-30-days', 0, 1);
+        var data = options.series;
+        options.series = [{
+            data: data,
+            pointStart: 1
+        }];
+        options.chart = {};
+        options.chart.renderTo = 'sparkline--dataset-downloads';
+        buildHighCharts.sparkline(options);
+    },
+
+    renderSparklineNavigationBounce: function () {
+        var options = buildChartData(this.getData(), 'search-refinement-percentage', 0, 1);
+        var data = options.series;
+        options.series = [{
+            data: data,
+            pointStart: 1
+        }];
+        options.chart = {};
+        options.chart.renderTo = 'sparkline--nav-bounce';
+        buildHighCharts.sparkline(options);
+    },
+
     renderSparklineRefinedSearch: function () {
         var options = buildChartData(this.getData(), 'search-refinement-percentage', 0, 1);
         var data = options.series;
@@ -167,6 +238,18 @@ var viewWebTraffic = {
         buildHighCharts.sparkline(options);
     },
 
+    renderSparklineExternalLinks: function () {
+        var options = buildChartData(this.getData(), 'users-following-external-links-daily-30-days', 0, 1);
+        var data = options.series;
+        options.series = [{
+            data: data,
+            pointStart: 1
+        }];
+        options.chart = {};
+        options.chart.renderTo = 'sparkline--external-links';
+        buildHighCharts.sparkline(options);
+    },
+
     renderSparklineVisits: function () {
         var options = buildChartData(this.getData(), 'visits-daily-30-days', 0, 1);
         var data = options.series;
@@ -179,13 +262,29 @@ var viewWebTraffic = {
         buildHighCharts.sparkline(options);
     },
 
+    renderSparklineBulletins: function () {
+        var options = buildChartData(this.getData(), 'users-30-sec-on-bulletin-30-days', 0, 1);
+        var data = options.series;
+        options.series = [{
+            data: data,
+            pointStart: 1
+        }];
+        options.chart = {};
+        options.chart.renderTo = 'sparkline--bulletins';
+        buildHighCharts.sparkline(options);
+    },
+
     renderCharts: function () {
         buildHighCharts.setChartOptions();
         this.renderChartVisitsToday();
+        this.renderSparklineDatasetDownloads();
+        this.renderSparklineNavigationBounce();
         this.renderSparklineRefinedSearch();
         this.renderSparklineSearchBounce();
         this.renderSparklineDirectVisits();
+        this.renderSparklineExternalLinks();
         this.renderSparklineVisits();
+        this.renderSparklineBulletins();
     },
 
     renderTableVisitsToday: function() {
@@ -273,10 +372,6 @@ var viewWebTraffic = {
     renderHiddenTables: function() {
         this.renderTableVisitsToday();
         this.renderTableDevices();
-
-        /* Uncomment if we put charts back in */
-        // this.renderTableLandingPages();
-        // this.renderTableTrafficSources();
     },
 
     renderTemplate: function (container) {
