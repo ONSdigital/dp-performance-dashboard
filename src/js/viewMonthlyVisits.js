@@ -43,7 +43,6 @@ var viewMonthlyVisits = {
                 year = date.substring(0, 4),
                 month = date.substring(4, 6),
                 day = date.substring(6, 8);
-            console.log(date, ' = day:', day, ',month:', month, ', year: ', year);
             options.categories[value] = day + '/' + month + '/' + year;
         }
 
