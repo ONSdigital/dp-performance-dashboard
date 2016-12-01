@@ -1,5 +1,4 @@
 var monthlyVisitsTemplate = require('../templates/partials/monthly-visits.handlebars'),
-    Highcharts = require('highcharts'),
     buildHighCharts = require('./buildHighCharts'),
     chartConfig = require('./chartConfig'),
     buildChartData = require('./buildChartDataObject'),
@@ -38,11 +37,15 @@ var viewMonthlyVisits = {
 
         var options = buildChartData(this.getData(), 'visits-daily-30-days', 0, 1);
 
-        // format the date to dd/mm/yyyy
-        // for (value in options.categories) {
-        //     var date = new Date(options.categories[value]);
-        //     options.categories[value] = date.getDate() + '/' + date.getMonth() + '/' + date.getFullYear();
-        // }
+        //format the date to dd/mm/yyyy
+        for (value in options.categories) {
+            var date = options.categories[value],
+                year = date.substring(0, 4),
+                month = date.substring(4, 6),
+                day = date.substring(6, 8);
+            console.log(date, ' = day:', day, ',month:', month, ', year: ', year);
+            options.categories[value] = day + '/' + month + '/' + year;
+        }
 
         var chartOptions = {
             chart: {
@@ -79,7 +82,8 @@ var viewMonthlyVisits = {
             series: [{
                 name: 'Visits',
                 data: options.series,
-                marker: chartConfig.series[0].marker
+                marker: chartConfig.series[0].marker,
+                showInLegend: false
             }]
         };
         buildHighCharts.chart(chartOptions);
