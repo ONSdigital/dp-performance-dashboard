@@ -14,10 +14,6 @@ var viewPublishTimes = {
         return currentState.publishTimes.data;
     },
 
-    setChartOptions: function () {
-        Highcharts.setOptions(chartConfig)
-    },
-
     renderView: function (container) {
         this.renderTemplate(container);
 
@@ -33,7 +29,7 @@ var viewPublishTimes = {
     },
 
     renderCharts: function () {
-        this.setChartOptions();
+        buildHighCharts.setChartOptions();
         this.renderPublishTimesChart();
     },
 
