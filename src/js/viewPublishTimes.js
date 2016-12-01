@@ -1,5 +1,5 @@
 var publishTimesTemplate = require('../templates/partials/publish-times.handlebars'),
-    Highcharts = require('highcharts'),
+    buildHighCharts = require('./buildHighCharts'),
     chartConfig = require('./chartConfig'),
     buildChartData = require('./buildChartDataObject'),
     store = require('./state'),
@@ -48,7 +48,7 @@ var viewPublishTimes = {
             time.categories[value] = date.getDate() + '/' + date.getMonth() + '/' + date.getFullYear();
         }
 
-        var chart = new Highcharts.Chart({
+        var chartOptions = {
             chart: {
                 renderTo: 'publish-times-new--chart', // TODO remove 'new' from ID once old requestAndPublish removed
                 type: 'area'
@@ -116,7 +116,8 @@ var viewPublishTimes = {
                 data: files.series,
                 marker: chartConfig.series[0].marker
             }]
-        });
+        };
+        buildHighCharts.chart(chartOptions);
     },
 
     renderTablePublishTimes: function() {
