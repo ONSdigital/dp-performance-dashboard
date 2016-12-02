@@ -76,7 +76,8 @@ var viewMonthlyVisits = {
                     offset: 14,
                     rotation: 0,
                     y: -15
-                }
+                },
+                min: 0
             }],
             series: [{
                 name: 'Visits',
