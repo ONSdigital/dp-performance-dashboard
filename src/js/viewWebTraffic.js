@@ -97,7 +97,7 @@ var viewWebTraffic = {
             visits = {
                 'name': visitsData.definition.meta.name,
                 'description': visitsData.definition.meta.description,
-                'highlightValue': parseInt(visitsAverage30.values[0][0]),
+                'highlightValue': numberFormatter(parseInt(visitsAverage30.values[0][0])),
                 'trend': getTrend(visitsAverage30.values[0][0], visitsAverage60.values[0][0])
             };
         bodyData.visits = visits;
@@ -306,72 +306,8 @@ var viewWebTraffic = {
         buildTableHtml(options);
     },
 
-    renderTableDevices: function() {
-        var options = {
-            data: this.getData(),
-            id: 'devices',
-            headings: [
-                'Device',
-                'Visits'
-            ],
-            body: [
-                {
-                    dataNode: 2,
-                    valueNodes: []
-                }
-            ]
-        };
-
-        buildTableHtml(options);
-    },
-
-    renderTableLandingPages: function() {
-        var options = {
-            data: this.getData(),
-            id: 'landing-pages',
-            headings: [
-                'Page title',
-                'Sessions'
-            ],
-            body: [
-                {
-                    dataNode: 4,
-                    valueNodes: [
-                        1,
-                        2
-                    ]
-                }
-            ]
-        };
-
-        buildTableHtml(options);
-    },
-
-    renderTableTrafficSources: function() {
-        var options = {
-            data: this.getData(),
-            id: 'traffic-sources',
-            headings: [
-                'Referrer',
-                'Sessions'
-            ],
-            body: [
-                {
-                    dataNode: 5,
-                    valueNodes: [
-                        0,
-                        2
-                    ]
-                }
-            ]
-        };
-
-        buildTableHtml(options);
-    },
-
     renderHiddenTables: function() {
         this.renderTableVisitsToday();
-        this.renderTableDevices();
     },
 
     renderTemplate: function (container) {
