@@ -277,8 +277,8 @@ var viewWebTraffic = {
     renderCharts: function () {
         buildHighCharts.setChartOptions();
         this.renderChartVisitsToday();
-        this.renderSparklineDatasetDownloads();
-        this.renderSparklineNavigationBounce();
+        //this.renderSparklineDatasetDownloads();
+        //this.renderSparklineNavigationBounce();
         this.renderSparklineRefinedSearch();
         this.renderSparklineSearchBounce();
         this.renderSparklineDirectVisits();
