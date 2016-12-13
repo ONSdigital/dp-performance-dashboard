@@ -1,9 +1,10 @@
 var publishTimesTemplate = require('../templates/partials/publish-times.handlebars'),
-    Highcharts = require('highcharts'),
+    buildHighCharts = require('./buildHighCharts'),
     chartConfig = require('./chartConfig'),
     buildChartData = require('./buildChartDataObject'),
     store = require('./state'),
     buildTableHtml = require('./buildTableHtml');
+    numberFormatter = require('./numberFormatter');
 
 var viewPublishTimes = {
 
@@ -11,10 +12,6 @@ var viewPublishTimes = {
         // Get latest activity data from state
         var currentState = store.getState();
         return currentState.publishTimes.data;
-    },
-
-    setChartOptions: function () {
-        Highcharts.setOptions(chartConfig)
     },
 
     renderView: function (container) {
@@ -32,7 +29,7 @@ var viewPublishTimes = {
     },
 
     renderCharts: function () {
-        this.setChartOptions();
+        buildHighCharts.setChartOptions();
         this.renderPublishTimesChart();
     },
 
@@ -47,7 +44,7 @@ var viewPublishTimes = {
             time.categories[value] = date.getDate() + '/' + date.getMonth() + '/' + date.getFullYear();
         }
 
-        var chart = new Highcharts.Chart({
+        var chartOptions = {
             chart: {
                 renderTo: 'publish-times-new--chart', // TODO remove 'new' from ID once old requestAndPublish removed
                 type: 'area'
@@ -66,15 +63,30 @@ var viewPublishTimes = {
             },
             yAxis: [{ // Primary yAxis
                 labels: {
-                    format: '{value}'
+                    //format: '{value}'
+                    formatter: function () {
+                        return numberFormatter(this.value);
+                    }
                 },
+                max: 60000,
                 title: {
                     text: 'Time (ms)',
                     align: 'high',
-                    offset: -30,
+                    offset: -14,
                     rotation: 0,
                     y: -15
-                }
+                },
+                plotLines: [{
+                    color: '#41403E', // Color value
+                    dashStyle: 'shortdash', // Style of the plot line. Default to solid
+                    value: 59000, // Value of where the line will appear
+                    width: 1, // Width of the line
+                    label: {
+                        text: 'Allowed publish time',
+                        style: {'color': '#41403E', 'font-size': '12px'},
+                        y: 15
+                    }
+                }]
             }, { // Secondary yAxis
                 title: {
                     text: 'Files',
@@ -100,7 +112,8 @@ var viewPublishTimes = {
                 data: files.series,
                 marker: chartConfig.series[0].marker
             }]
-        });
+        };
+        buildHighCharts.chart(chartOptions);
     },
 
     renderTablePublishTimes: function() {

@@ -1,19 +1,18 @@
+var webTrafficTemplate = require('../templates/web-traffic.handlebars'),
+    buildHighCharts = require('./buildHighCharts'),
+    chartConfig = require('./chartConfig'),
+    buildChartData = require('./buildChartDataObject'),
+    bodyData = {},
+    store = require('./state'),
+    buildTableHtml = require('./buildTableHtml'),
+    numberFormatter = require('./numberFormatter'),
+    getTrend = require('./getTrend');
+
 var viewWebTraffic = {
-    container: (function () {
-        return document.getElementById('content');
-    })(),
-    webTrafficTemplate: require('../templates/web-traffic.handlebars'),
-    Highcharts: require('highcharts'),
-    chartConfig: require('./chartConfig'),
-    buildChartData: require('./buildChartDataObject'),
-    bodyData: {},
-    store: require('./state'),
-    buildTableHtml: require('./buildTableHtml'),
-    numberFormatter: require('./numberFormatter'),
 
     getData: function() {
         // Get latest activity data from state
-        var currentState = this.store.getState();
+        var currentState = store.getState();
         return currentState.webTraffic.data;
     },
 
@@ -27,75 +26,117 @@ var viewWebTraffic = {
         }, 5);
     },
 
-    setChartOptions: function() {
-        this.Highcharts.setOptions(this.chartConfig)
-    },
-
     buildPageData: function () {
         var data = this.getData();
-        this.bodyData.activeUsers = data[0].values[0].toString();
-        var i;
+        bodyData.activeUsers = data[0].values[0].toString();
 
-        // browser stats
-        var browsersIndex = 3;
-        var browsers = {
-            'name': data[browsersIndex].definition.meta.name,
-            'description': data[browsersIndex].definition.meta.description,
-            'values': []
-        };
-        this.bodyData.browsers = browsers;
-        for (i = 0; i < 5; i++) {
-            var browser = {
-                'name': data[browsersIndex].values[i][0],
-                'sessions': viewWebTraffic.numberFormatter(parseInt(data[browsersIndex].values[i][1]))
+        // dataset downloads
+        var datasetDownloadsData = data[19],
+            datasetDownloadsAverage30 = data[20],
+            datasetDownloadsAverage60 = data[21],
+            datasetDownloads = {
+                'name': datasetDownloadsData.definition.meta.name,
+                'description': datasetDownloadsData.definition.meta.description,
+                'highlightValue': parseInt(datasetDownloadsAverage30.values[0][0]),
+                'trend': getTrend(datasetDownloadsAverage30.values[0][0], datasetDownloadsAverage60.values[0][0])
             };
-            browsers.values.push(browser);
-        }
+        bodyData.datasetDownloads = datasetDownloads;
 
-        // traffic sources (refers)
-        trafficSourcesIndex = 6;
-        var trafficSources = {
-            'name': data[trafficSourcesIndex].definition.meta.name,
-            'description': data[trafficSourcesIndex].definition.meta.description,
-            'values': []
-        };
-        this.bodyData.trafficSources = trafficSources;
-        for (i = 0; i < 5; i++) {
-            var trafficSource = {
-                'name': data[trafficSourcesIndex].values[i][0],
-                'sessions': viewWebTraffic.numberFormatter(parseInt(data[trafficSourcesIndex].values[i][2])),
-                'users': viewWebTraffic.numberFormatter(parseInt(data[trafficSourcesIndex].values[i][3]))
+        // navigation bounce
+        var navBounceData = data[7],
+            navBounceAverage30 = data[8],
+            navBounceAverage60 = data[9],
+            navBounce = {
+                'name': navBounceData.definition.meta.name,
+                'description': navBounceData.definition.meta.description,
+                'highlightValue': parseInt(navBounceAverage30.values[0][0]),
+                'trend': getTrend(navBounceAverage30.values[0][0], navBounceAverage60.values[0][0])
             };
-            trafficSources.values.push(trafficSource);
-        }
-        // landing pages
-        var landingPages = {
-            'name': data[5].definition.meta.name,
-            'description': data[5].definition.meta.description,
-            'values': []
-        };
-        this.bodyData.landingPages = landingPages;
-        for (i = 0; i < 5; i++) {
-            var name = data[5].values[i][1].split(' - Office for National Statistics');
-            var landingPage = {
-                'name': name[0],
-                'uri': data[5].values[i][0],
-                'sessions': viewWebTraffic.numberFormatter(parseInt(data[5].values[i][2])),
-                'users': viewWebTraffic.numberFormatter(parseInt(data[5].values[i][3]))
+        bodyData.navBounce = navBounce;
+
+        //search refinement
+        var searchRefinementData = data[7],
+            searchRefinementAverage30 = data[8],
+            searchRefinementAverage60 = data[9],
+            searchRefinement = {
+                'name': searchRefinementData.definition.meta.name,
+                'description': searchRefinementData.definition.meta.description,
+                'highlightValue': parseInt(searchRefinementAverage30.values[0][0]),
+                'trend': getTrend(searchRefinementAverage30.values[0][0], searchRefinementAverage60.values[0][0])
             };
-            landingPages.values.push(landingPage);
-        }
+        bodyData.searchRefinement = searchRefinement;
+
+        // search exit
+        var searchExitData = data[10],
+            searchExitAverage30 = data[11],
+            searchExitAverage60 = data[12],
+            searchExit = {
+                'name': searchExitData.definition.meta.name,
+                'description': searchExitData.definition.meta.description,
+                'highlightValue': parseInt(searchExitAverage30.values[0][0]),
+                'trend': getTrend(searchExitAverage30.values[0][0], searchExitAverage60.values[0][0])
+            };
+        bodyData.searchExit = searchExit;
+
+        // external links
+        var externalLinksData = data[22],
+            externalLinksAverage30 = data[23],
+            externalLinksAverage60 = data[24],
+            externalLinks = {
+                'name': externalLinksData.definition.meta.name,
+                'description': externalLinksData.definition.meta.description,
+                'highlightValue': parseInt(externalLinksAverage30.values[0][0]),
+                'trend': getTrend(externalLinksAverage30.values[0][0], externalLinksAverage60.values[0][0])
+            };
+        bodyData.externalLinks = externalLinks;
+
+        // visits
+        var visitsData = data[13],
+            visitsAverage30 = data[14],
+            visitsAverage60 = data[15],
+            visits = {
+                'name': visitsData.definition.meta.name,
+                'description': visitsData.definition.meta.description,
+                'highlightValue': numberFormatter(parseInt(visitsAverage30.values[0][0])),
+                'trend': getTrend(visitsAverage30.values[0][0], visitsAverage60.values[0][0])
+            };
+        bodyData.visits = visits;
+
+        // direct traffic
+        var directTrafficData = data[16],
+            directTrafficAverage30 = data[17],
+            directTrafficAverage60 = data[18],
+            percent = (directTrafficAverage30.values[0][0] / visitsAverage30.values[0][0]) * 100;
+            directTraffic = {
+                'name': directTrafficData.definition.meta.name,
+                'description': directTrafficData.definition.meta.description,
+                'highlightValue': parseInt(percent),
+                'trend': getTrend(directTrafficAverage30.values[0][0], directTrafficAverage60.values[0][0])
+            };
+        bodyData.directTraffic = directTraffic;
+
+        // 30 secs on bulletin
+        var bulletinData = data[25],
+            bulletinAverage30 = data[26],
+            bulletinAverage60 = data[27],
+            bulletin = {
+                'name': bulletinData.definition.meta.name,
+                'description': bulletinData.definition.meta.description,
+                'highlightValue': parseInt(bulletinAverage30.values[0][0]),
+                'trend': getTrend(bulletinAverage30.values[0][0], bulletinAverage60.values[0][0])
+            };
+        bodyData.bulletin = bulletin;
+
     },
 
     renderChartVisitsToday: function () {
-        //this.renderChart('visits-today--chart', this.addDataToConfig(this.chartConfig, this.buildChartData(this.getData(), 1, 0, 1, "column")));
-        var options = this.buildChartData(this.getData(), 'today', 0, 1);
+        var options = buildChartData(this.getData(), 'today', 0, 1);
         //format categories names with zeros to look like times
         for (value in options.categories) {
             options.categories[value] = options.categories[value] + ":00";
         }
 
-        var chart = new viewWebTraffic.Highcharts.Chart({
+        var chartOptions = {
             chart: {
                 renderTo: 'visits-today--chart',
                 type: 'column'
@@ -123,163 +164,127 @@ var viewWebTraffic = {
                 labels: {
                     //format: '{value}'
                     formatter: function () {
-                        return viewWebTraffic.numberFormatter(this.value);
+                        return numberFormatter(this.value);
                     }
                 }
             },
             series: [{
                 data: options.series,
-                marker: viewWebTraffic.chartConfig.series[0].marker,
+                marker: chartConfig.series[0].marker,
                 name: "Visitors",
                 showInLegend: false
             }]
-        });
-        //chart.series[0].setData([3,4,5,6,7,255,8,967,4]);
+        };
+        buildHighCharts.chart(chartOptions);
     },
 
-    renderChartDevices: function () {
-        var options = this.buildChartData(this.getData(), 'devices', 0, 1);
-        var chart = new viewWebTraffic.Highcharts.Chart({
-            chart: {
-                renderTo: 'devices--chart',
-                type: 'pie'
-            },
-            plotOptions: {
-                pie: {
-                    dataLabels: {
-                        format: '{point.name}<br/>{point.percentage:.1f}%',
-                        distance: 10,
-                        connectorWidth: 0,
-                        x: 15,
-                        y: -20,
-                        style: {
-                            color: '#414042',
-                            fontFamily: '"Open Sans",Helvetica,Arial,sans-serif',
-                            fontSize: '13px',
-                            fontWeight: 400,
-                            textAlign: 'center',
-                            textTransform: 'capitalize'
-                        }
-                    }
-                }
-            },
-            title: {
-                text: '',
-                align: "left"
-            },
-            // xAxis: {
-            //     categories: ['Desktop', 'Mobile', 'Tablet'],
-            //     labels: {
-            //         autoRotation: 0
-            //     },
-            //     tickWidth: 0
-            // },
-            // yAxis: {
-            //     title: {
-            //         align: 'high',
-            //         offset: -44,
-            //         rotation: 0,
-            //         y: -15,
-            //         text: "Number of visits"
-            //     },
-            //     labels: {
-            //         formatter: function () {
-            //             return viewWebTraffic.numberFormatter(this.value);
-            //         }
-            //     }
-            // },
-            // series: [{
-            //     data: options.series,
-            //     marker: viewWebTraffic.chartConfig.series[0].marker,
-            //     name: "Visits",
-            //     showInLegend: false
-            // }]
-            series: [{
-                name: 'Visits',
-                colorByPoint: true,
-                data: [{
-                    name: options.categories[0],
-                    y: options.series[0]
-                }, {
-                    name: options.categories[1],
-                    y: options.series[1]
-                }, {
-                    name: options.categories[2],
-                    y: options.series[2]
-                }]
-            }]
-        });
+    renderSparklineDatasetDownloads: function () {
+        var options = buildChartData(this.getData(), 'dataset-page-downloads-daily-30-days', 0, 1);
+        var data = options.series;
+        options.series = [{
+            data: data,
+            pointStart: 1
+        }];
+        options.chart = {};
+        options.chart.renderTo = 'sparkline--dataset-downloads';
+        buildHighCharts.sparkline(options);
     },
 
-    renderChartLandingPages: function () {
-        var options = this.buildChartData(this.getData(), 4, 1, 2);
-
-        // remove ' - Office for National Statistics' from page titles
-        // for (value in options.categories) {
-        //     str = options.categories[value].split(' - Office for National Statistics');
-        //     options.categories[value] = str[0];
-        // }
-
-        var chart = new viewWebTraffic.Highcharts.Chart({
-            chart: {
-                renderTo: 'landing-pages--chart',
-                type: 'bar'
-            },
-            title: {
-                text: ''
-            },
-            xAxis: {
-                categories: options.categories,
-                tickWidth: 0
-            },
-            yAxis: {
-                title: {
-                    text: 'Sessions'
-                }
-            },
-            series: [{
-                data: options.series,
-                marker: viewWebTraffic.chartConfig.series[0].marker,
-                name: "Sessions",
-                showInLegend: false
-            }]
-        });
+    renderSparklineNavigationBounce: function () {
+        var options = buildChartData(this.getData(), 'search-refinement-percentage', 0, 1);
+        var data = options.series;
+        options.series = [{
+            data: data,
+            pointStart: 1
+        }];
+        options.chart = {};
+        options.chart.renderTo = 'sparkline--nav-bounce';
+        buildHighCharts.sparkline(options);
     },
 
-    renderChartTrafficSources: function () {
-        var options = this.buildChartData(this.getData(), 5, 0, 2);
-        var chart = new viewWebTraffic.Highcharts.Chart({
-            chart: {
-                renderTo: 'traffic-sources--chart',
-                type: 'bar'
-            },
-            title: {
-                text: ''
-            },
-            xAxis: {
-                categories: options.categories,
-                tickWidth: 0
-            },
-            yAxis: {
-                title: {
-                    text: 'Sessions'
-                }
-            },
-            series: [{
-                data: options.series,
-                marker: viewWebTraffic.chartConfig.series[0].marker,
-                name: 'Sessions',
-                showInLegend: false
-            }]
-        });
+    renderSparklineRefinedSearch: function () {
+        var options = buildChartData(this.getData(), 'search-refinement-percentage', 0, 1);
+        var data = options.series;
+        options.series = [{
+            data: data,
+            pointStart: 1
+        }];
+        options.chart = {};
+        options.chart.renderTo = 'sparkline--refined-search';
+        buildHighCharts.sparkline(options);
+    },
+
+    renderSparklineSearchBounce: function () {
+        var options = buildChartData(this.getData(), 'search-exit-percentage', 0, 1);
+        var data = options.series;
+        options.series = [{
+            data: data,
+            pointStart: 1
+        }];
+        options.chart = {};
+        options.chart.renderTo = 'sparkline--search-bounce';
+        buildHighCharts.sparkline(options);
+     },
+
+    renderSparklineDirectVisits: function () {
+        var options = buildChartData(this.getData(), 'direct-visits-daily-30-days', 0, 1);
+        var data = options.series;
+        options.series = [{
+            data: data,
+            pointStart: 1
+        }];
+        options.chart = {};
+        options.chart.renderTo = 'sparkline--direct-traffic';
+        buildHighCharts.sparkline(options);
+    },
+
+    renderSparklineExternalLinks: function () {
+        var options = buildChartData(this.getData(), 'users-following-external-links-daily-30-days', 0, 1);
+        var data = options.series;
+        options.series = [{
+            data: data,
+            pointStart: 1
+        }];
+        options.chart = {};
+        options.chart.renderTo = 'sparkline--external-links';
+        buildHighCharts.sparkline(options);
+    },
+
+    renderSparklineVisits: function () {
+        var options = buildChartData(this.getData(), 'visits-daily-30-days', 0, 1);
+        var data = options.series;
+        options.series = [{
+            data: data,
+            pointStart: 1
+        }];
+        options.chart = {};
+        options.chart.renderTo = 'sparkline--visits';
+        buildHighCharts.sparkline(options);
+    },
+
+    renderSparklineBulletins: function () {
+        var options = buildChartData(this.getData(), 'users-30-sec-on-bulletin-30-days', 0, 1);
+        var data = options.series;
+        options.series = [{
+            data: data,
+            pointStart: 1
+        }];
+        options.chart = {};
+        options.chart.renderTo = 'sparkline--bulletins';
+        buildHighCharts.sparkline(options);
     },
 
     renderCharts: function () {
-        this.setChartOptions();
+        buildHighCharts.setChartOptions();
         this.renderChartVisitsToday();
-        this.renderChartDevices();
-        //this.renderChartLandingPages();
-        //this.renderChartTrafficSources();
+        //this.renderSparklineDatasetDownloads();
+        //this.renderSparklineNavigationBounce();
+        this.renderSparklineRefinedSearch();
+        this.renderSparklineSearchBounce();
+        this.renderSparklineDirectVisits();
+        this.renderSparklineExternalLinks();
+        this.renderSparklineVisits();
+        this.renderSparklineBulletins();
     },
 
     renderTableVisitsToday: function() {
@@ -298,83 +303,15 @@ var viewWebTraffic = {
             ]
         };
 
-        this.buildTableHtml(options);
-    },
-
-    renderTableDevices: function() {
-        var options = {
-            data: this.getData(),
-            id: 'devices',
-            headings: [
-                'Device',
-                'Visits'
-            ],
-            body: [
-                {
-                    dataNode: 2,
-                    valueNodes: []
-                }
-            ]
-        };
-
-        this.buildTableHtml(options);
-    },
-
-    renderTableLandingPages: function() {
-        var options = {
-            data: this.getData(),
-            id: 'landing-pages',
-            headings: [
-                'Page title',
-                'Sessions'
-            ],
-            body: [
-                {
-                    dataNode: 4,
-                    valueNodes: [
-                        1,
-                        2
-                    ]
-                }
-            ]
-        };
-
-        this.buildTableHtml(options);
-    },
-
-    renderTableTrafficSources: function() {
-        var options = {
-            data: this.getData(),
-            id: 'traffic-sources',
-            headings: [
-                'Referrer',
-                'Sessions'
-            ],
-            body: [
-                {
-                    dataNode: 5,
-                    valueNodes: [
-                        0,
-                        2
-                    ]
-                }
-            ]
-        };
-
-        this.buildTableHtml(options);
+        buildTableHtml(options);
     },
 
     renderHiddenTables: function() {
         this.renderTableVisitsToday();
-        this.renderTableDevices();
-
-        /* Uncomment if we put charts back in */
-        // this.renderTableLandingPages();
-        // this.renderTableTrafficSources();
     },
 
     renderTemplate: function (container) {
-        container.innerHTML = this.webTrafficTemplate(this.bodyData);
+        container.innerHTML = webTrafficTemplate(bodyData);
     }
 
 };
