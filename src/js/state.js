@@ -17,29 +17,22 @@ function dashboard(state, action) {
     switch (action.type) {
         case 'RECEIVED_TRAFFIC_DATA': {
             updatedState.webTraffic.data = action.data;
-            updatedState.webTraffic.isNewData = true;
             break;
         }
         case 'RECEIVED_RESPONSE_DATA': {
             updatedState.responseTimes.data = action.data;
-            updatedState.responseTimes.isNewData = true;
             break;
         }
         case 'RECEIVED_REQUEST_PUBLISH_DATA': {
             updatedState.requestAndPublishTimes.data = action.data;
-            updatedState.requestAndPublishTimes.isNewData = true;
             break;
         }
-        case 'UPDATED_RESPONSE_VIEW': {
-            updatedState.responseTimes.isNewData = false;
+        case 'RECEIVED_REQUEST_DATA': {
+            updatedState.requestTimes.data = action.data;
             break;
         }
-        case 'UPDATED_TRAFFIC_VIEW': {
-            updatedState.webTraffic.isNewData = false;
-            break;
-        }
-        case 'UPDATED_REQUEST_PUBLISH_VIEW': {
-            updatedState.requestAndPublishTimes.isNewData = false;
+        case 'RECEIVED_PUBLISH_DATA': {
+            updatedState.publishTimes.data = action.data;
             break;
         }
         case 'INITIALISE_VIEW': {
@@ -48,11 +41,6 @@ function dashboard(state, action) {
         }
         case 'REQUEST_VIEW': {
             updatedState.activeView = action.view;
-            updatedState.pendingViewUpdate = true;
-            break;
-        }
-        case 'UPDATED_VIEW': {
-            updatedState.pendingViewUpdate = false;
             break;
         }
         case 'ENABLE_STATE_LOGGING': {
@@ -87,7 +75,9 @@ var createStore = Redux.createStore,
         environment: '',
         webTraffic: {},
         responseTimes: {},
-        requestAndPublishTimes: {}
+        requestAndPublishTimes: {},
+        requestTimes: {},
+        publishTimes: {}
     },
     store = createStore(dashboard);
 

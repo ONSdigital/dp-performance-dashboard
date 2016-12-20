@@ -1,4 +1,3 @@
-
 a:hover {
     cursor: pointer;
 }
@@ -95,6 +94,35 @@ a:hover {
         }
 
     }
+
+}
+
+.trend {
+    width: 0;
+    height: 0;
+    float: right;
+    margin-right: 8px;
+    margin-top: 4px;
+
+    &--greater {
+        border-left: 12px solid transparent;
+        border-right: 12px solid transparent;
+        border-bottom: 14px solid #A6A8AB;
+    }
+
+    &--less {
+        border-left: 12px solid transparent;
+        border-right: 12px solid transparent;
+        border-top: 14px solid #A6A8AB;
+    }
+
+    &--equal {
+        background-color: #A6A8AB;
+        width: 16px;
+        height: 6px;
+        margin-top: 8px;
+    }
+
 
 }
 

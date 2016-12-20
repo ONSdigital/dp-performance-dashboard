@@ -275,8 +275,8 @@ var viewRequestAndPublishTimes = {
 
     renderCharts: function() {
         this.setChartOptions();
-        // this.renderChartRequestTimesDaily();
-        // this.renderChartRequestTimesMonthly();
+        this.renderChartRequestTimesDaily();
+        this.renderChartRequestTimesMonthly();
         this.renderPublishTimesChart();
     },
 
