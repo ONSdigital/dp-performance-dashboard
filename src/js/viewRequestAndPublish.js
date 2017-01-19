@@ -207,77 +207,11 @@ var viewRequestAndPublishTimes = {
         });
     },
 
-    renderPublishTimesChart: function() {
-        var time = this.buildChartData(this.getData(), 'publish-time-30-day', 0, 1);
-        var files = this.buildChartData(this.getData(), 'publish-time-30-day', 0, 2);
-
-        // format the date to dd/mm/yyyy
-        for (value in time.categories) {
-            var date = new Date(time.categories[value]);
-            time.categories[value] = date.getDate() + '/' + date.getMonth() + '/' + date.getFullYear();
-        }
-
-        var chart = new viewRequestAndPublishTimes.Highcharts.Chart({
-            chart: {
-                renderTo: 'publish-times--chart',
-                type: 'area'
-            },
-            title: {
-                text: '',
-                align: "left"
-            },
-            xAxis: {
-                type: 'category',
-                categories: time.categories,
-                labels: {
-                    autoRotation: 0
-                },
-                tickInterval: 4
-            },
-            yAxis: [{ // Primary yAxis
-                labels: {
-                    format: '{value}'
-                },
-                title: {
-                    text: 'Time (ms)',
-                    align: 'high',
-                    offset: -30,
-                    rotation: 0,
-                    y: -15
-                }
-            }, { // Secondary yAxis
-                title: {
-                    text: 'Files',
-                    align: 'high',
-                    offset: -30,
-                    rotation: 0,
-                    y: -15
-                },
-                labels: {
-                    format: '{value} files'
-                },
-                opposite: true
-            }],
-            series: [{
-                name: 'Time',
-                data: time.series,
-                marker: viewRequestAndPublishTimes.chartConfig.series[0].marker,
-                tooltip: {
-                    valueSuffix: 'ms'
-                }
-            }, {
-                name: 'Files',
-                data: files.series,
-                marker: viewRequestAndPublishTimes.chartConfig.series[0].marker
-            }]
-        });
-    },
-
     renderCharts: function() {
         this.setChartOptions();
         this.renderChartRequestTimesDaily();
         this.renderChartRequestTimesMonthly();
-        this.renderPublishTimesChart();
+        //this.renderPublishTimesChart();
     },
 
     renderTableRequestTimesDaily: function() {
