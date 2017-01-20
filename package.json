@@ -1,13 +1,17 @@
 {
   "name": "performance",
   "version": "0.0.1",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/ONSdigital/dp-performance-dashboard.git"
+  },
+  "license": "MIT",
   "scripts": {
     "webpack": "node ./node_modules/webpack/bin/webpack.js",
     "webpack-server": "ENV=development node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --content-base dist/ --port 9876",
     "webpack-static": "ENV=static ./node_modules/webpack/bin/webpack.js",
     "webpack-production": "ENV=production node ./node_modules/webpack/bin/webpack.js",
-    "install-sixteens": "mkdir -p node_modules && rm -rf ./node_modules/sixteens && cd node_modules && git clone -b live https://github.com/onsdigital/sixteens && cd sixteens && npm install && cp -rf dist ../../dist && cd ../ && rm -rf sixteens",
-    "install": "npm run install-sixteens && npm run webpack-production"
+    "install": "npm run webpack-production"
   },
   "dependencies": {
     "copy-webpack-plugin": "^3.0.1",
