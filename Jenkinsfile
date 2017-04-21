@@ -1,6 +1,8 @@
 #!groovy
 
 node {
+    def branch = env.JOB_NAME.replaceFirst('.+/', '')
+
     stage('Checkout') {
         checkout scm
         sh 'git clean -dfx'
@@ -18,11 +20,15 @@ node {
         sh "aws s3 cp performance-dashboard-${revision}.tar.gz s3://${env.S3_REVISIONS_BUCKET}/"
     }
 
-    if (env.JOB_NAME.replaceFirst('.+/', '') != 'develop') return
+    if (branch != 'develop' && branch != 'master') return
 
     stage('Deploy') {
-        sh "aws s3 cp --cache-control max-age=300 --recursive dist s3://${env.S3_DEVELOP_PERFORMANCE_BUCKET}/"
+        sh "aws s3 cp --cache-control max-age=300 --recursive dist s3://${bucketFor(branch)}/"
     }
+}
+
+def bucketFor(branch) {
+    branch == 'master' ? env.S3_PRODUCTION_PERFORMANCE_BUCKET : env.S3_DEVELOP_PERFORMANCE_BUCKET
 }
 
 @NonCPS
