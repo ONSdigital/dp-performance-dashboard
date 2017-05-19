@@ -66,7 +66,7 @@ var view = {
                 this.viewRequestTimes.renderView(container);
                 break;
             case "publish-times":
-                this.viewPublishTimes.renderView(container);
+                // this.viewPublishTimes.renderView(container);
                 break;
             case "monthly-visits":
                 this.viewMonthlyVisits.renderView(container);
