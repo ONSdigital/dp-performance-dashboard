@@ -25,7 +25,7 @@ onmessage = function(event) {
                 i;
 
             for (i = 0; i < dataLength; i++) {
-                dataSources[i].uri = 'https://performance.ons.gov.uk/' + dataSources[i].uri;
+                dataSources[i].uri = 'https://performance.develop.onsdigital.co.uk/' + dataSources[i].uri;
             }
 
             getData();
