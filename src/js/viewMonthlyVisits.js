@@ -99,7 +99,7 @@ var viewMonthlyVisits = {
             ],
             body: [
                 {
-                    dataNode: 13,
+                    dataNode: "visits-daily-30-days",
                     valueNodes: []
                 }
             ]

@@ -9,18 +9,9 @@
 
 module.exports = function(data, dimensionName, categoryColumn, valueColumn) {
 
-    // get the array index of dimension e.g. active users index = 0
-    function getDimensionIndex() {
-        for (var i = 0; i < data.length; i++) {
-            if (dimensionName == data[i].name) {
-                return i;
-            }
-        }
-    }
-
-    var dimension = getDimensionIndex(),
-        dataSeries = data[dimension].values,
-        name = data[dimension].definition.meta.description,
+    var dimension = data[dimensionName],
+        dataSeries = data[dimensionName].values,
+        name = data[dimensionName].definition.meta.description,
         categories = [],
         series = [],
         obj = {};

@@ -28,12 +28,12 @@ var viewWebTraffic = {
 
     buildPageData: function () {
         var data = this.getData();
-        bodyData.activeUsers = data[0].values[0].toString();
+        bodyData.activeUsers = data["active-users"].values[0].toString();
 
         // dataset downloads
-        var datasetDownloadsData = data[19],
-            datasetDownloadsAverage30 = data[20],
-            datasetDownloadsAverage60 = data[21],
+        var datasetDownloadsData = data["dataset-page-downloads-daily-30-days"],
+            datasetDownloadsAverage30 = data["dataset-page-downloads-30-days"],
+            datasetDownloadsAverage60 = data["dataset-page-downloads-60-to-30-days"],
             datasetDownloads = {
                 'name': datasetDownloadsData.definition.meta.name,
                 'description': datasetDownloadsData.definition.meta.description,
@@ -43,9 +43,9 @@ var viewWebTraffic = {
         bodyData.datasetDownloads = datasetDownloads;
 
         // navigation bounce
-        var navBounceData = data[7],
-            navBounceAverage30 = data[8],
-            navBounceAverage60 = data[9],
+        var navBounceData = data["search-refinement-percentage"],
+            navBounceAverage30 = data["search-refinement-average-30-days"],
+            navBounceAverage60 = data["search-refinement-average-60-to-30-days"],
             navBounce = {
                 'name': navBounceData.definition.meta.name,
                 'description': navBounceData.definition.meta.description,
@@ -55,9 +55,9 @@ var viewWebTraffic = {
         bodyData.navBounce = navBounce;
 
         //search refinement
-        var searchRefinementData = data[7],
-            searchRefinementAverage30 = data[8],
-            searchRefinementAverage60 = data[9],
+        var searchRefinementData = data["search-refinement-percentage"],
+            searchRefinementAverage30 = data["search-refinement-average-30-days"],
+            searchRefinementAverage60 = data["search-refinement-average-60-to-30-days"],
             searchRefinement = {
                 'name': searchRefinementData.definition.meta.name,
                 'description': searchRefinementData.definition.meta.description,
@@ -67,9 +67,9 @@ var viewWebTraffic = {
         bodyData.searchRefinement = searchRefinement;
 
         // search exit
-        var searchExitData = data[10],
-            searchExitAverage30 = data[11],
-            searchExitAverage60 = data[12],
+        var searchExitData = data["search-exit-percentage"],
+            searchExitAverage30 = data["search-exit-average-30-days"],
+            searchExitAverage60 = data["search-exit-average-60-to-30-days"],
             searchExit = {
                 'name': searchExitData.definition.meta.name,
                 'description': searchExitData.definition.meta.description,
@@ -79,9 +79,9 @@ var viewWebTraffic = {
         bodyData.searchExit = searchExit;
 
         // external links
-        var externalLinksData = data[22],
-            externalLinksAverage30 = data[23],
-            externalLinksAverage60 = data[24],
+        var externalLinksData = data["users-following-external-links-daily-30-days"],
+            externalLinksAverage30 = data["users-following-external-links-30-days"],
+            externalLinksAverage60 = data["users-following-external-links-60-to-30-days"],
             externalLinks = {
                 'name': externalLinksData.definition.meta.name,
                 'description': externalLinksData.definition.meta.description,
@@ -91,9 +91,9 @@ var viewWebTraffic = {
         bodyData.externalLinks = externalLinks;
 
         // visits
-        var visitsData = data[13],
-            visitsAverage30 = data[14],
-            visitsAverage60 = data[15],
+        var visitsData = data["visits-daily-30-days"],
+            visitsAverage30 = data["visits-total-30-days"],
+            visitsAverage60 = data["visits-total-60-to-30-days"],
             visits = {
                 'name': visitsData.definition.meta.name,
                 'description': visitsData.definition.meta.description,
@@ -103,9 +103,9 @@ var viewWebTraffic = {
         bodyData.visits = visits;
 
         // direct traffic
-        var directTrafficData = data[16],
-            directTrafficAverage30 = data[17],
-            directTrafficAverage60 = data[18],
+        var directTrafficData = data["direct-visits-daily-30-days"],
+            directTrafficAverage30 = data["direct-visits-total-30-days"],
+            directTrafficAverage60 = data["direct-visits-total-60-to-30-days"],
             percent = (directTrafficAverage30.values[0][0] / visitsAverage30.values[0][0]) * 100;
             directTraffic = {
                 'name': directTrafficData.definition.meta.name,
@@ -116,9 +116,9 @@ var viewWebTraffic = {
         bodyData.directTraffic = directTraffic;
 
         // 30 secs on bulletin
-        var bulletinData = data[25],
-            bulletinAverage30 = data[26],
-            bulletinAverage60 = data[27],
+        var bulletinData = data["users-30-sec-on-bulletin-30-days"],
+            bulletinAverage30 = data["users-30-sec-on-bulletin-30-days"],
+            bulletinAverage60 = data["users-30-sec-on-bulletin-60-to-30-days"],
             bulletin = {
                 'name': bulletinData.definition.meta.name,
                 'description': bulletinData.definition.meta.description,
@@ -297,7 +297,7 @@ var viewWebTraffic = {
             ],
             body: [
                 {
-                    dataNode: 1,
+                    dataNode: "today",
                     valueNodes: []
                 }
             ]

@@ -33,16 +33,17 @@ var viewServiceStatus = {
 
     buildPageData: function () {
         var data = this.getData();
+        var items = ["average-1-day", "average-7-days", "average-30-days"];
         this.bodyData.averageResponseTimes = [];
-        for (var i = 0; i <= 2; i++) {
+        for (var i = 0; i < items.length; i++) {
             var responseTimeData = {
-                'name': data[i].definition.meta.name,
-                'description': data[i].definition.meta.description,
-                'responseTime': parseInt(data[i].values[0][2]).toFixed(0),
-                'timeUp': data[i].values[0][3],
-                'timeDown': data[i].values[0][4],
-                'percentageTimeUp': data[i].values[0][6],
-                'percentageTimeDown': data[i].values[0][7]
+                'name': data[items[i]].definition.meta.name,
+                'description': data[items[i]].definition.meta.description,
+                'responseTime': parseInt(data[items[i]].values[0][2]).toFixed(0),
+                'timeUp': data[items[i]].values[0][3],
+                'timeDown': data[items[i]].values[0][4],
+                'percentageTimeUp': data[items[i]].values[0][6],
+                'percentageTimeDown': data[items[i]].values[0][7]
             };
             this.bodyData.averageResponseTimes.push(responseTimeData);
         }
