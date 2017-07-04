@@ -23,7 +23,7 @@ node {
     if (branch != 'develop' && branch != 'master') return
 
     stage('Deploy') {
-        sh "aws s3 cp --cache-control max-age=300 --recursive dist s3://${bucketFor(branch)}/"
+        sh "aws s3 cp --acl public-read --cache-control max-age=300 --recursive dist s3://${bucketFor(branch)}/"
     }
 }
 
