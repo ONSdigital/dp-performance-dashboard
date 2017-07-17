@@ -122,7 +122,7 @@ var viewWebTraffic = {
             bulletin = {
                 'name': bulletinData.definition.meta.name,
                 'description': bulletinData.definition.meta.description,
-                'highlightValue': parseInt(bulletinAverage30.values[0][0]),
+                'highlightValue': parseInt(bulletinAverage30.values[0][1]),
                 'trend': getTrend(bulletinAverage30.values[0][0], bulletinAverage60.values[0][0])
             };
         bodyData.bulletin = bulletin;
