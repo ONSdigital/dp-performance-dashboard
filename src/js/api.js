@@ -3,7 +3,6 @@
 /* Third party JS */
 var xhr = require('../../node_modules/xhr/index');
 var store = require('./state');
-var stringConvert = require('./stringConvert');
 var watch = require('./watchState');
 
 /* Register web worker */
@@ -32,25 +31,9 @@ var api = {
                 var dispatchType = "";
 
                 switch (event.data.title) {
-                    case ("webTraffic"): {
-                        dispatchType = "RECEIVED_TRAFFIC_DATA";
-                        break;
-                    }
                     case ("responseTimes"): {
                         dispatchType = "RECEIVED_RESPONSE_DATA";
                         break;
-                    }
-                    case ("requestAndPublishTimes"): {
-                        dispatchType = "RECEIVED_REQUEST_PUBLISH_DATA";
-                        break;
-                    }
-                    case ("requestTimes"): {
-                        dispatchType = "RECEIVED_REQUEST_DATA";
-                      break;
-                    }
-                    case ("publishTimes"): {
-                        dispatchType = "RECEIVED_PUBLISH_DATA";
-                      break;
                     }
                     default: {
                         break;
@@ -101,59 +84,6 @@ var api = {
 
         watch('environment', onChange);
     },
-
-    nonWebWorkerRequest: function() {
-        var data = [
-            {
-                title: 'webTraffic',
-                uri: 'analytics.json',
-                data: {}
-            },
-            {
-                title: 'responseTimes',
-                uri: 'responsetimes.json',
-                data: {}
-            },
-            {
-                title: 'requestAndPublishTimes',
-                uri: 'metrics.json',
-                data: {}
-            }
-        ],
-        dataLength = data.length;
-
-        for (var i = 0; i < dataLength; i++) {
-            (function(i) {
-                api.requestData(data[i].uri, function(response) {
-                    switch (data[i].title) {
-                        case 'webTraffic': {
-                            store.dispatch({
-                                type: "RECEIVED_TRAFFIC_DATA",
-                                data: JSON.parse(response)
-                            });
-                            break;
-                        }
-                        case 'responseTimes': {
-                            store.dispatch({
-                                type: "RECEIVED_RESPONSE_DATA",
-                                data: JSON.parse(response)
-                            });
-                            break;
-                        }
-                        case 'requestAndPublishTimes': {
-                            store.dispatch({
-                                type: "RECEIVED_REQUEST_PUBLISH_DATA",
-                                data: JSON.parse(response)
-                            });
-                            break;
-                        }
-                    }
-                });
-            })(i);
-        }
-
-
-    }
 };
 
 // Export this object so that the api functions can be used across app

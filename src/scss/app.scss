@@ -74,57 +74,6 @@ a:hover {
 
 }
 
-.chart-container {
-
-    //width: auto;
-
-    @media (min-width: 768px) {
-        width: 752px;
-    }
-
-    @media (min-width: 992px) {
-        width: 944px;
-
-        &--29 {
-            width: 29 * 16px
-        }
-
-        &--45 {
-            width: 45 * 16px;
-        }
-
-    }
-
-}
-
-.trend {
-    width: 0;
-    height: 0;
-    float: right;
-    margin-right: 8px;
-    margin-top: 4px;
-
-    &--greater {
-        border-left: 12px solid transparent;
-        border-right: 12px solid transparent;
-        border-bottom: 14px solid #A6A8AB;
-    }
-
-    &--less {
-        border-left: 12px solid transparent;
-        border-right: 12px solid transparent;
-        border-top: 14px solid #A6A8AB;
-    }
-
-    &--equal {
-        background-color: #A6A8AB;
-        width: 16px;
-        height: 6px;
-        margin-top: 8px;
-    }
-
-
-}
 
 // Revert Sixteens hiding all elements with attribute aria-hidden = true
 [aria-hidden*=true] {
