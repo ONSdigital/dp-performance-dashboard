@@ -50,11 +50,7 @@ var createStore = Redux.createStore,
         pendingViewUpdate: false,
         enableStateLogging: false,
         environment: '',
-        webTraffic: {},
         responseTimes: {},
-        requestAndPublishTimes: {},
-        requestTimes: {},
-        publishTimes: {}
     },
     store = createStore(dashboard);
 

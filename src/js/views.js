@@ -1,6 +1,5 @@
 var view = {
     baseTemplate: require('../templates/base.handlebars'),
-    viewTabs: require('./viewTabs'),
     viewResponseTimes: require('./viewResponseTimes'),
     main: document.getElementById('main'),
     store: require('./state'),
@@ -10,7 +9,6 @@ var view = {
     init: function(uriHash, uriParams) {
         this.renderBase();
         this.handleParams(uriParams);
-
         this.updateOnStateChanges();
         this.changeView(uriHash);
         this.handleHashChangeEvents();
@@ -66,7 +64,7 @@ var view = {
     },
 
     changeView: function(uriHash) {
-        var activeView = uriHash ? uriHash : "ons-website";
+        var activeView = uriHash ? uriHash : "service-status";
 
         this.store.dispatch({
             type: 'REQUEST_VIEW',
