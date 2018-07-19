@@ -2,17 +2,10 @@
 
 // All sources to request data from
 var dataSources = [
-    {
-        title: 'webTraffic',
-        uri: 'analytics.json'
-    },
+
     {
         title: 'responseTimes',
         uri: 'responsetimes.json'
-    },
-    {
-        title: 'requestAndPublishTimes',
-        uri: 'metrics.json'
     }
 ];
 
@@ -25,7 +18,7 @@ onmessage = function(event) {
                 i;
 
             for (i = 0; i < dataLength; i++) {
-                dataSources[i].uri = 'https://performance.develop.onsdigital.co.uk/' + dataSources[i].uri;
+                dataSources[i].uri = 'https://performance.ons.gov.uk/' + dataSources[i].uri;
             }
 
             getData();
@@ -55,28 +48,17 @@ function getData() {
             xhr.onreadystatechange = function() {
                 if ( xhr.readyState === 4 ) {
 
-                    if (dataSources[index].title === "requestAndPublishTimes") {
-                        // Break up this response into separate messages back to client
+                    var dataObject = {
+                        title: '',
+                        updateTime: '',
+                        data: {}
+                    };
 
-                        var requestData = JSON.parse(xhr.responseText),
-                            publishData = requestData.splice([requestData.length-1], 1);
+                    dataObject.data = JSON.parse(xhr.responseText);
 
-                        postMessage({title: "requestTimes", data: requestData});
-                        postMessage({title: "publishTimes", data: publishData});
-
-                    } else {
-
-                        var dataObject = {
-                            title: '',
-                            updateTime: '',
-                            data: {}
-                        };
-
-                        dataObject.data = JSON.parse(xhr.responseText);
-
-                        // Post message with updated object back to client
-                        postMessage({title: dataSources[index].title, data: dataObject.data});
-                    }
+                    // Post message with updated object back to client
+                    postMessage({title: dataSources[index].title, data: dataObject.data});
+                    
                 }
             };
             xhr.open( 'get', dataSources[index].uri );

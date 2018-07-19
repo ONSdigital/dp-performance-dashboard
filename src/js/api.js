@@ -3,7 +3,6 @@
 /* Third party JS */
 var xhr = require('../../node_modules/xhr/index');
 var store = require('./state');
-var stringConvert = require('./stringConvert');
 var watch = require('./watchState');
 
 /* Register web worker */
@@ -32,25 +31,9 @@ var api = {
                 var dispatchType = "";
 
                 switch (event.data.title) {
-                    case ("webTraffic"): {
-                        dispatchType = "RECEIVED_TRAFFIC_DATA";
-                        break;
-                    }
                     case ("responseTimes"): {
                         dispatchType = "RECEIVED_RESPONSE_DATA";
                         break;
-                    }
-                    case ("requestAndPublishTimes"): {
-                        dispatchType = "RECEIVED_REQUEST_PUBLISH_DATA";
-                        break;
-                    }
-                    case ("requestTimes"): {
-                        dispatchType = "RECEIVED_REQUEST_DATA";
-                      break;
-                    }
-                    case ("publishTimes"): {
-                        dispatchType = "RECEIVED_PUBLISH_DATA";
-                      break;
                     }
                     default: {
                         break;
@@ -101,7 +84,7 @@ var api = {
 
         watch('environment', onChange);
     },
-
+    
     nonWebWorkerRequest: function() {
         var data = [
             {
