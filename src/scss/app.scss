@@ -14,52 +14,6 @@ a:hover {
     }
 }
 
-// styling for in-page tabs
-.tab {
-
-    &__btn-group {
-
-        .btn--tab {
-
-            width: 50% !important;
-            background-color: #E5E6E7;
-
-            &:hover,
-            &:focus {
-                cursor: hand;
-                background-color: #D0D2D3;
-                outline: 0;
-                text-decoration: underline;
-            }
-
-        }
-
-        .btn--tab-active {
-            background-color: white;
-            border: solid 1px #E5E6E7 !important;
-            border-bottom: none !important;
-
-            &:hover,
-            &:focus {
-                cursor: default;
-                background-color: transparent;
-                outline: 0;
-            }
-        }
-    }
-
-    &__content {
-        border: solid 1px #E5E6E7;
-        border-top: none;
-    }
-
-    // There's a fix in Sixteens develop branch for the active tab having text decoration, so this is a temporary fix until that is in master branch
-    &__link--active:hover,
-    &__link--active:focus {
-        text-decoration: none;
-    }
-
-}
 
 // stand out numbers
 .size {
@@ -74,57 +28,6 @@ a:hover {
 
 }
 
-.chart-container {
-
-    //width: auto;
-
-    @media (min-width: 768px) {
-        width: 752px;
-    }
-
-    @media (min-width: 992px) {
-        width: 944px;
-
-        &--29 {
-            width: 29 * 16px
-        }
-
-        &--45 {
-            width: 45 * 16px;
-        }
-
-    }
-
-}
-
-.trend {
-    width: 0;
-    height: 0;
-    float: right;
-    margin-right: 8px;
-    margin-top: 4px;
-
-    &--greater {
-        border-left: 12px solid transparent;
-        border-right: 12px solid transparent;
-        border-bottom: 14px solid #A6A8AB;
-    }
-
-    &--less {
-        border-left: 12px solid transparent;
-        border-right: 12px solid transparent;
-        border-top: 14px solid #A6A8AB;
-    }
-
-    &--equal {
-        background-color: #A6A8AB;
-        width: 16px;
-        height: 6px;
-        margin-top: 8px;
-    }
-
-
-}
 
 // Revert Sixteens hiding all elements with attribute aria-hidden = true
 [aria-hidden*=true] {

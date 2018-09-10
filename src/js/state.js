@@ -15,36 +15,13 @@ function dashboard(state, action) {
 
     // Reducer switch function, updates the state as necessary
     switch (action.type) {
-        case 'RECEIVED_TRAFFIC_DATA': {
-            updatedState.webTraffic.data = action.data;
-            break;
-        }
+        
         case 'RECEIVED_RESPONSE_DATA': {
             updatedState.responseTimes.data = action.data;
             break;
         }
-        case 'RECEIVED_REQUEST_PUBLISH_DATA': {
-            updatedState.requestAndPublishTimes.data = action.data;
-            break;
-        }
-        case 'RECEIVED_REQUEST_DATA': {
-            updatedState.requestTimes.data = action.data;
-            break;
-        }
-        case 'RECEIVED_PUBLISH_DATA': {
-            updatedState.publishTimes.data = action.data;
-            break;
-        }
-        case 'INITIALISE_VIEW': {
-            updatedState.activeView = action.view;
-            break;
-        }
         case 'REQUEST_VIEW': {
             updatedState.activeView = action.view;
-            break;
-        }
-        case 'ENABLE_STATE_LOGGING': {
-            updatedState.enableStateLogging = true;
             break;
         }
         case 'UPDATE_ENVIRONMENT_VAR': {
@@ -73,11 +50,7 @@ var createStore = Redux.createStore,
         pendingViewUpdate: false,
         enableStateLogging: false,
         environment: '',
-        webTraffic: {},
         responseTimes: {},
-        requestAndPublishTimes: {},
-        requestTimes: {},
-        publishTimes: {}
     },
     store = createStore(dashboard);
 
