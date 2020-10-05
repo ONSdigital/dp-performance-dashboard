@@ -1,9 +1,23 @@
-#Performance dashboard for ons.gov.uk
+Performance dashboard
+=====================
+
+:warning: This project is being retired :warning:
+
 A static website for displaying performance data and analytics for the ONS website.
 
-Local development requires running `npm run webpack` (watches file and automatically re-builds JS) or `npm run webpack-server` (watches file and hosts on port 9876). 
+Getting started
+---------------
 
-All files needed for production can be built by running `npm run webpack-production` and will then be kept under `/dist`.
+Local development requires running:
 
-## Options
-Add use the parameter `stateLogging` to enable state being logged into the console.
+```bash
+make debug
+```
+
+This will watch the files and automatically rebuild. The dashboard will be served at http://localhost:9876/webpack-dev-server/.
+
+You can change the port by running:
+
+```bash
+PORT=1234 make debug
+```

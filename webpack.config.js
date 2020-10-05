@@ -1,62 +1,54 @@
-var webpack = require('webpack');
-var isProduction = process.env.ENV === 'production';
-var isStatic = process.env.ENV === 'static';
-var CopyWebpackPlugin = require('copy-webpack-plugin');
-var environment = (process.env.ENV === 'production') ? 'production' : 'develop';
-var devTool = isProduction ? '#source-map' : '#inline-source-map';
+const webpack = require('webpack');
+const path = require('path');
+const CopyPlugin = require('copy-webpack-plugin');
 
 function getPlugins() {
     var plugins = [];
 
-    if (isProduction) {
-        // Uglify production JavaScript
-        plugins.push(new webpack.optimize.UglifyJsPlugin());
-    }
-
     // Move static files to dist folder
-    plugins.push(new CopyWebpackPlugin([
-        { from: 'src/index.html', to: 'index.html' },
-        { from: 'src/worker.js', to: 'worker.js' },
-        { from: 'src/img/loader.gif', to: 'img/loader.gif' },
-        { from: 'src/favicon.ico', to: 'favicon.ico' }
-    ]));
-
-    // environment variable plugin
-    plugins.push(new webpack.DefinePlugin({
-        'process.env': {
-            'ENV': JSON.stringify(environment)
-        }
+    plugins.push(new CopyPlugin({
+        patterns: [
+            { from: 'src/index.html', to: 'index.html' },
+            { from: 'src/worker.js', to: 'worker.js' },
+            { from: 'src/img/loader.gif', to: 'img/loader.gif' },
+            { from: 'src/favicon.ico', to: 'favicon.ico' }
+        ]
     }));
-
     return plugins;
 }
 
-function isWatching() {
-    var bool = true;
-
-    if (isProduction || isStatic) {
-        bool = false;
-    }
-
-    return bool;
+function isProduction(mode) {
+    return mode === 'production';
 }
 
-module.exports = {
-    entry: "./src/app.js",
-    output: {
-        path: "dist",
-        filename: "bundle.js"
-    },
-    watch: isWatching(),
-    module: {
-        loaders: [
-            { test: /\.handlebars$/, loader: "handlebars-loader" },
-            { test: /\.scss$/, loaders: ["style", "css", "sass"]}
-        ]
-    },
-    devtool: devTool,
-    devServer: {
-        outputPath: "dist"
-    },
-    plugins: getPlugins()
+function isWatching(mode) {
+    return !isProduction(mode);
+}
+
+module.exports = (env, argv) => {
+    var devTool = isProduction(argv.mode) ? '#source-map' : '#inline-source-map';
+
+    return {
+        mode: argv.mode,
+        entry: "./src/app.js",
+        output: {
+            path: path.resolve(__dirname, 'dist'),
+            filename: "bundle.js"
+        },
+        watch: isWatching(argv.mode),
+        module: {
+            rules: [
+                { test: /\.handlebars$/, use: "handlebars-loader" },
+                { test: /\.scss$/, use: ["style-loader", "css-loader", "sass-loader"] }
+            ]
+        },
+        devtool: devTool,
+        devServer: {
+            contentBase: path.join(__dirname, 'dist'),
+        },
+        optimization: {
+            minimize: isProduction(argv.mode),
+        },
+        plugins: getPlugins()
+    }
 };

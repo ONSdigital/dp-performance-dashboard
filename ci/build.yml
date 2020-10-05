@@ -1,18 +1,17 @@
 ---
-
 platform: linux
 
 image_resource:
   type: docker-image
   source:
     repository: node
-    tag: 6.10.0
+    tag: 12.18
 
 inputs:
   - name: dp-performance-dashboard
 
 outputs:
-  - name: dist
+  - name: build
 
 run:
-  path: dp-performance-dashboard/ci/scripts/npm-install.sh
+  path: dp-performance-dashboard/ci/scripts/build.sh
