@@ -19,7 +19,7 @@
     "copy-webpack-plugin": "^6.2.0",
     "css-loader": "^4.3.0",
     "handlebars": "^4.7.6",
-    "handlebars-loader": "^1.7.1",
+    "handlebars-loader": "^1.7.3",
     "node-sass": "^4.14.1",
     "object-path": "^0.11.4",
     "path": "^0.12.7",
